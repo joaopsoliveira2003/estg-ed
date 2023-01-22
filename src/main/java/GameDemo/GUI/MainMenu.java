@@ -34,7 +34,7 @@ public class MainMenu extends JFrame {
         add(gestGameButton);
 
 
-        setSize(350, 350);
+        setSize(450, 450);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         setLocationRelativeTo(null);

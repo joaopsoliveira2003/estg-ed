@@ -78,8 +78,8 @@ public class PortConMainMenu extends JFrame {
         add(loadDataButton);
         add(saveDataButton);
 
-        setSize(350, 350);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(450, 450);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         setLocationRelativeTo(null);
         setResizable(false);
