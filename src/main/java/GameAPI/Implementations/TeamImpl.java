@@ -1,5 +1,6 @@
 package GameAPI.Implementations;
 
+import GameAPI.Exceptions.InvalidArgumentException;
 import GameAPI.Interfaces.Team;
 
 public class TeamImpl implements Team {
@@ -7,7 +8,7 @@ public class TeamImpl implements Team {
     private String name;
 
     public TeamImpl(String name) {
-        this.name = name;
+        setName(name);
     }
 
     @Override
@@ -16,12 +17,27 @@ public class TeamImpl implements Team {
     }
 
     @Override
-    public void setName(String name) {
+    public void setName(String name) throws InvalidArgumentException {
+        if (name == null || name.isEmpty() || name.isBlank()) {
+            throw new InvalidArgumentException("Name cannot be null, empty or blank");
+        }
         this.name = name;
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        TeamImpl team = (TeamImpl) obj;
+        return name.equals(team.name);
+    }
+
+    @Override
     public String toString() {
-        return "TeamImpl{" + "name='" + name + '\'' + '}';
+        return "Team {" + "name=" + name + '}';
     }
 }

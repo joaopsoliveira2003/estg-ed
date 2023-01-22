@@ -77,19 +77,21 @@ public class HashMap<K, V> implements MapADT<K, V> {
     }
 
     @Override
-    public boolean containsKey(K key) throws EmptyCollectionException, IllegalArgumentException {
+    public boolean containsKey(K key) throws IllegalArgumentException {
         try {
             get(key);
             return true;
         } catch (NoSuchElementException e) {
             return false;
+        } catch (EmptyCollectionException e) {
+            return false;
         }
     }
 
     @Override
-    public boolean containsValue(V value) throws EmptyCollectionException, IllegalArgumentException {
+    public boolean containsValue(V value) throws IllegalArgumentException {
         if (isEmpty()) {
-            throw new EmptyCollectionException();
+            return false;
         }
         if (value == null) {
             throw new IllegalArgumentException("Value cannot be null");

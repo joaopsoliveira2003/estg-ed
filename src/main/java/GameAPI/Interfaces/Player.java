@@ -1,17 +1,12 @@
 package GameAPI.Interfaces;
 
+import Collections.Implementations.Lists.UnorderedListADT;
+import GameAPI.Exceptions.InvalidArgumentException;
+
 /**
  * Player defines the interface for a player in the game.
  */
 public interface Player {
-
-    /**
-     * Generates a hash code for the player.
-     *
-     * @return a hash code for the player
-     */
-    @Override
-    int hashCode();
 
     /**
      * Returns the id of the player.
@@ -25,7 +20,7 @@ public interface Player {
      *
      * @param id the id of the player
      */
-    void setID(int id);
+    void setID(int id) throws InvalidArgumentException;
 
     /**
      * Returns the name of the player.
@@ -39,7 +34,7 @@ public interface Player {
      * 
      * @param name the name of the player
      */
-    void setName(String name);
+    void setName(String name) throws InvalidArgumentException;
 
     /**
      * Returns the team of the player.
@@ -53,7 +48,7 @@ public interface Player {
      *
      * @param team the of the player
      */
-    void setTeam(Team team);
+    void setTeam(Team team) throws InvalidArgumentException;
 
     /**
      * Returns the CurrentEnergy of the player.
@@ -67,7 +62,7 @@ public interface Player {
      *
      * @param energy the CurrentEnergy of the player
      */
-    void setCurrentEnergy(int energy);
+    void setCurrentEnergy(int energy) throws InvalidArgumentException;
 
     /**
      * Returns the level of the player.
@@ -81,7 +76,7 @@ public interface Player {
      *
      * @param level the level of the player
      */
-    void setLevel(int level);
+    void setLevel(int level) throws InvalidArgumentException;
 
     /**
      * Returns the experience of the player.
@@ -95,7 +90,22 @@ public interface Player {
      *
      * @param experiencePoints the experience of the player
      */
-    void setExperiencePoints(int experiencePoints);
+    void setExperiencePoints(int experiencePoints) throws InvalidArgumentException;
+
+    void addExperiencePoints(int experiencePoints) throws InvalidArgumentException;
+
+    UnorderedListADT<Portal> getPortals();
+
+    /**
+     * Generates a hash code for the player.
+     *
+     * @return a hash code for the player
+     */
+    @Override
+    int hashCode();
+
+    @Override
+    boolean equals(Object obj);
 
     /**
      * Returns a string representation of the player.

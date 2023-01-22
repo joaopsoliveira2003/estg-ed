@@ -45,7 +45,7 @@ public interface MapADT<K, V> {
      * @param key the key to search for
      * @return true if the map contains the given key
      */
-    boolean containsKey(K key) throws EmptyCollectionException, IllegalArgumentException;
+    boolean containsKey(K key) throws IllegalArgumentException;
 
     /**
      * Returns true if the map contains the given value.
@@ -53,7 +53,7 @@ public interface MapADT<K, V> {
      * @param value the value to search for
      * @return true if the map contains the given value
      */
-    boolean containsValue(V value) throws EmptyCollectionException, IllegalArgumentException;
+    boolean containsValue(V value) throws IllegalArgumentException;
 
     /**
      * Returns an array of the keys in the map.

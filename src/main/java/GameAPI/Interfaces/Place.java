@@ -1,17 +1,11 @@
 package GameAPI.Interfaces;
 
+import GameAPI.Exceptions.InvalidArgumentException;
+
 /**
  * Place defines the interface for a place in the game.
  */
-public interface Place {
-
-    /**
-     * Generates a hash code for the place.
-     * 
-     * @return a hash code for the place
-     */
-    @Override
-    int hashCode();
+public interface Place extends Comparable<Place> {
 
     /**
      * Returns the id of the place.
@@ -25,7 +19,7 @@ public interface Place {
      *
      * @param id the id of the place
      */
-    void setID(int id);
+    void setID(int id) throws InvalidArgumentException;
 
     /**
      * Returns the name of the place.
@@ -39,7 +33,7 @@ public interface Place {
      *
      * @param name the name of the place
      */
-    void setName(String name);
+    void setName(String name) throws InvalidArgumentException;
 
     /**
      * Returns the description of the place.
@@ -53,7 +47,7 @@ public interface Place {
      *
      * @param latitude the latitude of the place
      */
-    void setLatitude(double latitude);
+    void setLatitude(double latitude) throws InvalidArgumentException;
 
     /**
      * Returns the longitude of the place.
@@ -67,7 +61,15 @@ public interface Place {
      *
      * @param longitude the longitude of the place
      */
-    void setLongitude(double longitude);
+    void setLongitude(double longitude) throws InvalidArgumentException;
+
+    /**
+     * Returns the distance between the place and the specified place.
+     *
+     * @param place the place to compare
+     * @return the distance between the place and the specified place
+     */
+    double getDistanceTo(Place place) throws InvalidArgumentException;
 
     /**
      * Returns the energy of the place.
@@ -81,8 +83,19 @@ public interface Place {
      *
      * @param energy the energy of the place
      */
-    void setEnergy(int energy);
-    
+    void setEnergy(int energy) throws InvalidArgumentException;
+
+    /**
+     * Generates a hash code for the place.
+     *
+     * @return a hash code for the place
+     */
+    @Override
+    int hashCode();
+
+    @Override
+    boolean equals(Object obj);
+
     /**
      * Returns the description of the place.
      *

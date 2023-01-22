@@ -9,7 +9,7 @@ import java.util.Iterator;
 
 public class Network<T> extends Graph<T> implements NetworkADT<T> {
 
-    private double[][] adjMatrix;
+    protected double[][] adjMatrix;
 
     public Network() {
         numVertices = 0;

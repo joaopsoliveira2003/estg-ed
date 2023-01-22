@@ -1,5 +1,7 @@
 package GameAPI.Interfaces;
 
+import GameAPI.Exceptions.InvalidArgumentException;
+
 /**
  * Team defines a team of players.
  */
@@ -17,7 +19,16 @@ public interface Team {
      *
      * @param name the name of the team
      */
-    void setName(String name);
+    void setName(String name) throws InvalidArgumentException;
+
+    /**
+     * Returns true if the team is equal to the specified object.
+     *
+     * @param obj the object to compare
+     * @return true if the team is equal to the specified object
+     */
+    @Override
+    boolean equals(Object obj);
 
     /**
      * Returns a string representation of the team.
