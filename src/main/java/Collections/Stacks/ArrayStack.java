@@ -1,6 +1,6 @@
 package Collections.Stacks;
 
-import Exceptions.EmptyCollectionException;
+import Collections.Exceptions.EmptyCollectionException;
 
 public class ArrayStack<T> implements StackADT<T> {
     protected final static int DEFAULT_CAPACITY = 100;

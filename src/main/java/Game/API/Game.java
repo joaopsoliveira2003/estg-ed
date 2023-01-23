@@ -1,8 +1,14 @@
 package Game.API;
 
 import Game.Entities.Place;
+import Game.Entities.Player;
+import Game.Entities.Team;
 import Game.Exceptions.NoSuchPlaceException;
-import Exceptions.IllegalArgumentException;
+import Collections.Exceptions.IllegalArgumentException;
+import Game.Exceptions.NoSuchPlayerException;
+import Game.Exceptions.NoSuchTeamException;
+
+import java.util.Iterator;
 
 /**
  * Game defines the interface for the game.
@@ -55,5 +61,27 @@ public interface Game {
      * @throws IllegalArgumentException if one of the places is null
      */
     void removeRoute(Place vertex1, Place vertex2) throws NoSuchPlaceException, IllegalArgumentException;
+
+    void addPlayer(Player player) throws IllegalArgumentException;
+
+    void updatePlayer(Player oldPlayer, Player newPlayer) throws NoSuchPlayerException, IllegalArgumentException;
+
+    void removePlayer(Player player) throws NoSuchPlayerException, IllegalArgumentException;
+
+    void movePlayer(Player player, Place place) throws NoSuchPlayerException, NoSuchPlaceException, IllegalArgumentException;
+
+    void addTeam(Team team) throws IllegalArgumentException;
+
+    void addPlayerToTeam(Player player, Team team) throws NoSuchPlayerException, NoSuchTeamException, IllegalArgumentException;
+
+    void removePlayerFromTeam(Player player, Team team) throws NoSuchPlayerException, NoSuchTeamException, IllegalArgumentException;
+
+
+
+    Iterator<Place> getShortestPath(Place start, Place end) throws NoSuchPlaceException, IllegalArgumentException;
+
+    Iterator<Place> getShortestPathPortals(Player player, Place end, boolean portals) throws NoSuchPlaceException, IllegalArgumentException;
+
+
 
 }

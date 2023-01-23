@@ -1,6 +1,6 @@
 package Game.Entities;
 
-import Exceptions.IllegalArgumentException;
+import Collections.Exceptions.IllegalArgumentException;
 
 /**
  * Connector defines the interface for a connector in the game.

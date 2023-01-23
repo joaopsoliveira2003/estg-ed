@@ -1,6 +1,6 @@
 package Collections.Stacks;
 
-import Exceptions.EmptyCollectionException;
+import Collections.Exceptions.EmptyCollectionException;
 
 /**
  * SmackStackADT represents a smack stack.

@@ -1,8 +1,8 @@
-package Game.CustomCollections;
+package Collections.HashTables;
 
-import Exceptions.EmptyCollectionException;
-import Exceptions.IllegalArgumentException;
-import Exceptions.NoSuchElementException;
+import Collections.Exceptions.EmptyCollectionException;
+import Collections.Exceptions.IllegalArgumentException;
+import Collections.Exceptions.NoSuchElementException;
 import Collections.Lists.ListADT;
 
 /**

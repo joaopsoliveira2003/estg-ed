@@ -1,7 +1,7 @@
 package Game.Entities;
 
 import Collections.Lists.UnorderedListADT;
-import Exceptions.IllegalArgumentException;
+import Collections.Exceptions.IllegalArgumentException;
 import Game.Exceptions.NoAssociationException;
 
 public class PlayerImpl implements Player {

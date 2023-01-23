@@ -1,8 +1,8 @@
 package Collections.Trees;
 
-import Exceptions.ElementNotFoundException;
-import Exceptions.EmptyCollectionException;
-import Exceptions.NonComparableElementException;
+import Collections.Exceptions.ElementNotFoundException;
+import Collections.Exceptions.EmptyCollectionException;
+import Collections.Exceptions.NonComparableElementException;
 
 public class LinkedBinarySearchTree<T> extends LinkedBinaryTree<T> implements BinarySearchTreeADT<T> {
 

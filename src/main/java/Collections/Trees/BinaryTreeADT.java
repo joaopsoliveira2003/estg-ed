@@ -1,8 +1,8 @@
 package Collections.Trees;
 
-import Exceptions.ElementNotFoundException;
-import Exceptions.EmptyCollectionException;
-import Exceptions.UnsupportedOperationException;
+import Collections.Exceptions.ElementNotFoundException;
+import Collections.Exceptions.EmptyCollectionException;
+import Collections.Exceptions.UnsupportedOperationException;
 
 import java.util.Iterator;
 

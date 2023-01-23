@@ -1,6 +1,6 @@
 package Collections.Lists;
 
-import Exceptions.EmptyCollectionException;
+import Collections.Exceptions.EmptyCollectionException;
 
 //TODO: Iterator
 

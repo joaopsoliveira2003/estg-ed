@@ -1,6 +1,6 @@
 package Game.Entities;
 
-import Exceptions.IllegalArgumentException;
+import Collections.Exceptions.IllegalArgumentException;
 
 /**
  * Place defines the interface for a place in the game.

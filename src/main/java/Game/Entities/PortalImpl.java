@@ -1,8 +1,7 @@
 package Game.Entities;
 
-import Exceptions.IllegalArgumentException;
+import Collections.Exceptions.IllegalArgumentException;
 import Game.Exceptions.NoAssociationException;
-import Game.Exceptions.NoSuchPlayerException;
 
 public class PortalImpl extends PlaceImpl implements Portal {
 

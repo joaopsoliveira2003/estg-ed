@@ -1,7 +1,7 @@
 package Collections.Stacks;
 
 import Collections.Lists.Node;
-import Exceptions.EmptyCollectionException;
+import Collections.Exceptions.EmptyCollectionException;
 
 public class LinkedStack<T> implements StackADT<T> {
     protected Node<T> top;

@@ -1,7 +1,7 @@
 package Collections.Lists;
 
-import Exceptions.EmptyCollectionException;
-import Exceptions.NoSuchElementException;
+import Collections.Exceptions.EmptyCollectionException;
+import Collections.Exceptions.NoSuchElementException;
 
 /**
  * UnoorderedListADT defines the interface to an unordered list collection.

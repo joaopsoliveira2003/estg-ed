@@ -1,7 +1,7 @@
 package Collections.Queues;
 
 import Collections.Stacks.LinkedStack;
-import Exceptions.EmptyCollectionException;
+import Collections.Exceptions.EmptyCollectionException;
 
 public class StackQueue<T> implements QueueADT<T> {
     private final LinkedStack<T> stack1;

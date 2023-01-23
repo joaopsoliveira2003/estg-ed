@@ -1,4 +1,4 @@
-package Exceptions;
+package Collections.Exceptions;
 
 public class EmptyCollectionException extends RuntimeException {
 

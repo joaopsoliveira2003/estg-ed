@@ -1,6 +1,6 @@
 package Collections.Lists;
 
-import Exceptions.NonComparableElementException;
+import Collections.Exceptions.NonComparableElementException;
 
 public class LinkedOrderedList<T> extends LinkedList<T> implements OrderedListADT<T> {
 

@@ -2,11 +2,11 @@ package Game.Entities;
 
 import java.time.Instant;
 
-import Exceptions.EmptyCollectionException;
-import Exceptions.IllegalArgumentException;
-import Exceptions.NoSuchElementException;
-import Game.CustomCollections.HashMap;
-import Game.CustomCollections.MapADT;
+import Collections.Exceptions.EmptyCollectionException;
+import Collections.Exceptions.IllegalArgumentException;
+import Collections.Exceptions.NoSuchElementException;
+import Collections.HashTables.HashMap;
+import Collections.HashTables.MapADT;
 
 public class ConnectorImpl extends PlaceImpl implements Connector {
 

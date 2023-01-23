@@ -1,6 +1,6 @@
 package Collections.Stacks;
 
-import Exceptions.EmptyCollectionException;
+import Collections.Exceptions.EmptyCollectionException;
 
 /**
  * StackADT defines the interface to a stack collection.

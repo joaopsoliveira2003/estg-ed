@@ -1,6 +1,6 @@
 package Collections.Stacks;
 
-import Exceptions.EmptyCollectionException;
+import Collections.Exceptions.EmptyCollectionException;
 
 public class SmackStackArray<T> extends ArrayStack<T> implements SmackStackADT<T> {
 

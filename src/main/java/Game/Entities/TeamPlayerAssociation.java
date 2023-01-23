@@ -1,10 +1,10 @@
 package Game.Entities;
 
-import Exceptions.EmptyCollectionException;
-import Exceptions.IllegalArgumentException;
-import Exceptions.NoSuchElementException;
-import Game.CustomCollections.HashMap;
-import Game.CustomCollections.MapADT;
+import Collections.Exceptions.EmptyCollectionException;
+import Collections.Exceptions.IllegalArgumentException;
+import Collections.Exceptions.NoSuchElementException;
+import Collections.HashTables.HashMap;
+import Collections.HashTables.MapADT;
 import Collections.Lists.LinkedUnorderedList;
 import Collections.Lists.UnorderedListADT;
 import Game.Exceptions.NoAssociationException;

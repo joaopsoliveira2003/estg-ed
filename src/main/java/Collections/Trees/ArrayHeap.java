@@ -1,6 +1,6 @@
 package Collections.Trees;
 
-import Exceptions.EmptyCollectionException;
+import Collections.Exceptions.EmptyCollectionException;
 
 public class ArrayHeap<T> extends ArrayBinaryTree<T> implements HeapADT<T> {
 

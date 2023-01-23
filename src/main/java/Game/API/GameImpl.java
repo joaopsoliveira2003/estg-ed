@@ -1,17 +1,26 @@
 package Game.API;
 
-import Exceptions.IllegalArgumentException;
+import Collections.Exceptions.IllegalArgumentException;
+import Collections.HashTables.HashMap;
 import Game.CustomCollections.ExtendedNetwork;
 import Game.CustomCollections.ExtendedNetworkImpl;
 import Game.Entities.Place;
+import Game.Entities.Player;
+import Game.Entities.Team;
 import Game.Exceptions.NoSuchPlaceException;
+import Game.Exceptions.NoSuchPlayerException;
+import Game.Exceptions.NoSuchTeamException;
+
+import java.util.Iterator;
 
 public class GameImpl implements Game {
 
     private final ExtendedNetwork<Place> network;
+    private final HashMap<Player, Place> players;
 
     public GameImpl() {
         network = new ExtendedNetworkImpl<>();
+        players = new HashMap<>();
     }
 
     // PLACES AND ROUTES
@@ -66,6 +75,51 @@ public class GameImpl implements Game {
             throw new NoSuchPlaceException("Place " + vertex1 + " or " + vertex2 + " does not exist");
         }
         network.removeEdge(vertex1, vertex2);
+    }
+
+    @Override
+    public void addPlayer(Player player) throws IllegalArgumentException {
+
+    }
+
+    @Override
+    public void updatePlayer(Player oldPlayer, Player newPlayer) throws NoSuchPlayerException, IllegalArgumentException {
+
+    }
+
+    @Override
+    public void removePlayer(Player player) throws NoSuchPlayerException, IllegalArgumentException {
+
+    }
+
+    @Override
+    public void movePlayer(Player player, Place place) throws NoSuchPlayerException, NoSuchPlaceException, IllegalArgumentException {
+
+    }
+
+    @Override
+    public void addTeam(Team team) throws IllegalArgumentException {
+
+    }
+
+    @Override
+    public void addPlayerToTeam(Player player, Team team) throws NoSuchPlayerException, NoSuchTeamException, IllegalArgumentException {
+
+    }
+
+    @Override
+    public void removePlayerFromTeam(Player player, Team team) throws NoSuchPlayerException, NoSuchTeamException, IllegalArgumentException {
+
+    }
+
+    @Override
+    public Iterator<Place> getShortestPath(Place start, Place end) throws NoSuchPlaceException, IllegalArgumentException {
+        return null;
+    }
+
+    @Override
+    public Iterator<Place> getShortestPathPortals(Player player, Place end, boolean portals) throws NoSuchPlaceException, IllegalArgumentException {
+        return null;
     }
 
     // PLAYERS AND TEAMS

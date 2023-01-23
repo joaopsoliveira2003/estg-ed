@@ -1,8 +1,8 @@
 package Collections.Trees;
 
-import Exceptions.EmptyCollectionException;
-import Exceptions.NoSuchElementException;
-import Exceptions.NonComparableElementException;
+import Collections.Exceptions.EmptyCollectionException;
+import Collections.Exceptions.NoSuchElementException;
+import Collections.Exceptions.NonComparableElementException;
 import Collections.Lists.OrderedListADT;
 
 import java.util.Iterator;

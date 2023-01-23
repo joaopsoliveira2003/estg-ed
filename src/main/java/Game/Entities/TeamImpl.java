@@ -1,6 +1,6 @@
 package Game.Entities;
 
-import Exceptions.IllegalArgumentException;
+import Collections.Exceptions.IllegalArgumentException;
 
 public class TeamImpl implements Team {
 

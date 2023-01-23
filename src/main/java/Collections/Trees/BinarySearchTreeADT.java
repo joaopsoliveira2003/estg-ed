@@ -1,8 +1,8 @@
 package Collections.Trees;
 
-import Exceptions.ElementNotFoundException;
-import Exceptions.EmptyCollectionException;
-import Exceptions.NonComparableElementException;
+import Collections.Exceptions.ElementNotFoundException;
+import Collections.Exceptions.EmptyCollectionException;
+import Collections.Exceptions.NonComparableElementException;
 
 /**
  * BinarySearchTreeADT defines the interface to a binary search tree.

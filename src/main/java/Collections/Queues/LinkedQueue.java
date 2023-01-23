@@ -1,7 +1,7 @@
 package Collections.Queues;
 
 import Collections.Lists.Node;
-import Exceptions.EmptyCollectionException;
+import Collections.Exceptions.EmptyCollectionException;
 
 public class LinkedQueue<T> implements QueueADT<T> {
     private Node<T> front;

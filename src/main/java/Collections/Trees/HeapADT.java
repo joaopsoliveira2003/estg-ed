@@ -1,6 +1,6 @@
 package Collections.Trees;
 
-import Exceptions.EmptyCollectionException;
+import Collections.Exceptions.EmptyCollectionException;
 
 /**
  * HeapADT defines the interface to a heap collection.

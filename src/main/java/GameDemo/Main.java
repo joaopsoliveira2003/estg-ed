@@ -2,12 +2,8 @@ package GameDemo;
 
 import Game.API.Game;
 import Game.API.GameImpl;
-import Game.CustomCollections.ExtendedNetwork;
-import Game.CustomCollections.ExtendedNetworkImpl;
 import Game.Entities.*;
 import GameDemo.GUI.MainMenu;
-
-import java.util.Iterator;
 
 public class Main {
     public static void main(String[] args) {
@@ -48,13 +44,12 @@ public class Main {
         game.addRoute(place11, place7);
 
 
-        Team team1 = new TeamImpl("Team 1");
-        Team team2 = new TeamImpl("Team 2");
+        Team team1 = new TeamImpl("Sparks");
+        Team team2 = new TeamImpl("Giants");
 
         Player player1 = new PlayerImpl(0, "João", team1 ,400, 0, 0);
         Player player2 = new PlayerImpl(1, "Ana", team1 ,400, 0, 0);
         Player player3 = new PlayerImpl(2, "Pedro", team2 ,400, 0, 0);
         Player player4 = new PlayerImpl(3, "Maria", team2 ,400, 0, 0);
-
     }
 }

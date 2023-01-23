@@ -1,7 +1,7 @@
 package Game.CustomCollections;
 
-import Exceptions.IllegalArgumentException;
-import Exceptions.NoSuchElementException;
+import Collections.Exceptions.IllegalArgumentException;
+import Collections.Exceptions.NoSuchElementException;
 import Collections.Graphs.NetworkADT;
 
 import java.util.Iterator;

@@ -1,10 +1,10 @@
 package Collections.Trees;
 
 import Collections.Queues.LinkedQueue;
-import Exceptions.EmptyCollectionException;
-import Exceptions.UnsupportedOperationException;
+import Collections.Exceptions.EmptyCollectionException;
+import Collections.Exceptions.UnsupportedOperationException;
 import Collections.Lists.LinkedUnorderedList;
-import Exceptions.ElementNotFoundException;
+import Collections.Exceptions.ElementNotFoundException;
 
 import java.util.Iterator;
 

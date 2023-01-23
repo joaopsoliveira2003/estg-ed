@@ -1,7 +1,7 @@
 package Collections.Lists;
 
-import Exceptions.EmptyCollectionException;
-import Exceptions.NoSuchElementException;
+import Collections.Exceptions.EmptyCollectionException;
+import Collections.Exceptions.NoSuchElementException;
 
 public class DoublyLinkedUnorderedList<T> extends DoublyLinkedList<T> implements UnorderedListADT<T> {
 

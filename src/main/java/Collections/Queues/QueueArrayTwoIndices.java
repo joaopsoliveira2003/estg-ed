@@ -1,6 +1,6 @@
 package Collections.Queues;
 
-import Exceptions.EmptyCollectionException;
+import Collections.Exceptions.EmptyCollectionException;
 
 public class QueueArrayTwoIndices<T> implements QueueADT<T> {
     private final static int DEFAULT_CAPACITY = 100;

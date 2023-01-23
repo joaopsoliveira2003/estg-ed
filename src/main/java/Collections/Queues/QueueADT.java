@@ -1,6 +1,6 @@
 package Collections.Queues;
 
-import Exceptions.EmptyCollectionException;
+import Collections.Exceptions.EmptyCollectionException;
 
 /**
  * QueueADT defines the interface to a queue collection.

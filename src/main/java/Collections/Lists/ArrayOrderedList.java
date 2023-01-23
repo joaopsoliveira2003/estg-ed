@@ -1,6 +1,6 @@
 package Collections.Lists;
 
-import Exceptions.NonComparableElementException;
+import Collections.Exceptions.NonComparableElementException;
 
 public class ArrayOrderedList<T> extends ArrayList<T> implements OrderedListADT<T> {
 

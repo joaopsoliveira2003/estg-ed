@@ -1,6 +1,6 @@
 package Collections.Queues;
 
-import Exceptions.EmptyCollectionException;
+import Collections.Exceptions.EmptyCollectionException;
 
 public class CircularArrayQueue<T> implements QueueADT<T> {
 

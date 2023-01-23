@@ -1,4 +1,4 @@
-package Game.CustomCollections;
+package Collections.HashTables;
 
 /**
  *  TwoTypePair defines a pair of two different types.

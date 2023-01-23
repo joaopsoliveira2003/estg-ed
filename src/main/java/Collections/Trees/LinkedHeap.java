@@ -1,6 +1,6 @@
 package Collections.Trees;
 
-import Exceptions.EmptyCollectionException;
+import Collections.Exceptions.EmptyCollectionException;
 
 public class LinkedHeap<T> extends LinkedBinaryTree<T> implements HeapADT<T> {
     public HeapNode<T> lastNode;
