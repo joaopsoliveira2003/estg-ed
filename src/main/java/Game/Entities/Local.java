@@ -1,11 +1,14 @@
 package Game.Entities;
 
 import Collections.Exceptions.IllegalArgumentException;
+import org.json.simple.JSONObject;
+
+import java.io.IOException;
 
 /**
- * Place defines the interface for a place in the game.
+ * Local defines the interface for a place in the game.
  */
-public interface Place extends Comparable<Place> {
+public interface Local extends Comparable<Local> {
 
     /**
      * Returns the id of the place.
@@ -64,12 +67,12 @@ public interface Place extends Comparable<Place> {
     void setLongitude(double longitude) throws IllegalArgumentException;
 
     /**
-     * Returns the distance between the place and the specified place.
+     * Returns the distance between the local and the specified local.
      *
-     * @param place the place to compare
-     * @return the distance between the place and the specified place
+     * @param local the local to compare
+     * @return the distance between the local and the specified local
      */
-    double getDistanceTo(Place place) throws IllegalArgumentException;
+    double getDistanceTo(Local local) throws IllegalArgumentException;
 
     /**
      * Returns the energy of the place.
@@ -84,6 +87,21 @@ public interface Place extends Comparable<Place> {
      * @param energy the energy of the place
      */
     void setEnergy(int energy) throws IllegalArgumentException;
+
+    //json
+    /**
+     * Returns the json of the place.
+     *
+     * @return the json of the place
+     */
+    JSONObject getJSON();
+
+    /**
+     * Sets the json of the place.
+     *
+     * @param json the json of the place
+     */
+    void setJSON(JSONObject json) throws IOException, IllegalArgumentException;
 
     /**
      * Generates a hash code for the place.

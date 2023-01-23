@@ -2,8 +2,11 @@ package Game.Entities;
 
 import Collections.Exceptions.IllegalArgumentException;
 import Game.Exceptions.NoAssociationException;
+import org.json.simple.JSONObject;
 
-public class PortalImpl extends PlaceImpl implements Portal {
+import java.io.IOException;
+
+public class PortalImpl extends LocalImpl implements Portal {
 
     PortalPlayerAssociation ppa = PortalPlayerAssociation.getInstance();
     int maxEnergy;
@@ -50,5 +53,34 @@ public class PortalImpl extends PlaceImpl implements Portal {
         } catch (NoAssociationException ignored) {
             ppa.addAssociation(this, owner);
         }
+    }
+
+    @Override
+    public JSONObject getJSON() {
+        JSONObject portal = new JSONObject();
+        portal.put("id", getID());
+        portal.put("type", "Portal");
+        portal.put("name", getName());
+        JSONObject coordinates = new JSONObject();
+        coordinates.put("latitude", getLatitude());
+        coordinates.put("longitude", getLongitude());
+        portal.put("coordinates", coordinates);
+        JSONObject gameSettings = new JSONObject();
+        gameSettings.put("energy", getEnergy());
+        gameSettings.put("maxEnergy", getMaxEnergy());
+        JSONObject ownership = new JSONObject();
+        try {
+            ownership.put("player", getOwner().getName());
+        } catch (NoAssociationException ignored) {
+            ownership.put("player", "None");
+        }
+        gameSettings.put("ownership", ownership);
+        portal.put("gameSettings", gameSettings);
+        return portal;
+    }
+
+    @Override
+    public void setJSON(JSONObject json) throws IOException, IllegalArgumentException {
+
     }
 }

@@ -147,11 +147,20 @@ public class PlayerImpl implements Player {
     }
 
     @Override
+    public int compareTo(Player o) {
+        return this.id - o.getID();
+    }
+
+    @Override
         public String toString() {
-            return "Player {"
+            String team = "None";
+            try {
+                team = getTeam().getName();
+            } catch (NoAssociationException ignored) {}
+            return "\nPlayer {"
             + "id=" + id
             + ", name=" + name
-            + ", team=" + getTeam().getName()
+            + ", team=" + team
             + ", currentEnergy=" + currentEnergy
             + ", level=" + level
             + ", experiencePoints=" + experiencePoints + '}';

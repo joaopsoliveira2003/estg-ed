@@ -1,14 +1,19 @@
 package GameDemo;
 
+import Collections.Trees.AVLTree;
+import Collections.Trees.AVLTreeADT;
 import Game.API.Game;
 import Game.API.GameImpl;
 import Game.Entities.*;
 import GameDemo.GUI.MainMenu;
 
+import java.io.IOException;
+import java.util.Iterator;
+
 public class Main {
     public static void main(String[] args) {
 
-        MainMenu mainMenu = new MainMenu();
+        //MainMenu mainMenu = new MainMenu();
         Game game = new GameImpl();
 
         Portal place1 = new PortalImpl(0, "Torre dos Clérigos - Porto", 41.1456745, -8.6167864, 180, 200);
@@ -51,5 +56,38 @@ public class Main {
         Player player2 = new PlayerImpl(1, "Ana", team1 ,400, 0, 0);
         Player player3 = new PlayerImpl(2, "Pedro", team2 ,400, 0, 0);
         Player player4 = new PlayerImpl(3, "Maria", team2 ,400, 0, 0);
+        Player player5 = new PlayerImpl(4, "Rui", team1 ,400, 0, 0);
+        Player player6 = new PlayerImpl(5, "Sara", team1 ,400, 0, 0);
+        Player player7 = new PlayerImpl(6, "Joana", team2 ,400, 0, 0);
+        Player player8 = new PlayerImpl(7, "Ricardo", team2 ,400, 0, 0);
+        Player player9 = new PlayerImpl(8, "Miguel", team1 ,400, 0, 0);
+        Player player10 = new PlayerImpl(9, "Inês", team1 ,400, 0, 0);
+        Player player11 = new PlayerImpl(10, "João", team2 ,400, 0, 0);
+
+
+        try {
+            game.saveGameData("gameData.json");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        AVLTreeADT<Player> players = new AVLTree<>();
+        players.addElement(player1);
+        players.addElement(player2);
+        players.addElement(player3);
+        players.addElement(player4);
+        players.addElement(player5);
+        players.addElement(player6);
+        players.addElement(player7);
+        players.addElement(player8);
+        players.addElement(player9);
+        players.addElement(player10);
+        players.addElement(player11);
+        System.out.println(players);
+        System.out.println("Iterator");
+        Iterator<Player> iterator = players.iteratorPostOrder();
+        while (iterator.hasNext()){
+            System.out.println(iterator.next());
+        }
     }
 }

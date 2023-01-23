@@ -101,4 +101,8 @@ public class BinaryTreeNode<T> {
         }
         return children;
     }
+
+    public int getBalanceFactor() {
+        return left.numChildren() - right.numChildren();
+    }
 }

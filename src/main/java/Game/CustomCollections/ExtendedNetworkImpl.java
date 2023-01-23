@@ -4,9 +4,11 @@ import Collections.Exceptions.IllegalArgumentException;
 import Collections.Exceptions.NoSuchElementException;
 import Collections.Graphs.Network;
 import Collections.Lists.ArrayUnorderedList;
+import Collections.Lists.LinkedUnorderedList;
 import Collections.Stacks.LinkedStack;
 import Collections.Trees.LinkedHeap;
 import Game.Entities.Connector;
+import Game.Entities.Local;
 import Game.Entities.Portal;
 
 import java.util.Iterator;
@@ -22,14 +24,14 @@ public class ExtendedNetworkImpl<T> extends Network<T> implements ExtendedNetwor
         if (vertex1 == null || vertex2 == null) {
             throw new IllegalArgumentException("The vertex cannot be null.");
         }
-        Game.Entities.Place place1 = (Game.Entities.Place) vertex1;
-        Game.Entities.Place place2 = (Game.Entities.Place) vertex2;
+        Local local1 = (Local) vertex1;
+        Local local2 = (Local) vertex2;
         int index1 = getIndex(vertex1);
         int index2 = getIndex(vertex2);
         if (index1 == -1 || index2 == -1) {
             throw new NoSuchElementException("The vertex is not in the network.");
         }
-        addEdge(index1, index2, place1.getDistanceTo(place2));
+        addEdge(index1, index2, local1.getDistanceTo(local2));
     }
 
     @Override
@@ -63,6 +65,31 @@ public class ExtendedNetworkImpl<T> extends Network<T> implements ExtendedNetwor
             throw new IllegalArgumentException("The vertex cannot be null.");
         }
         return getIndex(vertex) != -1;
+    }
+
+    @Override
+    public Iterator<T> iteratorVertexes() {
+        LinkedUnorderedList<T> templist = new LinkedUnorderedList<>();
+        for (int i = 0; i < numVertices; i++) {
+            templist.addToRear(vertices[i]);
+        }
+        return templist.iterator();
+    }
+
+    @Override
+    public Iterator<T> iteratorRoutes() {
+        LinkedUnorderedList<T> templist = new LinkedUnorderedList<>();
+        for (int i = 0; i < numVertices; i++) {
+            for (int j = 0; j < numVertices; j++) {
+                System.out.println("i: " + i + " j: " + j + " weight: " + adjMatrix[i][j]);
+                if (adjMatrix[i][j] != Double.POSITIVE_INFINITY && i != j) {
+                    System.out.println("entered i: " + i + " j: " + j + " weight: " + adjMatrix[i][j]);
+                    templist.addToRear(vertices[i]);
+                    templist.addToRear(vertices[j]);
+                }
+            }
+        }
+        return templist.iterator();
     }
 
     @Override

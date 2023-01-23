@@ -5,7 +5,7 @@ import Collections.Exceptions.IllegalArgumentException;
 /**
  * Connector defines the interface for a connector in the game.
  */
-public interface Connector extends Place {
+public interface Connector extends Local {
 
     /**
      * Returns the cooldown time of the connector that is set for a player when he interacts with.

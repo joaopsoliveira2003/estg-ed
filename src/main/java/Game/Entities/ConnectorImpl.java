@@ -1,5 +1,6 @@
 package Game.Entities;
 
+import java.io.IOException;
 import java.time.Instant;
 
 import Collections.Exceptions.EmptyCollectionException;
@@ -7,8 +8,9 @@ import Collections.Exceptions.IllegalArgumentException;
 import Collections.Exceptions.NoSuchElementException;
 import Collections.HashTables.HashMap;
 import Collections.HashTables.MapADT;
+import org.json.simple.JSONObject;
 
-public class ConnectorImpl extends PlaceImpl implements Connector {
+public class ConnectorImpl extends LocalImpl implements Connector {
 
     int coolDownTime;
     MapADT<Player, Instant> playerInstantMap;
@@ -50,5 +52,34 @@ public class ConnectorImpl extends PlaceImpl implements Connector {
         } catch (IllegalArgumentException ignored) {
             throw new IllegalArgumentException("Player is not valid");
         }
+    }
+
+    @Override
+    public JSONObject getJSON() {
+        JSONObject connector = new JSONObject();
+        connector.put("id", getID());
+        connector.put("type", "Connector");
+        connector.put("name", getName());
+        JSONObject coordinates = new JSONObject();
+        coordinates.put("latitude", getLatitude());
+        coordinates.put("longitude", getLongitude());
+        connector.put("coordinates", coordinates);
+        JSONObject gameSettings = new JSONObject();
+        gameSettings.put("energy", getEnergy());
+        gameSettings.put("cooldown", getCoolDownTime());
+        connector.put("gameSettings", gameSettings);
+        return connector;
+    }
+
+    @Override
+    public void setJSON(JSONObject json) throws IOException, IllegalArgumentException {
+        setID((int) (long) json.get("id"));
+        setName((String) json.get("name"));
+        JSONObject coordinates = (JSONObject) json.get("coordinates");
+        setLatitude((double) coordinates.get("latitude"));
+        setLongitude((double) coordinates.get("longitude"));
+        JSONObject gameSettings = (JSONObject) json.get("gameSettings");
+        setEnergy((int) (long) gameSettings.get("energy"));
+        setCoolDownTime((int) (long) gameSettings.get("cooldown"));
     }
 }

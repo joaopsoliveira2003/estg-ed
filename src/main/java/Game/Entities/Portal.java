@@ -6,7 +6,7 @@ import Game.Exceptions.NoAssociationException;
 /**
  * Portal defines the interface for a portal in the game.
  */
-public interface Portal extends Place {
+public interface Portal extends Local {
 
     /**
      * Returns the maximum energy that can be stored in the portal.

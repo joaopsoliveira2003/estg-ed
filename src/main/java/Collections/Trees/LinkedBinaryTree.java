@@ -22,6 +22,13 @@ public class LinkedBinaryTree<T> implements BinaryTreeADT<T> {
         size = 1;
     }
 
+    public void setRoot(BinaryTreeNode<T> root) throws EmptyCollectionException {
+        if (isEmpty()) {
+            throw new EmptyCollectionException();
+        }
+        this.root = root;
+    }
+
     @Override
     public T getRootElement() throws EmptyCollectionException {
         if (isEmpty()) {

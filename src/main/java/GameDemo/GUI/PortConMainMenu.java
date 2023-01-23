@@ -14,7 +14,6 @@ public class PortConMainMenu extends JFrame {
 
         JButton editPortButton = new JButton("Edit Portals");
         editPortButton.addActionListener(e -> {
-
         });
 
         JButton removePortButton = new JButton("Remove Portals");

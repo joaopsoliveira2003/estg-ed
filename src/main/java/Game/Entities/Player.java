@@ -7,7 +7,7 @@ import Game.Exceptions.NoAssociationException;
 /**
  * Player defines the interface for a player in the game.
  */
-public interface Player {
+public interface Player extends Comparable<Player> {
 
     /**
      * Returns the id of the player.

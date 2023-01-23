@@ -9,7 +9,7 @@ public class MainMenu extends JFrame {
 
         JButton gestPortConButton = new JButton("Management of Portals and Connectors");
         gestPortConButton.addActionListener(e -> {
-            new PortConMainMenu();
+            PortConMainMenu portConMainMenu = new PortConMainMenu();
         });
 
         JButton gestRoutesButton = new JButton("Management of Routes");

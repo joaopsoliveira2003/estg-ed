@@ -2,7 +2,7 @@ package Game.Entities;
 
 import Collections.Exceptions.IllegalArgumentException;
 
-public class PlaceImpl implements Place {
+public abstract class LocalImpl implements Local {
 
     private int id;
     private String name;
@@ -10,7 +10,7 @@ public class PlaceImpl implements Place {
     private double longitude;
     private int energy;
 
-    public PlaceImpl(int id, String name, double latitude, double longitude, int energy) {
+    public LocalImpl(int id, String name, double latitude, double longitude, int energy) {
         setID(id);
         setName(name);
         setLatitude(latitude);
@@ -71,14 +71,14 @@ public class PlaceImpl implements Place {
     }
 
     @Override
-    public double getDistanceTo(Place place) throws IllegalArgumentException {
-        if (place == null) {
-            throw new IllegalArgumentException("Place cannot be null");
+    public double getDistanceTo(Local local) throws IllegalArgumentException {
+        if (local == null) {
+            throw new IllegalArgumentException("Local cannot be null");
         }
         double lat1 = Math.toRadians(latitude);
-        double lat2 = Math.toRadians(place.getLatitude());
+        double lat2 = Math.toRadians(local.getLatitude());
         double lon1 = Math.toRadians(longitude);
-        double lon2 = Math.toRadians(place.getLongitude());
+        double lon2 = Math.toRadians(local.getLongitude());
         double dlon = lon2 - lon1;
         double dlat = lat2 - lat1;
         double a = Math.pow(Math.sin(dlat / 2), 2) + Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin(dlon / 2), 2);
@@ -99,6 +99,7 @@ public class PlaceImpl implements Place {
         this.energy = energy;
     }
 
+
     @Override
     public int hashCode() {
         return id;
@@ -112,17 +113,17 @@ public class PlaceImpl implements Place {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final PlaceImpl other = (PlaceImpl) obj;
+        final LocalImpl other = (LocalImpl) obj;
         return this.id == other.id;
     }
 
     @Override
-    public int compareTo(Place other) {
+    public int compareTo(Local other) {
         return this.id - other.getID();
     }
 
     @Override
     public String toString() {
-        return "\nPlace {" + "id=" + id + ", name=" + name + ", latitude=" + latitude + ", longitude=" + longitude + ", energy=" + energy + '}';
+        return "\nLocal {" + "id=" + id + ", name=" + name + ", latitude=" + latitude + ", longitude=" + longitude + ", energy=" + energy + '}';
     }
 }

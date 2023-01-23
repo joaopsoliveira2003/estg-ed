@@ -21,6 +21,12 @@ public interface ExtendedNetwork<T> extends NetworkADT<T> {
 
     boolean containsVertex(T vertex);
 
+    //return all vertexes
+    Iterator<T> iteratorVertexes();
+
+    //return all routes
+    Iterator<T> iteratorRoutes();
+
     /**
      * Returns an iterator that performs a traversal considering if the path should go through portals or connectors.
      *
