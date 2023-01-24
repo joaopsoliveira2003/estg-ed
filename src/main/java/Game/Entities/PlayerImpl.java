@@ -1,7 +1,7 @@
 package Game.Entities;
 
-import Collections.Lists.UnorderedListADT;
 import Collections.Exceptions.IllegalArgumentException;
+import Collections.Lists.UnorderedListADT;
 import Game.Exceptions.NoAssociationException;
 
 public class PlayerImpl implements Player {
@@ -12,23 +12,20 @@ public class PlayerImpl implements Player {
     private int id;
     private String name;
     private int currentEnergy;
-    private int level;
     private int experiencePoints;
 
     public PlayerImpl(int id, String name) {
         setID(id);
         setName(name);
-        setCurrentEnergy(100);
-        setLevel(0);
+        setCurrentEnergy(150);
         setExperiencePoints(0);
     }
 
-    public PlayerImpl(int id, String name, Team team, int currentEnergy, int level, int experiencePoints) {
+    public PlayerImpl(int id, String name, Team team, int currentEnergy, int experiencePoints) {
         setID(id);
         setName(name);
         setTeam(team);
         setCurrentEnergy(currentEnergy);
-        setLevel(level);
         setExperiencePoints(experiencePoints);
         setTeam(team);
     }
@@ -91,17 +88,23 @@ public class PlayerImpl implements Player {
     }
 
     @Override
-    public int getLevel() {
-        return level;
+    public void addEnergy(int energy) throws IllegalArgumentException {
+        this.currentEnergy += energy;
     }
 
     @Override
-    public void setLevel(int level) throws IllegalArgumentException {
-        if (level < 0) {
-            throw new IllegalArgumentException("Level cannot be negative");
+    public void removeEnergy(int energy) throws IllegalArgumentException {
+        if (energy < 0) {
+            throw new IllegalArgumentException("Energy cannot be negative");
         }
-        this.level = level;
+        this.currentEnergy -= energy;
     }
+
+    @Override
+    public int getLevel() {
+        return (int) (0.07 * Math.sqrt(experiencePoints));
+    }
+
 
     @Override
     public int getExperiencePoints() {
@@ -151,6 +154,29 @@ public class PlayerImpl implements Player {
         return this.id - o.getID();
     }
 
+    /*public int compareTo(Player o, PlayerFilter filter) {
+        switch (filter) {
+            case ID:
+                return this.id - o.getID();
+            case NAME:
+                return this.name.compareTo(o.getName());
+            case TEAM:
+                try {
+                    return this.getTeam().getName().compareTo(o.getTeam().getName());
+                } catch (NoAssociationException e) {
+                    return -1;
+                }
+            case CURRENT_ENERGY:
+                return this.currentEnergy - o.getCurrentEnergy();
+            case LEVEL:
+                return this.level - o.getLevel();
+            case EXPERIENCE_POINTS:
+                return this.experiencePoints - o.getExperiencePoints();
+            default:
+                return 0;
+        }
+    }*/
+
     @Override
         public String toString() {
             String team = "None";
@@ -162,7 +188,6 @@ public class PlayerImpl implements Player {
             + ", name=" + name
             + ", team=" + team
             + ", currentEnergy=" + currentEnergy
-            + ", level=" + level
             + ", experiencePoints=" + experiencePoints + '}';
         }
 }

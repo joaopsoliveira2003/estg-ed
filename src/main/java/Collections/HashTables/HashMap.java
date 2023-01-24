@@ -53,8 +53,17 @@ public class HashMap<K, V> implements MapADT<K, V> {
 
     @Override
     public V remove(K key) throws EmptyCollectionException, NoSuchElementException, IllegalArgumentException {
+        if (key == null) {
+            throw new IllegalArgumentException("Key cannot be null");
+        }
+        if (isEmpty()) {
+            throw new EmptyCollectionException("Map is empty");
+        }
         V value = get(key);
         int index = Math.abs(key.hashCode()) % map.length;
+        if (map[index] == null) {
+            throw new NoSuchElementException("Key not found");
+        }
         map[index] = null;
         size--;
         return value;
@@ -63,14 +72,14 @@ public class HashMap<K, V> implements MapADT<K, V> {
     @Override
     public V get(K key) throws EmptyCollectionException, NoSuchElementException, IllegalArgumentException {
         if (isEmpty()) {
-            throw new EmptyCollectionException();
+            throw new EmptyCollectionException("Map is empty");
         }
         if (key == null) {
             throw new IllegalArgumentException("Key cannot be null");
         }
         int index = Math.abs(key.hashCode()) % map.length;
         if (map[index] == null) {
-            throw new NoSuchElementException();
+            throw new NoSuchElementException("Key not found");
         }
         return map[index].getValue();
     }

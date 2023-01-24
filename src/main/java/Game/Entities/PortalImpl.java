@@ -56,6 +56,11 @@ public class PortalImpl extends LocalImpl implements Portal {
     }
 
     @Override
+    public void removeOwner() throws NoAssociationException {
+        ppa.removeAssociation(this, getOwner());
+    }
+
+    @Override
     public JSONObject getJSON() {
         JSONObject portal = new JSONObject();
         portal.put("id", getID());

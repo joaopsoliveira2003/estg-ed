@@ -99,6 +99,21 @@ public abstract class LocalImpl implements Local {
         this.energy = energy;
     }
 
+    @Override
+    public void addEnergy(int energy) throws IllegalArgumentException {
+        if (energy <= 0) {
+            throw new IllegalArgumentException("Energy must be positive");
+        }
+        this.energy += energy;
+    }
+
+    public void removeEnergy(int energy) throws IllegalArgumentException {
+        if (energy <= 0) {
+            throw new IllegalArgumentException("Energy must be positive");
+        }
+        this.energy -= energy;
+    }
+
 
     @Override
     public int hashCode() {

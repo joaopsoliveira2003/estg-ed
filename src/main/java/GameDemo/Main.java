@@ -8,13 +8,16 @@ import Game.Entities.*;
 import GameDemo.GUI.MainMenu;
 
 import java.io.IOException;
+import java.sql.SQLOutput;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 public class Main {
     public static void main(String[] args) {
 
-        //MainMenu mainMenu = new MainMenu();
         Game game = new GameImpl();
+        new MainMenu(game);
 
         Portal place1 = new PortalImpl(0, "Torre dos Clérigos - Porto", 41.1456745, -8.6167864, 180, 200);
         Portal place2 = new PortalImpl(1, "Castelo de S.Jorge - Lisboa", 38.7136723, -9.1331109, 190, 200);
@@ -52,20 +55,65 @@ public class Main {
         Team team1 = new TeamImpl("Sparks");
         Team team2 = new TeamImpl("Giants");
 
-        Player player1 = new PlayerImpl(0, "João", team1 ,400, 0, 0);
-        Player player2 = new PlayerImpl(1, "Ana", team1 ,400, 0, 0);
-        Player player3 = new PlayerImpl(2, "Pedro", team2 ,400, 0, 0);
-        Player player4 = new PlayerImpl(3, "Maria", team2 ,400, 0, 0);
-        Player player5 = new PlayerImpl(4, "Rui", team1 ,400, 0, 0);
-        Player player6 = new PlayerImpl(5, "Sara", team1 ,400, 0, 0);
-        Player player7 = new PlayerImpl(6, "Joana", team2 ,400, 0, 0);
-        Player player8 = new PlayerImpl(7, "Ricardo", team2 ,400, 0, 0);
-        Player player9 = new PlayerImpl(8, "Miguel", team1 ,400, 0, 0);
-        Player player10 = new PlayerImpl(9, "Inês", team1 ,400, 0, 0);
-        Player player11 = new PlayerImpl(10, "João", team2 ,400, 0, 0);
+        game.addTeam(team1);
+        game.addTeam(team2);
+
+        Player player1 = new PlayerImpl(0, "João");
+        Player player2 = new PlayerImpl(1, "Ana");
+        Player player3 = new PlayerImpl(2, "Pedro");
+        Player player4 = new PlayerImpl(3, "Maria");
+        Player player5 = new PlayerImpl(4, "Rui");
+        Player player6 = new PlayerImpl(5, "Sara");
+        Player player7 = new PlayerImpl(6, "Joana");
+        Player player8 = new PlayerImpl(7, "Ricardo");
+        Player player9 = new PlayerImpl(8, "Miguel");
+        Player player10 = new PlayerImpl(9, "Inês");
+        Player player11 = new PlayerImpl(10, "João");
+
+        game.addPlayer(player1);
+        game.addPlayer(player2);
+        game.addPlayer(player3);
+        game.addPlayer(player4);
+        game.addPlayer(player5);
+        game.addPlayer(player6);
+        game.addPlayer(player7);
+        game.addPlayer(player8);
+        game.addPlayer(player9);
+        game.addPlayer(player10);
+        game.addPlayer(player11);
 
 
-        try {
+        System.out.println("*********************");
+
+        game.addPlayerToTeam(player6, team2);
+
+        game.addPlayerToTeam(player11, team1);
+
+        place7.setOwner(player11);
+
+        game.movePlayer(player6, place7);
+
+        System.out.println("Player6 energy before acquiring place7: " + player6.getCurrentEnergy());
+
+        System.out.println("Place7 energy before acquiring: " + place7.getEnergy());
+
+        game.acquirePortal(player6, place7);
+
+        System.out.println("Player6 energy after acquiring place7: " + player6.getCurrentEnergy());
+
+        System.out.println("Place7 energy after acquiring: " + place7.getEnergy());
+
+
+        game.movePlayer(player6, place8);
+
+        System.out.println("PLayer6 energy before charging in place8: " + player6.getCurrentEnergy());
+
+        game.chargePlayer(player6, place8);
+
+        System.out.println("Player6 after charge in place8: " + player6.getCurrentEnergy());
+
+
+        /*try {
             game.saveGameData("gameData.json");
         } catch (IOException e) {
             e.printStackTrace();
@@ -89,5 +137,27 @@ public class Main {
         while (iterator.hasNext()){
             System.out.println(iterator.next());
         }
+
+        Set<Player> playersSet = new HashSet<>();
+        playersSet.add(player1);
+        playersSet.add(player2);
+        playersSet.add(player3);
+        playersSet.add(player4);
+        playersSet.add(player1);
+        playersSet.add(player2);
+        playersSet.add(player3);
+        playersSet.add(player4);
+        playersSet.add(player5);
+        playersSet.add(player6);
+        playersSet.add(player7);
+        playersSet.add(player8);
+        playersSet.add(player9);
+        playersSet.add(player10);
+        playersSet.add(player11);
+        System.out.println(playersSet);
+        playersSet.remove(player1);
+        System.out.println(playersSet);*/
+
+
     }
 }

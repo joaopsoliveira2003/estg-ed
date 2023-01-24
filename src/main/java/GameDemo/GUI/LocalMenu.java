@@ -1,10 +1,12 @@
 package GameDemo.GUI;
 
+import Game.API.Game;
+
 import javax.swing.*;
 import java.awt.*;
 
-public class PortConMainMenu extends JFrame {
-    public PortConMainMenu() {
+public class LocalMenu extends JFrame {
+    public LocalMenu(Game game) {
         super("Management of Portals and Connectors");
 
         JButton addPortButton = new JButton("Add Portals");
@@ -56,6 +58,9 @@ public class PortConMainMenu extends JFrame {
 
         });
 
+        JButton emptyButton = new JButton("");
+        emptyButton.setEnabled(false);
+
         JButton saveDataButton = new JButton("Export Data");
         saveDataButton.addActionListener(e -> {
 
@@ -75,14 +80,13 @@ public class PortConMainMenu extends JFrame {
         add(removeConRegistButton);
         add(listPortConButton);
         add(loadDataButton);
+        add(emptyButton);
         add(saveDataButton);
 
         setSize(450, 450);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         setLocationRelativeTo(null);
-        setResizable(false);
-
-        setVisible(true);
+        //setResizable(false);
     }
 }

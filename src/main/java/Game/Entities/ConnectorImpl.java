@@ -82,4 +82,12 @@ public class ConnectorImpl extends LocalImpl implements Connector {
         setEnergy((int) (long) gameSettings.get("energy"));
         setCoolDownTime((int) (long) gameSettings.get("cooldown"));
     }
-}
+
+    //toString
+    @Override
+    public String toString() {
+        return "ConnectorImpl{" + "coolDownTime=" + coolDownTime + ", playerInstantMap=" + playerInstantMap + '}';
+    }
+
+
+    }

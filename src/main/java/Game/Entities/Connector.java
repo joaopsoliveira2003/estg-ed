@@ -39,4 +39,11 @@ public interface Connector extends Local {
      */
     boolean isCoolDownOver(Player player) throws IllegalArgumentException;
 
+    /**
+     * Returns the description of the place.
+     *
+     * @return the description of the place
+     */
+    String toString();
+
 }

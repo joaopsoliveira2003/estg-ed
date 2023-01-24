@@ -66,18 +66,25 @@ public interface Player extends Comparable<Player> {
     void setCurrentEnergy(int energy) throws IllegalArgumentException;
 
     /**
+     * Adds the specified energy to the player.
+     *
+     * @param energy the energy to add
+     */
+    void addEnergy(int energy) throws IllegalArgumentException;
+
+    /**
+     * Removes the specified energy from the player.
+     *
+     * @param energy the energy to remove
+     */
+    void removeEnergy(int energy) throws IllegalArgumentException;
+
+    /**
      * Returns the level of the player.
      *
      * @return the level of the player
      */
     int getLevel();
-
-    /**
-     * Sets the level of the player.
-     *
-     * @param level the level of the player
-     */
-    void setLevel(int level) throws IllegalArgumentException;
 
     /**
      * Returns the experience of the player.

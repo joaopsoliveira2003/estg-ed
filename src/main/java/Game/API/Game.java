@@ -1,15 +1,14 @@
 package Game.API;
 
 import Collections.Lists.LinkedOrderedList;
+import Game.Entities.Connector;
 import Game.Entities.Local;
 import Game.Entities.Player;
 import Game.Entities.Team;
 import Game.Enumerations.LocalFilter;
 import Game.Enumerations.PlayerFilter;
-import Game.Exceptions.NoSuchLocalException;
+import Game.Exceptions.*;
 import Collections.Exceptions.IllegalArgumentException;
-import Game.Exceptions.NoSuchPlayerException;
-import Game.Exceptions.NoSuchTeamException;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -75,7 +74,7 @@ public interface Game {
 
     void exportShortestPath(Iterator<Local> path, String fileName) throws IOException, IllegalArgumentException;
 
-    void addPlayer(Player player) throws IllegalArgumentException;
+    void addPlayer(Player player) throws IllegalArgumentException, AlreadyExistsException;
 
     void updatePlayer(Player oldPlayer, Player newPlayer) throws NoSuchPlayerException, IllegalArgumentException;
 
@@ -83,13 +82,17 @@ public interface Game {
 
     void movePlayer(Player player, Local local) throws NoSuchPlayerException, NoSuchLocalException, IllegalArgumentException;
 
-    void addTeam(Team team) throws IllegalArgumentException;
+    void addTeam(Team team) throws IllegalArgumentException, AlreadyExistsException;
 
     void addPlayerToTeam(Player player, Team team) throws NoSuchPlayerException, NoSuchTeamException, IllegalArgumentException;
 
     void removePlayerFromTeam(Player player, Team team) throws NoSuchPlayerException, NoSuchTeamException, IllegalArgumentException;
 
     LinkedOrderedList<Player> listPlayersOrdered(PlayerFilter filter);
+
+    void chargePlayer(Player player, Local local) throws NoSuchPlayerException, NoSuchLocalException, CooldownNotOverException, IllegalArgumentException;
+
+    void acquirePortal(Player player, Local local) throws NoSuchPlayerException, NoSuchLocalException, NoTeamException, NotEnoughEnergyException, AlreadyConqueredPortalException, IllegalArgumentException;
 
     void loadGameData(String fileName) throws IOException, IllegalArgumentException;
 

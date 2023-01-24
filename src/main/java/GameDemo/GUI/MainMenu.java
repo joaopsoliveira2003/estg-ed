@@ -1,15 +1,23 @@
 package GameDemo.GUI;
 
+import Game.API.Game;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class MainMenu extends JFrame {
-    public MainMenu() {
+    public MainMenu(Game game) {
         super("Main Menu");
+
+        LocalMenu localMenu = new LocalMenu(game);
 
         JButton gestPortConButton = new JButton("Management of Portals and Connectors");
         gestPortConButton.addActionListener(e -> {
-            PortConMainMenu portConMainMenu = new PortConMainMenu();
+            if (!localMenu.isVisible()) {
+                localMenu.setVisible(true);
+            } else {
+                localMenu.toFront();
+            }
         });
 
         JButton gestRoutesButton = new JButton("Management of Routes");
@@ -38,7 +46,7 @@ public class MainMenu extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         setLocationRelativeTo(null);
-        setResizable(false);
+        //setResizable(false);
 
         setVisible(true);
     }

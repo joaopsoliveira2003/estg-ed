@@ -101,6 +101,8 @@ public class DoublyLinkedList<T> implements ListADT<T>, Iterable<T> {
         return tail.getElement();
     }
 
+
+
     @Override
     public boolean contains(T target) throws EmptyCollectionException {
         if (isEmpty()) throw new EmptyCollectionException();

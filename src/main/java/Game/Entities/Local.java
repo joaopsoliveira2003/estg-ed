@@ -88,6 +88,10 @@ public interface Local extends Comparable<Local> {
      */
     void setEnergy(int energy) throws IllegalArgumentException;
 
+    void addEnergy(int energy) throws IllegalArgumentException;
+
+    void removeEnergy(int energy) throws IllegalArgumentException;
+
     //json
     /**
      * Returns the json of the place.
