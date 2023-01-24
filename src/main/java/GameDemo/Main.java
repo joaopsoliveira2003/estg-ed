@@ -1,23 +1,17 @@
 package GameDemo;
 
-import Collections.Trees.AVLTree;
-import Collections.Trees.AVLTreeADT;
 import Game.API.Game;
 import Game.API.GameImpl;
 import Game.Entities.*;
 import GameDemo.GUI.MainMenu;
 
 import java.io.IOException;
-import java.sql.SQLOutput;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
 
 public class Main {
     public static void main(String[] args) {
 
         Game game = new GameImpl();
-        new MainMenu(game);
+        //new MainMenu(game);
 
         Portal place1 = new PortalImpl(0, "Torre dos Clérigos - Porto", 41.1456745, -8.6167864, 180, 200);
         Portal place2 = new PortalImpl(1, "Castelo de S.Jorge - Lisboa", 38.7136723, -9.1331109, 190, 200);
@@ -27,23 +21,23 @@ public class Main {
         Portal place6 = new PortalImpl(5, "Portugal dos Pequenitos - Coimbra", 40.2023015, -8.4365746, 75, 125);
         Portal place7 = new PortalImpl(7, "Dom Afonso Henriques - Guimarães", 41.446926, -8.2922936, 90, 130);
 
-        Connector place8 = new ConnectorImpl(0, "Salinas Aveiro - Aveiro", 40.6448511, -8.6668641, 75, 5);
-        Connector place9 = new ConnectorImpl(1, "Sé de Leiria", 39.74604335, -8.81005909, 50, 3);
-        Connector place10 = new ConnectorImpl(2, "Universidade de Trás-os-Montes e Alto Douro - Vila Real", 41.2885442, -7.7412596, 50, 2);
-        Connector place11 = new ConnectorImpl(3, "Instituto Politécnico da Guarda - Guarda", 40.53703093, -7.2762619, 50, 3);
+        Connector place8 = new ConnectorImpl(8, "Salinas Aveiro - Aveiro", 40.6448511, -8.6668641, 75, 5);
+        Connector place9 = new ConnectorImpl(9, "Sé de Leiria", 39.74604335, -8.81005909, 50, 3);
+        Connector place10 = new ConnectorImpl(10, "Universidade de Trás-os-Montes e Alto Douro - Vila Real", 41.2885442, -7.7412596, 50, 2);
+        Connector place11 = new ConnectorImpl(11, "Instituto Politécnico da Guarda - Guarda", 40.53703093, -7.2762619, 50, 3);
 
-        game.addPlace(place1);
-        game.addPlace(place2);
-        game.addPlace(place3);
-        game.addPlace(place4);
-        game.addPlace(place5);
-        game.addPlace(place6);
-        game.addPlace(place7);
+        game.addLocal(place1);
+        game.addLocal(place2);
+        game.addLocal(place3);
+        game.addLocal(place4);
+        game.addLocal(place5);
+        game.addLocal(place6);
+        game.addLocal(place7);
 
-        game.addPlace(place8);
-        game.addPlace(place9);
-        game.addPlace(place10);
-        game.addPlace(place11);
+        game.addLocal(place8);
+        game.addLocal(place9);
+        game.addLocal(place10);
+        game.addLocal(place11);
 
         game.addRoute(place1, place8);
         game.addRoute(place8, place9);
@@ -82,6 +76,7 @@ public class Main {
         game.addPlayer(player10);
         game.addPlayer(player11);
 
+        player6.addExperiencePoints(9999);
 
         System.out.println("*********************");
 
@@ -112,52 +107,11 @@ public class Main {
 
         System.out.println("Player6 after charge in place8: " + player6.getCurrentEnergy());
 
-
-        /*try {
+        try {
             game.saveGameData("gameData.json");
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        AVLTreeADT<Player> players = new AVLTree<>();
-        players.addElement(player1);
-        players.addElement(player2);
-        players.addElement(player3);
-        players.addElement(player4);
-        players.addElement(player5);
-        players.addElement(player6);
-        players.addElement(player7);
-        players.addElement(player8);
-        players.addElement(player9);
-        players.addElement(player10);
-        players.addElement(player11);
-        System.out.println(players);
-        System.out.println("Iterator");
-        Iterator<Player> iterator = players.iteratorPostOrder();
-        while (iterator.hasNext()){
-            System.out.println(iterator.next());
-        }
-
-        Set<Player> playersSet = new HashSet<>();
-        playersSet.add(player1);
-        playersSet.add(player2);
-        playersSet.add(player3);
-        playersSet.add(player4);
-        playersSet.add(player1);
-        playersSet.add(player2);
-        playersSet.add(player3);
-        playersSet.add(player4);
-        playersSet.add(player5);
-        playersSet.add(player6);
-        playersSet.add(player7);
-        playersSet.add(player8);
-        playersSet.add(player9);
-        playersSet.add(player10);
-        playersSet.add(player11);
-        System.out.println(playersSet);
-        playersSet.remove(player1);
-        System.out.println(playersSet);*/
-
 
     }
 }

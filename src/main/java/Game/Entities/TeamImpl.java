@@ -1,6 +1,7 @@
 package Game.Entities;
 
 import Collections.Exceptions.IllegalArgumentException;
+import org.json.simple.JSONObject;
 
 public class TeamImpl implements Team {
 
@@ -21,6 +22,18 @@ public class TeamImpl implements Team {
             throw new IllegalArgumentException("Name cannot be null, empty or blank");
         }
         this.name = name;
+    }
+
+    @Override
+    public JSONObject toJSON() {
+        JSONObject json = new JSONObject();
+        json.put("name", name);
+        return json;
+    }
+
+    @Override
+    public void fromJSON(JSONObject json) {
+
     }
 
     @Override

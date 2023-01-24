@@ -16,10 +16,10 @@ import Game.Enumerations.PlayerFilter;
 import Game.Exceptions.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.Iterator;
 
 public class GameImpl implements Game {
@@ -36,68 +36,76 @@ public class GameImpl implements Game {
         playerPositions = new HashMap<>();
     }
 
-    // PLACES AND ROUTES
+    // LOCALS AND ROUTES
 
     @Override
-    public void addPlace(Local vertex) throws IllegalArgumentException {
-        if (vertex == null) {
+    public void addLocal(Local local) throws IllegalArgumentException, AlreadyExistsException {
+        if (local == null) {
             throw new IllegalArgumentException("Local cannot be null");
         }
-        network.addVertex(vertex);
+        if (network.containsVertex(local)) {
+            throw new AlreadyExistsException("Local " + local.getName() + " already exists");
+        }
+        network.addVertex(local);
     }
 
     @Override
-    public void updatePlace(Local oldVertex, Local newVertex) throws NoSuchLocalException, IllegalArgumentException {
-        if (oldVertex == null || newVertex == null) {
+    public void updateLocal(Local oldLocal, Local newLocal) throws NoSuchLocalException, IllegalArgumentException {
+        if (oldLocal == null || newLocal == null) {
             throw new IllegalArgumentException("Local cannot be null");
         }
-        if (network.containsVertex(oldVertex)) {
-            throw new NoSuchLocalException("Local " + oldVertex + " does not exist");
+        if (network.containsVertex(oldLocal)) {
+            throw new NoSuchLocalException("Local " + oldLocal.getName() + " does not exist");
         }
-        network.updateVertex(oldVertex, newVertex);
+        network.updateVertex(oldLocal, newLocal);
     }
 
     @Override
-    public void removePlace(Local vertex) throws NoSuchLocalException, IllegalArgumentException {
-        if (vertex == null) {
+    public void removeLocal(Local local) throws NoSuchLocalException, IllegalArgumentException {
+        if (local == null) {
             throw new IllegalArgumentException("Local cannot be null");
         }
-        if (network.containsVertex(vertex)) {
-            throw new NoSuchLocalException("Local " + vertex + " does not exist");
+        if (!network.containsVertex(local)) {
+            throw new NoSuchLocalException("Local " + local.getName() + " does not exist");
         }
-        network.removeVertex(vertex);
+        network.removeVertex(local);
     }
 
     @Override
     public LinkedOrderedList<Local> listPlacesOrdered(LocalFilter filter) {
-        return null;
+        LinkedOrderedList<Local> list = new LinkedOrderedList<>();
+        for (Iterator<Local> it = network.iteratorVertexes(); it.hasNext(); ) {
+            Local local = it.next();
+            list.add(local);
+        }
+        return list;
     }
 
     @Override
-    public void addRoute(Local vertex1, Local vertex2) throws NoSuchLocalException, IllegalArgumentException {
-        if (vertex1 == null || vertex2 == null) {
+    public void addRoute(Local local1, Local local2) throws NoSuchLocalException, IllegalArgumentException {
+        if (local1 == null || local2 == null) {
             throw new IllegalArgumentException("Local cannot be null");
         }
-        if (!network.containsVertex(vertex1) || !network.containsVertex(vertex2)) {
-            throw new NoSuchLocalException("Local " + vertex1 + " or " + vertex2 + " does not exist");
+        if (!network.containsVertex(local1) || !network.containsVertex(local2)) {
+            throw new NoSuchLocalException("Local " + local1.getName() + " or " + local2.getName() + " does not exist");
         }
-        network.addEdge(vertex1, vertex2);
+        network.addEdge(local1, local2);
     }
 
     @Override
-    public void removeRoute(Local vertex1, Local vertex2) throws NoSuchLocalException, IllegalArgumentException {
-        if (vertex1 == null || vertex2 == null) {
+    public void removeRoute(Local local1, Local local2) throws NoSuchLocalException, IllegalArgumentException {
+        if (local1 == null || local2 == null) {
             throw new IllegalArgumentException("Local cannot be null");
         }
-        if (!network.containsVertex(vertex1) || !network.containsVertex(vertex2)) {
-            throw new NoSuchLocalException("Local " + vertex1 + " or " + vertex2 + " does not exist");
+        if (!network.containsVertex(local1) || !network.containsVertex(local2)) {
+            throw new NoSuchLocalException("Local " + local1.getName() + " or " + local2.getName() + " does not exist");
         }
-        network.removeEdge(vertex1, vertex2);
+        network.removeEdge(local1, local2);
     }
 
     @Override
-    public Iterator<Local> getShortestPath(Local vertex1, Local vertex2) throws NoSuchLocalException, IllegalArgumentException {
-        return network.iteratorShortestPath(vertex1, vertex2);
+    public Iterator<Local> getShortestPath(Local local1, Local local2) throws NoSuchLocalException, IllegalArgumentException {
+        return network.iteratorShortestPath(local1, local2);
     }
 
     @Override
@@ -128,7 +136,7 @@ public class GameImpl implements Game {
             throw new IllegalArgumentException("Player cannot be null");
         }
         if (players.contains(player)) {
-            throw new AlreadyExistsException("Player " + player + " already exists");
+            throw new AlreadyExistsException("Player " + player.getName() + " already exists");
         }
         players.add(player);
     }
@@ -139,7 +147,7 @@ public class GameImpl implements Game {
             throw new IllegalArgumentException("Player cannot be null");
         }
         if (!players.contains(oldPlayer)) {
-            throw new NoSuchPlayerException("Player " + oldPlayer + " does not exist");
+            throw new NoSuchPlayerException("Player " + oldPlayer.getName() + " does not exist");
         }
         players.remove(oldPlayer);
         try {
@@ -154,7 +162,7 @@ public class GameImpl implements Game {
             throw new IllegalArgumentException("Player cannot be null");
         }
         if (!players.contains(player)) {
-            throw new NoSuchPlayerException("Player " + player + " does not exist");
+            throw new NoSuchPlayerException("Player " + player.getName() + " does not exist");
         }
         players.remove(player);
         try {
@@ -168,10 +176,10 @@ public class GameImpl implements Game {
             throw new IllegalArgumentException("Player or local cannot be null");
         }
         if (!players.contains(player)) {
-            throw new NoSuchPlayerException("Player " + player + " does not exist");
+            throw new NoSuchPlayerException("Player " + player.getName() + " does not exist");
         }
         if (!network.containsVertex(local)) {
-            throw new NoSuchLocalException("Local " + local + " does not exist");
+            throw new NoSuchLocalException("Local " + local.getName() + " does not exist");
         }
         playerPositions.put(player, local);
     }
@@ -182,7 +190,7 @@ public class GameImpl implements Game {
             throw new IllegalArgumentException("Team cannot be null");
         }
         if (teams.contains(team)) {
-            throw new AlreadyExistsException("Team " + team + " already exists");
+            throw new AlreadyExistsException("Team " + team.getName() + " already exists");
         }
         teams.add(team);
     }
@@ -193,7 +201,7 @@ public class GameImpl implements Game {
             throw new IllegalArgumentException("Player or team cannot be null");
         }
         if (!players.contains(player)) {
-            throw new NoSuchPlayerException("Player " + player + " does not exist");
+            throw new NoSuchPlayerException("Player " + player.getName() + " does not exist");
         }
         player.setTeam(team);
     }
@@ -211,7 +219,12 @@ public class GameImpl implements Game {
 
     @Override
     public LinkedOrderedList<Player> listPlayersOrdered(PlayerFilter filter) {
-        return null;
+        LinkedOrderedList<Player> list = new LinkedOrderedList<>();
+        for (Iterator<Player> it = players.iterator(); it.hasNext(); ) {
+            Player player = it.next();
+            list.add(player);
+        }
+        return list;
     }
 
     @Override
@@ -323,22 +336,20 @@ public class GameImpl implements Game {
 
     @Override
     public void loadGameData(String fileName) throws IOException, IllegalArgumentException {
+        JSONParser parser = new JSONParser();
 
     }
 
     @Override
     public void saveGameData(String fileName) throws IOException, IllegalArgumentException {
-        JSONObject mainObject = new JSONObject();
-        JSONObject locals = new JSONObject();
+        JSONObject json = new JSONObject();
         JSONArray localsArray = new JSONArray();
         Iterator<Local> iterator = network.iteratorVertexes();
         while (iterator.hasNext()) {
             Local place = iterator.next();
             localsArray.add(place.getJSON());
         }
-        locals.put("locals", localsArray);
-        mainObject.put("locals", locals);
-        JSONObject routes = new JSONObject();
+        json.put("locals", localsArray);
         JSONArray routesArray = new JSONArray();
         iterator = network.iteratorRoutes();
         while (iterator.hasNext()) {
@@ -347,20 +358,33 @@ public class GameImpl implements Game {
             route.put("to", iterator.next().getID());
             routesArray.add(route);
         }
-        routes.put("routes", routesArray);
-        mainObject.put("routes", routes);
+        json.put("routes", routesArray);
 
-        JSONObject players = new JSONObject();
-        JSONObject teams = new JSONObject();
+        JSONArray playersArray = new JSONArray();
+        Iterator<Player> iterator1 = players.iterator();
+        while (iterator1.hasNext()) {
+            Player player = iterator1.next();
+            playersArray.add(player.toJSON());
+        }
+        json.put("players", playersArray);
+
+        JSONArray teamsArray = new JSONArray();
+        Iterator<Team> iterator2 = teams.iterator();
+        while (iterator2.hasNext()) {
+            Team team = iterator2.next();
+            teamsArray.add(team.toJSON());
+        }
+        json.put("teams", teamsArray);
 
         //write to a file with fileName
         File file = new File(fileName);
         if (!file.exists()) {
             file.createNewFile();
         }
+
         //write to text file
         FileOutputStream fileOutputStream = new FileOutputStream(file);
-        fileOutputStream.write(mainObject.toJSONString().getBytes());
+        fileOutputStream.write(json.toJSONString().getBytes());
         fileOutputStream.close();
     }
 }

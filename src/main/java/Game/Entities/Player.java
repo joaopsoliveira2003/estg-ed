@@ -3,6 +3,7 @@ package Game.Entities;
 import Collections.Lists.UnorderedListADT;
 import Collections.Exceptions.IllegalArgumentException;
 import Game.Exceptions.NoAssociationException;
+import org.json.simple.JSONObject;
 
 /**
  * Player defines the interface for a player in the game.
@@ -113,6 +114,10 @@ public interface Player extends Comparable<Player> {
      * @return the portals the player owns
      */
     UnorderedListADT<Portal> getPortals() throws NoAssociationException;
+
+    JSONObject toJSON();
+
+    void fromJSON(JSONObject json);
 
     /**
      * Generates a hash code for the player.

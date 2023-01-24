@@ -1,6 +1,7 @@
 package Game.Entities;
 
 import Collections.Exceptions.IllegalArgumentException;
+import org.json.simple.JSONObject;
 
 /**
  * Team defines a team of players.
@@ -20,6 +21,10 @@ public interface Team {
      * @param name the name of the team
      */
     void setName(String name) throws IllegalArgumentException;
+
+    JSONObject toJSON();
+
+    void fromJSON(JSONObject json);
 
     /**
      * Returns true if the team is equal to the specified object.

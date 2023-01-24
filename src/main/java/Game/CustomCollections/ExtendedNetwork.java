@@ -80,7 +80,7 @@ public class ExtendedNetwork<T> extends Network<T> implements ExtendedNetworkADT
     public Iterator<T> iteratorRoutes() {
         LinkedUnorderedList<T> templist = new LinkedUnorderedList<>();
         for (int i = 0; i < numVertices; i++) {
-            for (int j = 0; j < numVertices; j++) {
+            for (int j = i + 1; j < numVertices; j++) {
                 System.out.println("i: " + i + " j: " + j + " weight: " + adjMatrix[i][j]);
                 if (adjMatrix[i][j] != Double.POSITIVE_INFINITY && i != j) {
                     System.out.println("entered i: " + i + " j: " + j + " weight: " + adjMatrix[i][j]);

@@ -3,6 +3,7 @@ package Game.Entities;
 import Collections.Exceptions.IllegalArgumentException;
 import Collections.Lists.UnorderedListADT;
 import Game.Exceptions.NoAssociationException;
+import org.json.simple.JSONObject;
 
 public class PlayerImpl implements Player {
 
@@ -133,6 +134,32 @@ public class PlayerImpl implements Player {
     }
 
     @Override
+    public JSONObject toJSON() {
+        JSONObject json = new JSONObject();
+
+        json.put("id", id);
+        json.put("name",name);
+        try {
+            json.put("team", getTeam().getName());
+        } catch (NoAssociationException e) {
+            json.put("team", "None");
+        }
+        json.put("level", getLevel());
+        json.put("experiencePoints", experiencePoints);
+        json.put("currentEnergy", currentEnergy);
+
+        return json;
+    }
+
+    @Override
+    public void fromJSON(JSONObject json) {
+        setID((int) json.get(id));
+        setName((String) json.get(name));
+        setCurrentEnergy((int) json.get(currentEnergy));
+        setExperiencePoints((int) json.get(experiencePoints));
+    }
+
+    @Override
     public int hashCode() {
         return id;
     }
@@ -188,6 +215,7 @@ public class PlayerImpl implements Player {
             + ", name=" + name
             + ", team=" + team
             + ", currentEnergy=" + currentEnergy
+            + ", level=" + getLevel()
             + ", experiencePoints=" + experiencePoints + '}';
         }
 }
