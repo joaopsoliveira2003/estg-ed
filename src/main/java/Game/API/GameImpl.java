@@ -306,10 +306,14 @@ public class GameImpl implements Game {
                             player.removeEnergy((int) (portal.getMaxEnergy() * 0.25));
                             portal.addEnergy((int) (portal.getMaxEnergy() * 0.25));
                         } else {
+                            portal.removeEnergy(player.getCurrentEnergy());
+                            player.removeEnergy(player.getCurrentEnergy());
                             //not enough energy
                             throw new NotEnoughEnergyException("Player " + player.getName() + " does not have enough energy to conquer the portal");
                         }
                     } else {
+                        portal.removeEnergy(player.getCurrentEnergy());
+                        player.removeEnergy(player.getCurrentEnergy());
                         //not enough energy
                         throw new NotEnoughEnergyException("Player " + player.getName() + " does not have enough energy to reset the portal");
                     }
@@ -335,9 +339,108 @@ public class GameImpl implements Game {
     }
 
     @Override
+    public void chargePortal(Player player, Local local, int energy) throws NoSuchPlayerException, NoSuchLocalException, InvalidLocalException, WrongLocationException, NoTeamException, NotEnoughEnergyException, NotConqueredPortalException, IllegalArgumentException {
+        if (player == null || local == null) {
+            throw new IllegalArgumentException("Player or local cannot be null");
+        }
+        if (!players.contains(player)) {
+            throw new NoSuchPlayerException("Player " + player.getName() + " does not exist");
+        }
+        if (!network.containsVertex(local)) {
+            throw new NoSuchLocalException("Local " + local.getName() + " does not exist");
+        }
+        try {
+            if (playerPositions.get(player) != local) {
+                throw new NoSuchElementException();
+            }
+        } catch (EmptyCollectionException | NoSuchElementException ignored) {
+            throw new WrongLocationException("Player " + player.getName() + " is not in local " + local.getName() + "!");
+        }
+        //check if the portal has a owner and if yes get the team of the owner and compare with the team of the player
+        if (local instanceof Portal) {
+            Portal portal = (Portal) local;
+            try {
+                if (portal.getOwner().getTeam() != player.getTeam()) {
+                    throw new NotConqueredPortalException("Portal " + portal.getName() + " is not conquered by " + player.getName());
+                }
+            } catch (NoAssociationException ignored) {
+                throw new NotConqueredPortalException("Portal " + portal.getName() + " is not conquered by " + player.getName());
+            }
+            //check if the player has enough energy to charge the portal
+            if (player.getCurrentEnergy() >= energy) {
+                //enough energy
+                player.removeEnergy(energy);
+                portal.addEnergy(energy);
+            } else {
+                //not enough energy
+                throw new NotEnoughEnergyException("Player " + player.getName() + " does not have enough energy to charge the portal");
+            }
+        } else {
+            throw new InvalidLocalException("Local " + local.getName() + " is not a portal!");
+        }
+
+    }
+
+    @Override
     public void loadGameData(String fileName) throws IOException, IllegalArgumentException {
         JSONParser parser = new JSONParser();
+        try {
+            Object obj = parser.parse(new FileReader(fileName));
+            JSONObject jsonObject = (JSONObject) obj;
+            JSONArray teamsArray = (JSONArray) jsonObject.get("teams");
+            Iterator<JSONObject> iterator = teamsArray.iterator();
+            while (iterator.hasNext()) {
+                JSONObject team = iterator.next();
+                String name = (String) team.get("name");
+                Team t = new TeamImpl(name);
+                addTeam(t);
+            }
+            JSONArray playersArray = (JSONArray) jsonObject.get("players");
+            iterator = playersArray.iterator();
+            while (iterator.hasNext()) {
+                JSONObject player = iterator.next();
+                int id = ((Long) player.get("id")).intValue();
+                String name = (String) player.get("name");
+                String team = (String) player.get("team");
+                int energy = ((Long) player.get("energy")).intValue();
+                Player p = new PlayerImpl(id, name);
+                p.addEnergy(energy);
+                addPlayer(p);
+            }
+            JSONArray localsArray = (JSONArray) jsonObject.get("locals");
+            iterator = localsArray.iterator();
+            while (iterator.hasNext()) {
+                JSONObject local = iterator.next();
+                int id = ((Long) local.get("id")).intValue();
+                String type = (String) local.get("type");
+                String name = (String) local.get("name");
+                int energy = ((Long) local.get("energy")).intValue();
+                Double latitude = (Double) local.get("latitude");
+                Double longitude = (Double) local.get("longitude");
+                JSONObject gameSettings = (JSONObject) jsonObject.get("gameSettings");
+                int maxEnergy = ((Long) gameSettings.get("maxEnergy")).intValue();
+                int cooldown = ((Long) gameSettings.get("cooldown")).intValue();
+                JSONObject ownership = (JSONObject) gameSettings.get("ownership");
+                String owner = (String) ownership.get("owner");
 
+                if (type.equals("Connector")) {
+                    Connector connector = new ConnectorImpl(id, name, latitude, longitude, energy, cooldown);
+                    network.addVertex(connector);
+                } else if (type.equals("portal")) {
+                    Portal portal = new PortalImpl(id, name, latitude, longitude, energy, maxEnergy);
+                    network.addVertex(portal);
+                }
+            }
+            JSONArray routesArray = (JSONArray) jsonObject.get("routes");
+            iterator = routesArray.iterator();
+            while (iterator.hasNext()) {
+                JSONObject route = iterator.next();
+                String from = (String) route.get("from");
+                String to = (String) route.get("to");
+            }
+        } catch (ParseException ignored) {
+            throw new IOException("Error parsing file");
+        }
     }
 
     @Override

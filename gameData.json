@@ -1,0 +1,288 @@
+{
+  "routes": [
+    {
+      "from": 0,
+      "to": 8
+    },
+    {
+      "from": 7,
+      "to": 11
+    },
+    {
+      "from": 8,
+      "to": 9
+    },
+    {
+      "from": 9,
+      "to": 10
+    },
+    {
+      "from": 10,
+      "to": 11
+    }
+  ],
+  "teams": [
+    {
+      "name": "Giants"
+    },
+    {
+      "name": "Sparks"
+    }
+  ],
+  "players": [
+    {
+      "level": 0,
+      "name": "João",
+      "experiencePoints": 0,
+      "currentEnergy": 150,
+      "id": 0,
+      "team": "None"
+    },
+    {
+      "level": 0,
+      "name": "Ana",
+      "experiencePoints": 0,
+      "currentEnergy": 150,
+      "id": 1,
+      "team": "None"
+    },
+    {
+      "level": 0,
+      "name": "Pedro",
+      "experiencePoints": 0,
+      "currentEnergy": 150,
+      "id": 2,
+      "team": "None"
+    },
+    {
+      "level": 0,
+      "name": "Maria",
+      "experiencePoints": 0,
+      "currentEnergy": 150,
+      "id": 3,
+      "team": "None"
+    },
+    {
+      "level": 0,
+      "name": "Rui",
+      "experiencePoints": 0,
+      "currentEnergy": 150,
+      "id": 4,
+      "team": "None"
+    },
+    {
+      "level": 6,
+      "name": "Sara",
+      "experiencePoints": 9999,
+      "currentEnergy": 35,
+      "id": 5,
+      "team": "Giants"
+    },
+    {
+      "level": 0,
+      "name": "Joana",
+      "experiencePoints": 0,
+      "currentEnergy": 150,
+      "id": 6,
+      "team": "None"
+    },
+    {
+      "level": 0,
+      "name": "Ricardo",
+      "experiencePoints": 0,
+      "currentEnergy": 150,
+      "id": 7,
+      "team": "None"
+    },
+    {
+      "level": 0,
+      "name": "Miguel",
+      "experiencePoints": 0,
+      "currentEnergy": 150,
+      "id": 8,
+      "team": "None"
+    },
+    {
+      "level": 0,
+      "name": "Inês",
+      "experiencePoints": 0,
+      "currentEnergy": 150,
+      "id": 9,
+      "team": "None"
+    },
+    {
+      "level": 0,
+      "name": "João",
+      "experiencePoints": 0,
+      "currentEnergy": 150,
+      "id": 10,
+      "team": "Sparks"
+    }
+  ],
+  "locals": [
+    {
+      "gameSettings": {
+        "maxEnergy": 200,
+        "ownership": {
+          "player": "None"
+        },
+        "energy": 180
+      },
+      "name": "Torre dos Clérigos - Porto",
+      "coordinates": {
+        "latitude": 41.1456745,
+        "longitude": -8.6167864
+      },
+      "id": 0,
+      "type": "Portal"
+    },
+    {
+      "gameSettings": {
+        "maxEnergy": 200,
+        "ownership": {
+          "player": "None"
+        },
+        "energy": 190
+      },
+      "name": "Castelo de S.Jorge - Lisboa",
+      "coordinates": {
+        "latitude": 38.7136723,
+        "longitude": -9.1331109
+      },
+      "id": 1,
+      "type": "Portal"
+    },
+    {
+      "gameSettings": {
+        "maxEnergy": 250,
+        "ownership": {
+          "player": "None"
+        },
+        "energy": 100
+      },
+      "name": "Mosteiro da Batalha - Batalha",
+      "coordinates": {
+        "latitude": 39.657521,
+        "longitude": -8.8674718
+      },
+      "id": 2,
+      "type": "Portal"
+    },
+    {
+      "gameSettings": {
+        "maxEnergy": 100,
+        "ownership": {
+          "player": "None"
+        },
+        "energy": 75
+      },
+      "name": "Castelo de Bragança - Bragança",
+      "coordinates": {
+        "latitude": 41.8040229,
+        "longitude": -6.7499805
+      },
+      "id": 3,
+      "type": "Portal"
+    },
+    {
+      "gameSettings": {
+        "maxEnergy": 100,
+        "ownership": {
+          "player": "None"
+        },
+        "energy": 90
+      },
+      "name": "Sé Velha - Coimbra",
+      "coordinates": {
+        "latitude": 40.2087924,
+        "longitude": -8.4312746
+      },
+      "id": 4,
+      "type": "Portal"
+    },
+    {
+      "gameSettings": {
+        "maxEnergy": 125,
+        "ownership": {
+          "player": "None"
+        },
+        "energy": 75
+      },
+      "name": "Portugal dos Pequenitos - Coimbra",
+      "coordinates": {
+        "latitude": 40.2023015,
+        "longitude": -8.4365746
+      },
+      "id": 5,
+      "type": "Portal"
+    },
+    {
+      "gameSettings": {
+        "maxEnergy": 130,
+        "ownership": {
+          "player": "Sara"
+        },
+        "energy": 32
+      },
+      "name": "Dom Afonso Henriques - Guimarães",
+      "coordinates": {
+        "latitude": 41.446926,
+        "longitude": -8.2922936
+      },
+      "id": 7,
+      "type": "Portal"
+    },
+    {
+      "gameSettings": {
+        "cooldown": 5,
+        "energy": 75
+      },
+      "name": "Salinas Aveiro - Aveiro",
+      "coordinates": {
+        "latitude": 40.6448511,
+        "longitude": -8.6668641
+      },
+      "id": 8,
+      "type": "Connector"
+    },
+    {
+      "gameSettings": {
+        "cooldown": 3,
+        "energy": 50
+      },
+      "name": "Sé de Leiria",
+      "coordinates": {
+        "latitude": 39.74604335,
+        "longitude": -8.81005909
+      },
+      "id": 9,
+      "type": "Connector"
+    },
+    {
+      "gameSettings": {
+        "cooldown": 2,
+        "energy": 50
+      },
+      "name": "Universidade de Trás-os-Montes e Alto Douro - Vila Real",
+      "coordinates": {
+        "latitude": 41.2885442,
+        "longitude": -7.7412596
+      },
+      "id": 10,
+      "type": "Connector"
+    },
+    {
+      "gameSettings": {
+        "cooldown": 3,
+        "energy": 50
+      },
+      "name": "Instituto Politécnico da Guarda - Guarda",
+      "coordinates": {
+        "latitude": 40.53703093,
+        "longitude": -7.2762619
+      },
+      "id": 11,
+      "type": "Connector"
+    }
+  ]
+}

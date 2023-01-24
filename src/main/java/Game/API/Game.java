@@ -100,6 +100,8 @@ public interface Game {
 
     void acquirePortal(Player player, Local local) throws NoSuchPlayerException, NoSuchLocalException, NoTeamException, NotEnoughEnergyException, AlreadyConqueredPortalException, IllegalArgumentException;
 
+    void chargePortal(Player player, Local local, int energy) throws NoSuchPlayerException, NoSuchLocalException, InvalidLocalException, WrongLocationException, NoTeamException, NotEnoughEnergyException, NotConqueredPortalException, IllegalArgumentException;
+
     void loadGameData(String fileName) throws IOException, IllegalArgumentException;
 
     void saveGameData(String fileName) throws IOException, IllegalArgumentException;

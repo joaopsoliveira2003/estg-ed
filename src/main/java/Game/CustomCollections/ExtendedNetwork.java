@@ -81,7 +81,6 @@ public class ExtendedNetwork<T> extends Network<T> implements ExtendedNetworkADT
         LinkedUnorderedList<T> templist = new LinkedUnorderedList<>();
         for (int i = 0; i < numVertices; i++) {
             for (int j = i + 1; j < numVertices; j++) {
-                System.out.println("i: " + i + " j: " + j + " weight: " + adjMatrix[i][j]);
                 if (adjMatrix[i][j] != Double.POSITIVE_INFINITY && i != j) {
                     System.out.println("entered i: " + i + " j: " + j + " weight: " + adjMatrix[i][j]);
                     templist.addToRear(vertices[i]);

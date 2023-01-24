@@ -11,7 +11,7 @@ public class Main {
     public static void main(String[] args) {
 
         Game game = new GameImpl();
-        //new MainMenu(game);
+        new MainMenu(game);
 
         Portal place1 = new PortalImpl(0, "Torre dos Clérigos - Porto", 41.1456745, -8.6167864, 180, 200);
         Portal place2 = new PortalImpl(1, "Castelo de S.Jorge - Lisboa", 38.7136723, -9.1331109, 190, 200);
