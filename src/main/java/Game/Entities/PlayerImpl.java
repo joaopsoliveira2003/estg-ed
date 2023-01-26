@@ -22,6 +22,14 @@ public class PlayerImpl implements Player {
         setExperiencePoints(0);
     }
 
+    public PlayerImpl(int id, String name, Team team) {
+        setID(id);
+        setName(name);
+        setTeam(team);
+        setCurrentEnergy(150);
+        setExperiencePoints(0);
+    }
+
     public PlayerImpl(int id, String name, Team team, int currentEnergy, int experiencePoints) {
         setID(id);
         setName(name);
@@ -73,6 +81,11 @@ public class PlayerImpl implements Player {
             tpa.addAssociation(team, this);
         }
 
+    }
+
+    @Override
+    public void removeTeam() throws IllegalArgumentException, NoAssociationException {
+        tpa.removeAssociation(getTeam(), this);
     }
 
     @Override

@@ -94,9 +94,9 @@ public class PortalImpl extends LocalImpl implements Portal {
         gameSettings.put("maxEnergy", getMaxEnergy());
         JSONObject ownership = new JSONObject();
         try {
-            ownership.put("player", getOwner().getName());
+            ownership.put("player", getOwner().getID());
         } catch (NoAssociationException ignored) {
-            ownership.put("player", "None");
+            ownership.put("player", -1);
         }
         gameSettings.put("ownership", ownership);
         portal.put("gameSettings", gameSettings);

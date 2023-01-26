@@ -38,5 +38,4 @@ public interface Portal extends Local {
     void setOwner(Player owner) throws IllegalArgumentException;
 
     void removeOwner() throws NoAssociationException;
-    
 }

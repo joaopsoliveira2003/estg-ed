@@ -8,7 +8,7 @@ import Collections.Lists.ListADT;
 
 public class HashMap<K, V> implements MapADT<K, V> {
 
-    private final static int DEFAULT_CAPACITY = 25;
+    private final static int DEFAULT_CAPACITY = 15;
     private TwoTypePair<K, V>[] map;
     private int size;
 

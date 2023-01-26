@@ -8,6 +8,9 @@ import Collections.HashTables.MapADT;
 import Collections.HashTables.SetADT;
 import Collections.HashTables.HashSet;
 import Collections.Lists.LinkedOrderedList;
+import Collections.Lists.OrderedListADT;
+import Collections.Trees.HeapADT;
+import Collections.Trees.LinkedHeap;
 import Game.CustomCollections.ExtendedNetworkADT;
 import Game.CustomCollections.ExtendedNetwork;
 import Game.Entities.*;
@@ -21,383 +24,470 @@ import org.json.simple.parser.ParseException;
 
 import java.io.*;
 import java.util.Iterator;
+import java.util.Objects;
 
 public class GameImpl implements Game {
 
     private final ExtendedNetworkADT<Local> network;
-    private final SetADT<Player> players;
-    private final SetADT<Team> teams;
-    private final MapADT<Player, Local> playerPositions;
+    private final MapADT<Integer, Local> locals;
+    private final MapADT<Integer, Player> players;
+    private final MapADT<String, Team> teams;
+    private final MapADT<Integer, Local> playerPositions;
 
     public GameImpl() {
         network = new ExtendedNetwork<>();
-        players = new HashSet<>();
-        teams = new HashSet<>();
+        locals = new HashMap<>();
+        players = new HashMap<>();
+        teams = new HashMap<>();
         playerPositions = new HashMap<>();
     }
 
-    // LOCALS AND ROUTES
+    protected void validateInteger(int value, String name) throws IllegalArgumentException {
+        if (value < 0) {
+            throw new IllegalArgumentException(name + " cannot be negative.");
+        }
+    }
+
+    protected void validateString(String value, String name) throws IllegalArgumentException {
+        if (value == null || value.isEmpty() || value.isBlank()) {
+            throw new IllegalArgumentException(name + " cannot be null, empty or blank.");
+        }
+    }
+
 
     @Override
-    public void addLocal(Local local) throws IllegalArgumentException, AlreadyExistsException {
-        if (local == null) {
-            throw new IllegalArgumentException("Local cannot be null");
+    public void addPortal(int id, String name, double latitude, double longitude, int energy, int maxEnergy) throws IllegalArgumentException, AlreadyExistsException {
+        validateInteger(id, "ID");
+        if (locals.containsKey(id)) {
+            throw new AlreadyExistsException("Portal with id " + id + " already exists.");
         }
-        if (network.containsVertex(local)) {
-            throw new AlreadyExistsException("Local " + local.getName() + " already exists");
-        }
-        network.addVertex(local);
+        Portal portal = new PortalImpl(id, name, latitude, longitude, energy, maxEnergy);
+        locals.put(portal.getID(), portal);
+        network.addVertex(portal);
     }
 
     @Override
-    public void updateLocal(Local oldLocal, Local newLocal) throws NoSuchLocalException, IllegalArgumentException {
-        if (oldLocal == null || newLocal == null) {
-            throw new IllegalArgumentException("Local cannot be null");
+    public void addConnector(int id, String name, double latitude, double longitude, int energy, int cooldown) throws IllegalArgumentException, AlreadyExistsException {
+        validateInteger(id, "ID");
+        if (locals.containsKey(id)) {
+            throw new AlreadyExistsException("Connector with id " + id + " already exists.");
         }
-        if (network.containsVertex(oldLocal)) {
-            throw new NoSuchLocalException("Local " + oldLocal.getName() + " does not exist");
-        }
-        network.updateVertex(oldLocal, newLocal);
+        Connector connector = new ConnectorImpl(id, name, latitude, longitude, energy, cooldown);
+        locals.put(connector.getID(), connector);
+        network.addVertex(connector);
     }
 
     @Override
-    public void removeLocal(Local local) throws NoSuchLocalException, IllegalArgumentException {
-        if (local == null) {
-            throw new IllegalArgumentException("Local cannot be null");
+    public void updatePortal(int id, String name, double latitude, double longitude, int energy, int maxEnergy) throws IllegalArgumentException, NoSuchLocalException {
+        validateInteger(id, "ID");
+        if (!locals.containsKey(id)) {
+            throw new NoSuchLocalException("Portal with id " + id + " does not exist.");
         }
-        if (!network.containsVertex(local)) {
-            throw new NoSuchLocalException("Local " + local.getName() + " does not exist");
+        //Local local = locals.get(id);
+        Portal portal = (Portal) locals.get(id);
+        portal.setName(name);
+        portal.setLatitude(latitude);
+        portal.setLongitude(longitude);
+        portal.setEnergy(energy);
+        portal.setMaxEnergy(maxEnergy);
+        //network.updateVertex(portal);
+        //TODO: check if this is working if so remove updateVertex from ExtendedNetwork
+    }
+
+    @Override
+    public void updateConnector(int id, String name, double latitude, double longitude, int energy, int cooldown) throws IllegalArgumentException, NoSuchLocalException {
+        validateInteger(id, "ID");
+        if (!locals.containsKey(id)) {
+            throw new NoSuchLocalException("Connector with id " + id + " does not exist.");
         }
+        //Local local = locals.get(id);
+        Connector connector = (Connector) locals.get(id);
+        connector.setName(name);
+        connector.setLatitude(latitude);
+        connector.setLongitude(longitude);
+        connector.setEnergy(energy);
+        connector.setCoolDownTime(cooldown);
+        //network.updateVertex(connector);
+        //TODO: check if this is working if so remove updateVertex from ExtendedNetwork
+    }
+
+    @Override
+    public void removePortal(int id) throws IllegalArgumentException, NoSuchLocalException {
+        validateInteger(id, "ID");
+        if (!locals.containsKey(id)) {
+            throw new NoSuchLocalException("Portal with id " + id + " does not exist.");
+        }
+        Local local = locals.get(id);
         network.removeVertex(local);
+        locals.remove(id);
     }
 
     @Override
-    public LinkedOrderedList<Local> listLocalsOrdered(LocalFilter filter) {
-        LinkedOrderedList<Local> list = new LinkedOrderedList<>();
-        for (Iterator<Local> it = network.iteratorVertexes(); it.hasNext(); ) {
-            Local local = it.next();
-            list.add(local);
+    public void removeConnector(int id) throws IllegalArgumentException, NoSuchLocalException {
+        validateInteger(id, "ID");
+        if (!locals.containsKey(id)) {
+            throw new NoSuchLocalException("Connector with id " + id + " does not exist.");
         }
-        return list;
+        Local local = locals.get(id);
+        network.removeVertex(local);
+        locals.remove(id);
     }
 
     @Override
-    public void addRoute(Local local1, Local local2) throws NoSuchLocalException, IllegalArgumentException {
-        if (local1 == null || local2 == null) {
-            throw new IllegalArgumentException("Local cannot be null");
+    public Iterator<Local> listLocalsOrdered(LocalFilter filter) {
+        //TODO: implement sorting
+        OrderedListADT<Local> orderedList = new LinkedOrderedList<>();
+        Iterator<Local> iterator = network.iteratorVertexes();
+        while (iterator.hasNext()) {
+            Local local = iterator.next();
+            orderedList.add(local);
         }
-        if (!network.containsVertex(local1) || !network.containsVertex(local2)) {
-            throw new NoSuchLocalException("Local " + local1.getName() + " or " + local2.getName() + " does not exist");
+        return orderedList.iterator();
+    }
+
+    @Override
+    public void addRoute(int id1, int id2) throws IllegalArgumentException, NoSuchLocalException {
+        validateInteger(id1, "ID1");
+        if (!locals.containsKey(id1)) {
+            throw new NoSuchLocalException("Local with id " + id1 + " does not exist.");
         }
+        validateInteger(id2, "ID2");
+        if (!locals.containsKey(id2)) {
+            throw new NoSuchLocalException("Local with id " + id2 + " does not exist.");
+        }
+        Local local1 = locals.get(id1);
+        Local local2 = locals.get(id2);
         network.addEdge(local1, local2);
     }
 
     @Override
-    public void removeRoute(Local local1, Local local2) throws NoSuchLocalException, IllegalArgumentException {
-        if (local1 == null || local2 == null) {
-            throw new IllegalArgumentException("Local cannot be null");
+    public void removeRoute(int id1, int id2) throws IllegalArgumentException, NoSuchLocalException {
+        validateInteger(id1, "ID1");
+        if (!locals.containsKey(id1)) {
+            throw new NoSuchLocalException("Local with id " + id1 + " does not exist.");
         }
-        if (!network.containsVertex(local1) || !network.containsVertex(local2)) {
-            throw new NoSuchLocalException("Local " + local1.getName() + " or " + local2.getName() + " does not exist");
+        validateInteger(id2, "ID2");
+        if (!locals.containsKey(id2)) {
+            throw new NoSuchLocalException("Local with id " + id2 + " does not exist.");
         }
+        Local local1 = locals.get(id1);
+        Local local2 = locals.get(id2);
         network.removeEdge(local1, local2);
     }
 
     @Override
-    public Iterator<Local> getShortestPath(Local local1, Local local2) throws NoSuchLocalException, IllegalArgumentException {
+    public Iterator<Local> getShortestPath(Local local1, Local local2) throws IllegalArgumentException, NoSuchLocalException {
+        if (local1 == null || local2 == null) {
+            throw new IllegalArgumentException("Local cannot be null.");
+        }
+        if (!locals.containsValue(local1)) {
+            throw new NoSuchLocalException("Local " + local1.getName() + " does not exist.");
+        }
+        if (!locals.containsValue(local2)) {
+            throw new NoSuchLocalException("Local " + local2.getName() + " does not exist.");
+        }
         return network.iteratorShortestPath(local1, local2);
     }
 
     @Override
-    public Iterator<Local> getShortestPath(Local vertex1, Local vertex2, boolean portals) throws NoSuchLocalException, IllegalArgumentException {
+    public Iterator<Local> getShortestPath(Local vertex1, Local vertex2, boolean portals) throws IllegalArgumentException, NoSuchLocalException {
         return network.iteratorShortestPath(vertex1, vertex2, portals);
     }
 
     @Override
-    public void exportShortestPath(Iterator<Local> path, String fileName) throws IOException, IllegalArgumentException {
+    public void exportShortestPath(Iterator<Local> iterator, String fileName) throws IllegalArgumentException, IOException {
+        /*if (iterator == null) {
+            throw new IllegalArgumentException("Iterator cannot be null.");
+        }
         if (fileName == null) {
-            throw new IllegalArgumentException("File name cannot be null");
+            throw new IllegalArgumentException("File name cannot be null.");
         }
-        JSONObject main = new JSONObject();
+        if (!iterator.hasNext()) {
+            throw new IllegalArgumentException("Iterator is empty.");
+        }
+        JSONObject json = new JSONObject();
+
         JSONArray array = new JSONArray();
-        while (path.hasNext()) {
-            array.add(path.next().getName());
+        while (iterator.hasNext()) {
+            Local local = iterator.next();
+            JSONObject localJson = new JSONObject();
+            localJson.put("id", local.getId());
+            localJson.put("name", local.getName());
+            localJson.put("latitude", local.getLatitude());
+            localJson.put("longitude", local.getLongitude());
+            array.add(localJson);
         }
-        main.put("path", array);
         File file = new File(fileName);
-        FileOutputStream stream = new FileOutputStream(file);
-        stream.write(main.toJSONString().getBytes());
-        stream.close();
+        if (!file.exists()) {
+            file.createNewFile();
+        }
+        try (PrintWriter writer = new PrintWriter(file)) {
+            while (iterator.hasNext()) {
+                Local local = iterator.next();
+                writer.println(local.getName());
+            }
+        }*/
     }
 
     @Override
-    public void addPlayer(Player player) throws IllegalArgumentException, AlreadyExistsException {
-        if (player == null) {
-            throw new IllegalArgumentException("Player cannot be null");
+    public void addPlayer(int id, String name, String team) throws IllegalArgumentException, AlreadyExistsException, NoSuchTeamException {
+        validateInteger(id, "ID");
+        if (players.containsKey(id)) {
+            throw new AlreadyExistsException("Player with id " + id + " already exists.");
         }
-        if (players.contains(player)) {
-            throw new AlreadyExistsException("Player " + player.getName() + " already exists");
+        validateString(team, "Team");
+        if (team.equals("None")) {
+            players.put(id, new PlayerImpl(id, name));
+            return;
         }
-        players.add(player);
+        if (!teams.containsKey(team)) {
+            throw new NoSuchTeamException("Team " + team + " does not exist.");
+        }
+        players.put(id, new PlayerImpl(id, name, teams.get(team)));
     }
 
     @Override
-    public void updatePlayer(Player oldPlayer, Player newPlayer) throws NoSuchPlayerException, IllegalArgumentException {
-        if (oldPlayer == null || newPlayer == null) {
-            throw new IllegalArgumentException("Player cannot be null");
+    public void updatePlayer(int id, String name, String team) throws IllegalArgumentException, NoSuchPlayerException, NoSuchTeamException {
+        validateInteger(id, "ID");
+        if (!players.containsKey(id)) {
+            throw new NoSuchPlayerException("Player with id " + id + " does not exist.");
         }
-        if (!players.contains(oldPlayer)) {
-            throw new NoSuchPlayerException("Player " + oldPlayer.getName() + " does not exist");
+        validateString(team, "Team");
+        if (!teams.containsKey(team)) {
+            throw new NoSuchTeamException("Team " + team + " does not exist.");
         }
-        players.remove(oldPlayer);
+        Player player = players.get(id);
+        player.setName(name);
+        player.setTeam(teams.get(team));
+    }
+
+    @Override
+    public void removePlayer(int id) throws IllegalArgumentException, NoSuchPlayerException {
+        validateInteger(id, "ID");
+        if (!players.containsKey(id)) {
+            throw new NoSuchPlayerException("Player with id " + id + " does not exist.");
+        }
+        players.remove(id);
+    }
+
+    @Override
+    public void movePlayer(int player, int local) throws IllegalArgumentException, NoSuchPlayerException, NoSuchLocalException {
+        validateInteger(player, "Player");
+        if (!players.containsKey(player)) {
+            throw new NoSuchPlayerException("Player with id " + player + " does not exist.");
+        }
+        validateInteger(local, "Local");
+        if (!locals.containsKey(local)) {
+            throw new NoSuchLocalException("Local with id " + local + " does not exist.");
+        }
+        playerPositions.put(player, locals.get(local));
+    }
+
+    @Override
+    public void addTeam(String name) throws IllegalArgumentException, AlreadyExistsException {
+        if (teams.containsKey(name)) {
+            throw new AlreadyExistsException("Team " + name + " already exists.");
+        }
+        Team team = new TeamImpl(name);
+        teams.put(name, team);
+    }
+
+    @Override
+    public void addPlayerToTeam(int player, String team) throws IllegalArgumentException, NoSuchPlayerException, NoSuchTeamException {
+        validateInteger(player, "Player");
+        if (!players.containsKey(player)) {
+            throw new NoSuchPlayerException("Player with id " + player + " does not exist.");
+        }
+        validateString(team, "Team");
+        if (!teams.containsKey(team)) {
+            throw new NoSuchTeamException("Team " + team + " does not exist.");
+        }
+        players.get(player).setTeam(teams.get(team));
+    }
+
+    @Override
+    public void removePlayerFromTeam(int player, String team) throws IllegalArgumentException, NoSuchPlayerException, NoSuchTeamException, NoTeamException {
+        validateInteger(player, "Player");
+        if (!players.containsKey(player)) {
+            throw new NoSuchPlayerException("Player with id " + player + " does not exist.");
+        }
+        validateString(team, "Team");
+        if (!teams.containsKey(team)) {
+            throw new NoSuchTeamException("Team " + team + " does not exist.");
+        }
         try {
-            playerPositions.remove(oldPlayer);
-        } catch (EmptyCollectionException | NoSuchElementException ignored) {}
-        players.add(newPlayer);
-    }
-
-    @Override
-    public void removePlayer(Player player) throws NoSuchPlayerException, IllegalArgumentException {
-        if (player == null) {
-            throw new IllegalArgumentException("Player cannot be null");
+            players.get(player).removeTeam();
+        } catch (NoTeamException exception) {
+            throw new NoTeamException(exception.getMessage());
         }
-        if (!players.contains(player)) {
-            throw new NoSuchPlayerException("Player " + player.getName() + " does not exist");
-        }
-        players.remove(player);
-        try {
-            playerPositions.remove(player);
-        } catch (EmptyCollectionException | NoSuchElementException ignored) {}
-    }
-
-    @Override
-    public void movePlayer(Player player, Local local) throws NoSuchPlayerException, NoSuchLocalException, IllegalArgumentException {
-        if (player == null || local == null) {
-            throw new IllegalArgumentException("Player or local cannot be null");
-        }
-        if (!players.contains(player)) {
-            throw new NoSuchPlayerException("Player " + player.getName() + " does not exist");
-        }
-        if (!network.containsVertex(local)) {
-            throw new NoSuchLocalException("Local " + local.getName() + " does not exist");
-        }
-        playerPositions.put(player, local);
-    }
-
-    @Override
-    public void addTeam(Team team) throws IllegalArgumentException, AlreadyExistsException {
-        if (team == null) {
-            throw new IllegalArgumentException("Team cannot be null");
-        }
-        if (teams.contains(team)) {
-            throw new AlreadyExistsException("Team " + team.getName() + " already exists");
-        }
-        teams.add(team);
-    }
-
-    @Override
-    public void addPlayerToTeam(Player player, Team team) throws NoSuchPlayerException, NoSuchTeamException, IllegalArgumentException {
-        if (player == null || team == null) {
-            throw new IllegalArgumentException("Player or team cannot be null");
-        }
-        if (!players.contains(player)) {
-            throw new NoSuchPlayerException("Player " + player.getName() + " does not exist");
-        }
-        player.setTeam(team);
-    }
-
-    @Override
-    public void removePlayerFromTeam(Player player, Team team) throws NoSuchPlayerException, NoSuchTeamException, IllegalArgumentException {
-        if (player == null || team == null) {
-            throw new IllegalArgumentException("Player or team cannot be null");
-        }
-        if (!players.contains(player)) {
-            throw new NoSuchPlayerException("Player " + player + " does not exist");
-        }
-        //player.setTeam(null);
     }
 
     @Override
     public LinkedOrderedList<Player> listPlayersOrdered(PlayerFilter filter) {
+        //TODO: implement sorting
         LinkedOrderedList<Player> list = new LinkedOrderedList<>();
-        for (Iterator<Player> it = players.iterator(); it.hasNext(); ) {
-            Player player = it.next();
+        for (Player player : players.getValues()) {
             list.add(player);
         }
         return list;
     }
 
     @Override
-    public void chargePlayer(Player player, Local local) throws NoSuchPlayerException, NoSuchLocalException, InvalidLocalException, CooldownNotOverException, IllegalArgumentException {
-        if (player == null || local == null) {
-            throw new IllegalArgumentException("Player or local cannot be null");
+    public void chargePlayer(int player, int local) throws IllegalArgumentException, NoSuchPlayerException, NoSuchLocalException, InvalidLocalException, WrongLocationException, CooldownNotOverException {
+        validateInteger(player, "Player");
+        if (!players.containsKey(player)) {
+            throw new NoSuchPlayerException("Player with id " + player + " does not exist.");
         }
-
-        if (!players.contains(player)) {
-            throw new NoSuchPlayerException("Player " + player.getName() + " does not exist");
+        Player playerObject = players.get(player);
+        validateInteger(local, "Local");
+        if (!locals.containsKey(local)) {
+            throw new NoSuchLocalException("Local with id " + local + " does not exist.");
         }
-
-        if (!network.containsVertex(local)) {
-            throw new NoSuchLocalException("Local " + local.getName() + " does not exist");
+        if (!(locals.get(local) instanceof Connector)) {
+            throw new InvalidLocalException("Local with id " + local + " is not a connector.");
         }
-
-        try {
-            if (playerPositions.get(player) != local) {
-                throw new NoSuchElementException();
-            }
-        } catch (EmptyCollectionException | NoSuchElementException ignored) {
-            throw new InvalidLocalException("Player " + player.getName() + " is not in local " + local.getName() + "!");
+        Connector localObject = (Connector) locals.get(local);
+        if (playerPositions.get(player) != localObject) {
+            throw new WrongLocationException("Player is not at the local.");
         }
-
-        if (local instanceof Connector) {
-            //cast local to connector
-            Connector connector = (Connector) local;
-            if (connector.isCoolDownOver(player)) {
-                //charge player with 10% of the energy of the connector
-                player.addEnergy((int) (connector.getEnergy() * 0.1));
-                connector.addLastInteraction(player);
-            } else {
-                throw new CooldownNotOverException("Cooldown for player " + player.getName() + " is not over!");
-            }
+        if (localObject.isCoolDownOver(playerObject)) {
+            playerObject.addEnergy((int) (localObject.getEnergy() * 0.1));
+            localObject.addLastInteraction(playerObject);
         } else {
-            throw new InvalidLocalException("Local " + local.getName() + " is not a connector!");
+            throw new CooldownNotOverException("Cooldown is not over.");
         }
     }
 
     @Override
-    public void acquirePortal(Player player, Local local) throws NoSuchPlayerException, NoSuchLocalException, NoTeamException, NotEnoughEnergyException, AlreadyConqueredPortalException, IllegalArgumentException {
-        if (player == null || local == null) {
-            throw new IllegalArgumentException("Player or local cannot be null");
+    public void acquirePortal(int player, int local) throws IllegalArgumentException, NoSuchPlayerException, NoSuchLocalException, InvalidLocalException, NoTeamException, WrongLocationException, NotEnoughEnergyException, AlreadyConqueredPortalException {
+        validateInteger(player, "Player");
+        if (!players.containsKey(player)) {
+            throw new NoSuchPlayerException("Player with id " + player + " does not exist.");
         }
-        if (!players.contains(player)) {
-            throw new NoSuchPlayerException("Player " + player.getName() + " does not exist");
+        Player playerObject = players.get(player);
+        validateInteger(local, "Local");
+        if (!locals.containsKey(local)) {
+            throw new NoSuchLocalException("Local with id " + local + " does not exist.");
         }
-        if (!network.containsVertex(local)) {
-            throw new NoSuchLocalException("Local " + local.getName() + " does not exist");
+        if (!(locals.get(local) instanceof Portal)) {
+            throw new InvalidLocalException("Local with id " + local + " is not a portal.");
         }
+        Portal portalObject = (Portal) locals.get(local);
         try {
-            if (playerPositions.get(player) != local) {
-                throw new NoSuchElementException();
+            if (playerObject.getTeam() == portalObject.getOwner().getTeam()) {
+                throw new AlreadyConqueredPortalException("Portal is already owned by a player of the same team.");
             }
-        } catch (EmptyCollectionException | NoSuchElementException ignored) {
-            throw new InvalidLocalException("Player " + player.getName() + " is not in local " + local.getName() + "!");
+        } catch (NoAssociationException exception) {
+            throw new NoTeamException(exception.getMessage());
         }
+        if (playerPositions.get(player) != portalObject) {
+            throw new WrongLocationException("Player is not at the local.");
+        }
+        //TODO: optimize this
+        try {
+            if (portalObject.getOwner().getTeam() != playerObject.getTeam()) {
+                //equipa adversária
+                // in order to conquer a portal of a different team, the player needs to discharge the portal and then charge with 25% of the max energy of the portal otherwise the portal won't have an owner
+                if (playerObject.getCurrentEnergy() >= portalObject.getEnergy()) {
+                    //enough energy
+                    portalObject.removeOwner();
+                    playerObject.removeEnergy(portalObject.getEnergy());
+                    portalObject.removeEnergy(portalObject.getEnergy());
 
-        player.getTeam();
-
-        if (local instanceof Portal) {
-            Portal portal = (Portal) local;
-            try {
-
-                if (portal.getOwner().getTeam() != player.getTeam()) {
-                    //equipa adversária
-                    // in order to conquer a portal of a different team, the player needs to discharge the portal and then charge with 25% of the max energy of the portal otherwise the portal won't have an owner
-                    if (player.getCurrentEnergy() >= portal.getEnergy()) {
+                    //now check if the player has enough energy to charge the portal with 25% of the max energy of the portal
+                    if (playerObject.getCurrentEnergy() >= (portalObject.getMaxEnergy() * 0.25)) {
                         //enough energy
-                        portal.removeOwner();
-                        player.removeEnergy(portal.getEnergy());
-                        portal.removeEnergy(portal.getEnergy());
-
-                        //now check if the player has enough energy to charge the portal with 25% of the max energy of the portal
-                        if (player.getCurrentEnergy() >= (portal.getMaxEnergy() * 0.25)) {
-                            //enough energy
-                            portal.setOwner(player);
-                            player.removeEnergy((int) (portal.getMaxEnergy() * 0.25));
-                            portal.addEnergy((int) (portal.getMaxEnergy() * 0.25));
-                        } else {
-                            portal.removeEnergy(player.getCurrentEnergy());
-                            player.removeEnergy(player.getCurrentEnergy());
-                            //not enough energy
-                            throw new NotEnoughEnergyException("Player " + player.getName() + " does not have enough energy to conquer the portal");
-                        }
+                        portalObject.setOwner(playerObject);
+                        playerObject.removeEnergy((int) (portalObject.getMaxEnergy() * 0.25));
+                        portalObject.addEnergy((int) (portalObject.getMaxEnergy() * 0.25));
                     } else {
-                        portal.removeEnergy(player.getCurrentEnergy());
-                        player.removeEnergy(player.getCurrentEnergy());
+                        portalObject.removeEnergy(playerObject.getCurrentEnergy());
+                        playerObject.removeEnergy(playerObject.getCurrentEnergy());
                         //not enough energy
-                        throw new NotEnoughEnergyException("Player " + player.getName() + " does not have enough energy to reset the portal");
+                        throw new NotEnoughEnergyException("Player " + playerObject.getName() + " does not have enough energy to conquer the portal");
                     }
                 } else {
-                    //mesma equipa
-                    throw new AlreadyConqueredPortalException("Portal " + portal.getName() + " is already conquered by " + portal.getOwner());
-                }
-            } catch (NoAssociationException ignored) {
-                //sem equipa
-
-                //check if the player has enough energy to charge the portal with 25% of the max energy of the portal
-                if (player.getCurrentEnergy() >= (portal.getMaxEnergy() * 0.25)) {
-                    //enough energy
-                    portal.setOwner(player);
-                    player.removeEnergy((int) (portal.getMaxEnergy() * 0.25));
-                    portal.addEnergy((int) (portal.getMaxEnergy() * 0.25));
-                } else {
+                    portalObject.removeEnergy(playerObject.getCurrentEnergy());
+                    playerObject.removeEnergy(playerObject.getCurrentEnergy());
                     //not enough energy
-                    throw new NotEnoughEnergyException("Player " + player.getName() + " does not have enough energy to conquer the portal");
+                    throw new NotEnoughEnergyException("Player " + playerObject.getName() + " does not have enough energy to reset the portal");
                 }
+            } else {
+                //mesma equipa
+                throw new AlreadyConqueredPortalException("Portal " + portalObject.getName() + " is already conquered by " + portalObject.getOwner().getName());
             }
-        }
-    }
+        } catch (NoAssociationException ignored) {
+            //sem equipa
 
-    @Override
-    public void chargePortal(Player player, Local local, int energy) throws NoSuchPlayerException, NoSuchLocalException, InvalidLocalException, WrongLocationException, NoTeamException, NotEnoughEnergyException, NotConqueredPortalException, IllegalArgumentException {
-        if (player == null || local == null) {
-            throw new IllegalArgumentException("Player or local cannot be null");
-        }
-        if (!players.contains(player)) {
-            throw new NoSuchPlayerException("Player " + player.getName() + " does not exist");
-        }
-        if (!network.containsVertex(local)) {
-            throw new NoSuchLocalException("Local " + local.getName() + " does not exist");
-        }
-        try {
-            if (playerPositions.get(player) != local) {
-                throw new NoSuchElementException();
-            }
-        } catch (EmptyCollectionException | NoSuchElementException ignored) {
-            throw new WrongLocationException("Player " + player.getName() + " is not in local " + local.getName() + "!");
-        }
-        //check if the portal has a owner and if yes get the team of the owner and compare with the team of the player
-        if (local instanceof Portal) {
-            Portal portal = (Portal) local;
-            try {
-                if (portal.getOwner().getTeam() != player.getTeam()) {
-                    throw new NotConqueredPortalException("Portal " + portal.getName() + " is not conquered by " + player.getName());
-                }
-            } catch (NoAssociationException ignored) {
-                throw new NotConqueredPortalException("Portal " + portal.getName() + " is not conquered by " + player.getName());
-            }
-            //check if the player has enough energy to charge the portal
-            if (player.getCurrentEnergy() >= energy) {
+            //check if the player has enough energy to charge the portal with 25% of the max energy of the portal
+            if (playerObject.getCurrentEnergy() >= (portalObject.getMaxEnergy() * 0.25)) {
                 //enough energy
-                player.removeEnergy(energy);
-                portal.addEnergy(energy);
+                portalObject.setOwner(playerObject);
+                playerObject.removeEnergy((int) (portalObject.getMaxEnergy() * 0.25));
+                portalObject.addEnergy((int) (portalObject.getMaxEnergy() * 0.25));
             } else {
                 //not enough energy
-                throw new NotEnoughEnergyException("Player " + player.getName() + " does not have enough energy to charge the portal");
+                throw new NotEnoughEnergyException("Player " + playerObject.getName() + " does not have enough energy to conquer the portal");
             }
-        } else {
-            throw new InvalidLocalException("Local " + local.getName() + " is not a portal!");
         }
-
     }
 
     @Override
-    public void loadGameData(String fileName) throws IOException, IllegalArgumentException {
-        JSONParser parser = new JSONParser();
+    public void chargePortal(int player, int local, int energy) throws IllegalArgumentException, NoSuchPlayerException, NoSuchLocalException, InvalidLocalException, WrongLocationException, NoTeamException, NotEnoughEnergyException, NotConqueredPortalException {
+        validateInteger(player, "Player");
+        if (!players.containsKey(player)) {
+            throw new NoSuchPlayerException("Player with id " + player + " does not exist.");
+        }
+        Player playerObject = players.get(player);
+        validateInteger(local, "Local");
+        if (!locals.containsKey(local)) {
+            throw new NoSuchLocalException("Local with id " + local + " does not exist.");
+        }
+        if (!(locals.get(local) instanceof Portal)) {
+            throw new InvalidLocalException("Local with id " + local + " is not a portal.");
+        }
+        Portal portalObject = (Portal) locals.get(local);
+        if (playerPositions.get(player) != portalObject) {
+            throw new WrongLocationException("Player is not at the local.");
+        }
         try {
-            Object obj = parser.parse(new FileReader(fileName));
-            JSONObject jsonObject = (JSONObject) obj;
-            MapADT<String, Team> teams = new HashMap<>();
-            JSONArray teamsArray = (JSONArray) jsonObject.get("teams");
+            if (portalObject.getOwner().getTeam() != playerObject.getTeam()) {
+                throw new NotConqueredPortalException("Portal is not owned by a player of the same team.");
+            }
+        } catch (NoAssociationException exception) {
+            throw new NoTeamException(exception.getMessage());
+        }
+        if (playerObject.getCurrentEnergy() >= energy) {
+            playerObject.removeEnergy(energy);
+            portalObject.addEnergy(energy);
+        } else {
+            throw new NotEnoughEnergyException("Player does not have the specified energy to charge the portal.");
+        }
+    }
+
+    @Override
+    public void loadGameData(String fileName) throws IllegalArgumentException, IOException {
+        //TODO: clear data structures before adding?
+        validateString(fileName, "File name");
+        try {
+            JSONObject json = null;
+            try {
+                json = (JSONObject) new JSONParser().parse(new FileReader(fileName));
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+
+            // TEAMS
+
+            JSONArray teamsArray = (JSONArray) json.get("teams");
             Iterator<JSONObject> iterator = teamsArray.iterator();
             while (iterator.hasNext()) {
-                JSONObject team = iterator.next();
-                String name = (String) team.get("name");
-                Team t = new TeamImpl(name);
-                teams.put(name, t);
-                addTeam(t);
+                addTeam((String) iterator.next().get("name"));
             }
-            MapADT<String, Player> players = new HashMap<>();
-            JSONArray playersArray = (JSONArray) jsonObject.get("players");
+
+            // PLAYERS
+
+            JSONArray playersArray = (JSONArray) json.get("players");
             iterator = playersArray.iterator();
             while (iterator.hasNext()) {
                 JSONObject player = iterator.next();
@@ -406,17 +496,18 @@ public class GameImpl implements Game {
                 String team = (String) player.get("team");
                 int energy = ((Long) player.get("currentEnergy")).intValue();
                 int experience = ((Long) player.get("experiencePoints")).intValue();
-                Player p = new PlayerImpl(id, name);
-                p.addEnergy(energy);
+                addPlayer(id, name, team);
+                Player playerObject = players.get(id);
+                playerObject.addEnergy(energy);
+                playerObject.addExperiencePoints(experience);
                 if (!team.equals("None")) {
-                    p.setTeam(teams.get(team));
+                    addPlayerToTeam(id, team);
                 }
-                p.addExperiencePoints(experience);
-                addPlayer(p);
-                players.put(name, p);
             }
-            MapADT<Integer, Local> locals = new HashMap<>();
-            JSONArray localsArray = (JSONArray) jsonObject.get("locals");
+
+            // LOCALS
+
+            JSONArray localsArray = (JSONArray) json.get("locals");
             iterator = localsArray.iterator();
             while (iterator.hasNext()) {
                 JSONObject local = iterator.next();
@@ -431,36 +522,36 @@ public class GameImpl implements Game {
 
                 if (type.equals("Connector")) {
                     int cooldown = ((Long) gameSettings.get("cooldown")).intValue();
-                    Connector connector = new ConnectorImpl(id, name, latitude, longitude, energy, cooldown);
-                    network.addVertex(connector);
-                    locals.put(id, connector);
+                    addConnector(id, name, latitude, longitude, energy, cooldown);
                 } else if (type.equals("Portal")) {
                     int maxEnergy = ((Long) gameSettings.get("maxEnergy")).intValue();
                     JSONObject ownership = (JSONObject) gameSettings.get("ownership");
-                    String owner = (String) ownership.get("player");
-                    Portal portal = new PortalImpl(id, name, latitude, longitude, energy, maxEnergy);
-                    if (!owner.equals("None")) {
-                        portal.setOwner(players.get(owner));
+                    int owner = ((Long) ownership.get("player")).intValue();
+                    addPortal(id, name, latitude, longitude, energy, maxEnergy);
+                    Portal portalObject = (Portal) locals.get(id);
+                    if (owner != -1) {
+                        portalObject.setOwner(players.get(owner));
                     }
-                    network.addVertex(portal);
-                    locals.put(id, portal);
                 }
             }
-            JSONArray routesArray = (JSONArray) jsonObject.get("routes");
+
+            // ROUTES
+
+            JSONArray routesArray = (JSONArray) json.get("routes");
             iterator = routesArray.iterator();
             while (iterator.hasNext()) {
                 JSONObject route = iterator.next();
-                Integer from = ((Long) route.get("from")).intValue();
-                Integer to = ((Long) route.get("to")).intValue();
-                network.addEdge(locals.get(from), locals.get(to));
+                int from = ((Long) route.get("from")).intValue();
+                int to = ((Long) route.get("to")).intValue();
+                addRoute(from, to);
             }
-        } catch (ParseException ignored) {
-            throw new IOException("Error parsing file");
+        } catch (Exception exception) {
+            throw new IOException(exception.getMessage());
         }
     }
 
     @Override
-    public void saveGameData(String fileName) throws IOException, IllegalArgumentException {
+    public void saveGameData(String fileName) throws IllegalArgumentException, IOException {
         JSONObject json = new JSONObject();
         JSONArray localsArray = new JSONArray();
         Iterator<Local> iterator = network.iteratorVertexes();
@@ -480,17 +571,13 @@ public class GameImpl implements Game {
         json.put("routes", routesArray);
 
         JSONArray playersArray = new JSONArray();
-        Iterator<Player> iterator1 = players.iterator();
-        while (iterator1.hasNext()) {
-            Player player = iterator1.next();
+        for (Player player : players.getValues()) {
             playersArray.add(player.toJSON());
         }
         json.put("players", playersArray);
 
         JSONArray teamsArray = new JSONArray();
-        Iterator<Team> iterator2 = teams.iterator();
-        while (iterator2.hasNext()) {
-            Team team = iterator2.next();
+        for (Team team : teams.getValues()) {
             teamsArray.add(team.toJSON());
         }
         json.put("teams", teamsArray);

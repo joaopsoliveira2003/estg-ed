@@ -17,92 +17,53 @@ import java.util.Iterator;
  */
 public interface Game {
 
-    /**
-     * Adds a local to the network.
-     *
-     * @param local the place to be added
-     * @throws IllegalArgumentException if the local is null
-     * @throws AlreadyExistsException   if the local already exists
-     */
-    void addLocal(Local local) throws IllegalArgumentException, AlreadyExistsException;
+    void addPortal(int id, String name, double latitude, double longitude, int energy, int maxEnergy) throws IllegalArgumentException, AlreadyExistsException;
 
-    /**
-     * Updates a local in the network.
-     *
-     * @param oldLocal the local to be updated
-     * @param newLocal the new local
-     * @throws IllegalArgumentException if the local is null
-     * @throws NoSuchLocalException     if the local does not exist
-     */
-    void updateLocal(Local oldLocal, Local newLocal) throws IllegalArgumentException, NoSuchLocalException;
+    void addConnector(int id, String name, double latitude, double longitude, int energy, int cooldown) throws IllegalArgumentException, AlreadyExistsException;
 
-    /**
-     * Removes a local from the network.
-     *
-     * @param local the local to be removed
-     * @throws IllegalArgumentException if the local is null
-     * @throws NoSuchLocalException     if the local does not exist
-     */
-    void removeLocal(Local local) throws IllegalArgumentException, NoSuchLocalException;
+    void updatePortal(int id, String name, double latitude, double longitude, int energy, int maxEnergy) throws IllegalArgumentException, NoSuchLocalException;
 
-    /**
-     * Lists the locals in the network.
-     *
-     * @param filter the filter to be applied
-     * @return the list of locals
-     */
-    LinkedOrderedList<Local> listLocalsOrdered(LocalFilter filter);
+    void updateConnector(int id, String name, double latitude, double longitude, int energy, int cooldown) throws IllegalArgumentException, NoSuchLocalException;
 
-    /**
-     * Adds a route between two locals.
-     *
-     * @param local1 the first local
-     * @param local2 the second local
-     * @throws IllegalArgumentException if one of the local is null
-     * @throws NoSuchLocalException     if one of the local does not exist
-     * @throws AlreadyExistsException   if the route already exists
-     */
-    void addRoute(Local local1, Local local2) throws IllegalArgumentException, NoSuchLocalException, AlreadyExistsException;
+    void removePortal(int id) throws IllegalArgumentException, NoSuchLocalException;
 
-    /**
-     * Removes a route between two locals.
-     *
-     * @param local1 the first local
-     * @param local2 the second local
-     * @throws IllegalArgumentException if one of the places is null
-     * @throws NoSuchLocalException     if one of the places does not exist
-     */
-    void removeRoute(Local local1, Local local2) throws IllegalArgumentException, NoSuchLocalException;
+    void removeConnector(int id) throws IllegalArgumentException, NoSuchLocalException;
+
+    Iterator<Local> listLocalsOrdered(LocalFilter filter);
+
+    void addRoute(int id1, int id2) throws IllegalArgumentException, NoSuchLocalException;
+
+    void removeRoute(int id1, int id2) throws IllegalArgumentException, NoSuchLocalException;
 
     Iterator<Local> getShortestPath(Local local1, Local local2) throws IllegalArgumentException, NoSuchLocalException;
 
-    Iterator<Local> getShortestPath(Local vertex1, Local vertex2, boolean portals) throws NoSuchLocalException, IllegalArgumentException;
+    Iterator<Local> getShortestPath(Local vertex1, Local vertex2, boolean portals) throws IllegalArgumentException, NoSuchLocalException;
 
-    void exportShortestPath(Iterator<Local> path, String fileName) throws IOException, IllegalArgumentException;
+    void exportShortestPath(Iterator<Local> path, String fileName) throws IllegalArgumentException, IOException;
 
-    void addPlayer(Player player) throws IllegalArgumentException, AlreadyExistsException;
+    void addPlayer(int id, String name, String team) throws IllegalArgumentException, AlreadyExistsException, NoSuchTeamException;
 
-    void updatePlayer(Player oldPlayer, Player newPlayer) throws NoSuchPlayerException, IllegalArgumentException;
+    void updatePlayer(int id, String name, String team) throws IllegalArgumentException, NoSuchPlayerException, NoSuchTeamException;
 
-    void removePlayer(Player player) throws NoSuchPlayerException, IllegalArgumentException;
+    void removePlayer(int id) throws IllegalArgumentException, NoSuchPlayerException;
 
-    void movePlayer(Player player, Local local) throws NoSuchPlayerException, NoSuchLocalException, IllegalArgumentException;
+    void movePlayer(int player, int local) throws IllegalArgumentException, NoSuchPlayerException, NoSuchLocalException;
 
-    void addTeam(Team team) throws IllegalArgumentException, AlreadyExistsException;
+    void addTeam(String name) throws IllegalArgumentException, AlreadyExistsException;
 
-    void addPlayerToTeam(Player player, Team team) throws NoSuchPlayerException, NoSuchTeamException, IllegalArgumentException;
+    void addPlayerToTeam(int player, String team) throws IllegalArgumentException, NoSuchPlayerException, NoSuchTeamException;
 
-    void removePlayerFromTeam(Player player, Team team) throws NoSuchPlayerException, NoSuchTeamException, IllegalArgumentException;
+    void removePlayerFromTeam(int player, String team) throws IllegalArgumentException, NoSuchPlayerException, NoSuchTeamException;
 
     LinkedOrderedList<Player> listPlayersOrdered(PlayerFilter filter);
 
-    void chargePlayer(Player player, Local local) throws NoSuchPlayerException, NoSuchLocalException, CooldownNotOverException, IllegalArgumentException;
+    void chargePlayer(int player, int local) throws IllegalArgumentException, NoSuchPlayerException, NoSuchLocalException, InvalidLocalException, WrongLocationException, CooldownNotOverException;
 
-    void acquirePortal(Player player, Local local) throws NoSuchPlayerException, NoSuchLocalException, NoTeamException, NotEnoughEnergyException, AlreadyConqueredPortalException, IllegalArgumentException;
+    void acquirePortal(int player, int local) throws IllegalArgumentException, NoSuchPlayerException, NoSuchLocalException, InvalidLocalException, NoTeamException, WrongLocationException, NotEnoughEnergyException, AlreadyConqueredPortalException;
 
-    void chargePortal(Player player, Local local, int energy) throws NoSuchPlayerException, NoSuchLocalException, InvalidLocalException, WrongLocationException, NoTeamException, NotEnoughEnergyException, NotConqueredPortalException, IllegalArgumentException;
+    void chargePortal(int player, int local, int energy) throws IllegalArgumentException, NoSuchPlayerException, NoSuchLocalException, InvalidLocalException, WrongLocationException, NoTeamException, NotEnoughEnergyException, NotConqueredPortalException;
 
-    void loadGameData(String fileName) throws IOException, IllegalArgumentException;
+    void loadGameData(String fileName) throws IllegalArgumentException, IOException;
 
-    void saveGameData(String fileName) throws IOException, IllegalArgumentException;
+    void saveGameData(String fileName) throws IllegalArgumentException, IOException;
 }

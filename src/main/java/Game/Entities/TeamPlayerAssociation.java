@@ -72,7 +72,7 @@ public class TeamPlayerAssociation {
             }
             playerTeamMap.remove(player);
         } catch (EmptyCollectionException | NoSuchElementException ignored) {
-            throw new NoAssociationException("Player is not associated with any team");
+            throw new NoAssociationException("Player " + player.getName() + " is not associated with any team");
         } catch (IllegalArgumentException ignored) {
             throw new IllegalArgumentException("Team or Player is null");
         }

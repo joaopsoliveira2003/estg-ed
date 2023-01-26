@@ -43,7 +43,7 @@ public interface Player extends Comparable<Player> {
      *
      * @return the team of the player
      */
-    Team getTeam();
+    Team getTeam() throws NoAssociationException;
 
     /**
      * Sets the team of the player.
@@ -51,6 +51,8 @@ public interface Player extends Comparable<Player> {
      * @param team the of the player
      */
     void setTeam(Team team) throws IllegalArgumentException;
+
+    void removeTeam() throws IllegalArgumentException, NoAssociationException;
 
     /**
      * Returns the Current Energy of the player.

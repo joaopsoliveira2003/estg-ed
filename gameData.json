@@ -124,7 +124,7 @@
       "gameSettings": {
         "maxEnergy": 200,
         "ownership": {
-          "player": "None"
+          "player": 10
         },
         "energy": 180
       },
@@ -140,7 +140,7 @@
       "gameSettings": {
         "maxEnergy": 200,
         "ownership": {
-          "player": "None"
+          "player": 6
         },
         "energy": 190
       },
@@ -156,7 +156,7 @@
       "gameSettings": {
         "maxEnergy": 250,
         "ownership": {
-          "player": "None"
+          "player": 10
         },
         "energy": 100
       },
@@ -172,7 +172,7 @@
       "gameSettings": {
         "maxEnergy": 100,
         "ownership": {
-          "player": "None"
+          "player": 6
         },
         "energy": 75
       },
@@ -188,7 +188,7 @@
       "gameSettings": {
         "maxEnergy": 100,
         "ownership": {
-          "player": "None"
+          "player": -1
         },
         "energy": 90
       },
@@ -204,7 +204,7 @@
       "gameSettings": {
         "maxEnergy": 125,
         "ownership": {
-          "player": "None"
+          "player": -1
         },
         "energy": 75
       },
@@ -220,7 +220,7 @@
       "gameSettings": {
         "maxEnergy": 130,
         "ownership": {
-          "player": "Sara"
+          "player": -1
         },
         "energy": 32
       },
