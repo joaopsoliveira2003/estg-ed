@@ -26,7 +26,7 @@ public class RemoveLocals extends JFrame {
         model.addColumn("Longitude");
         model.addColumn("Energy");
 
-        for (Local local : game.listPlacesOrdered(LocalFilter.ID)) {
+        for (Local local : game.listLocalsOrdered(LocalFilter.ID)) {
             String type;
             if (local instanceof Portal) {
                 type = "Portal";

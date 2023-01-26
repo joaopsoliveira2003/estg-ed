@@ -51,7 +51,7 @@ public interface Game {
      * @param filter the filter to be applied
      * @return the list of locals
      */
-    LinkedOrderedList<Local> listPlacesOrdered(LocalFilter filter);
+    LinkedOrderedList<Local> listLocalsOrdered(LocalFilter filter);
 
     /**
      * Adds a route between two locals.

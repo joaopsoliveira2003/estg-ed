@@ -28,7 +28,7 @@ public class PlayerImpl implements Player {
         setTeam(team);
         setCurrentEnergy(currentEnergy);
         setExperiencePoints(experiencePoints);
-        setTeam(team);
+
     }
 
     @Override
@@ -210,7 +210,7 @@ public class PlayerImpl implements Player {
             try {
                 team = getTeam().getName();
             } catch (NoAssociationException ignored) {}
-            return "\nPlayer {"
+            return "Player {"
             + "id=" + id
             + ", name=" + name
             + ", team=" + team

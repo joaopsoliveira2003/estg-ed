@@ -82,7 +82,6 @@ public class ExtendedNetwork<T> extends Network<T> implements ExtendedNetworkADT
         for (int i = 0; i < numVertices; i++) {
             for (int j = i + 1; j < numVertices; j++) {
                 if (adjMatrix[i][j] != Double.POSITIVE_INFINITY && i != j) {
-                    System.out.println("entered i: " + i + " j: " + j + " weight: " + adjMatrix[i][j]);
                     templist.addToRear(vertices[i]);
                     templist.addToRear(vertices[j]);
                 }

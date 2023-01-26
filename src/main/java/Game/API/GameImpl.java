@@ -72,7 +72,7 @@ public class GameImpl implements Game {
     }
 
     @Override
-    public LinkedOrderedList<Local> listPlacesOrdered(LocalFilter filter) {
+    public LinkedOrderedList<Local> listLocalsOrdered(LocalFilter filter) {
         LinkedOrderedList<Local> list = new LinkedOrderedList<>();
         for (Iterator<Local> it = network.iteratorVertexes(); it.hasNext(); ) {
             Local local = it.next();
@@ -282,10 +282,9 @@ public class GameImpl implements Game {
         } catch (EmptyCollectionException | NoSuchElementException ignored) {
             throw new InvalidLocalException("Player " + player.getName() + " is not in local " + local.getName() + "!");
         }
-        //check if the player has a team
-        if (player.getTeam() == null) {
-            throw new NoTeamException("Player " + player.getName() + " does not have a team!");
-        }
+
+        player.getTeam();
+
         if (local instanceof Portal) {
             Portal portal = (Portal) local;
             try {
@@ -387,14 +386,17 @@ public class GameImpl implements Game {
         try {
             Object obj = parser.parse(new FileReader(fileName));
             JSONObject jsonObject = (JSONObject) obj;
+            MapADT<String, Team> teams = new HashMap<>();
             JSONArray teamsArray = (JSONArray) jsonObject.get("teams");
             Iterator<JSONObject> iterator = teamsArray.iterator();
             while (iterator.hasNext()) {
                 JSONObject team = iterator.next();
                 String name = (String) team.get("name");
                 Team t = new TeamImpl(name);
+                teams.put(name, t);
                 addTeam(t);
             }
+            MapADT<String, Player> players = new HashMap<>();
             JSONArray playersArray = (JSONArray) jsonObject.get("players");
             iterator = playersArray.iterator();
             while (iterator.hasNext()) {
@@ -402,11 +404,18 @@ public class GameImpl implements Game {
                 int id = ((Long) player.get("id")).intValue();
                 String name = (String) player.get("name");
                 String team = (String) player.get("team");
-                int energy = ((Long) player.get("energy")).intValue();
+                int energy = ((Long) player.get("currentEnergy")).intValue();
+                int experience = ((Long) player.get("experiencePoints")).intValue();
                 Player p = new PlayerImpl(id, name);
                 p.addEnergy(energy);
+                if (!team.equals("None")) {
+                    p.setTeam(teams.get(team));
+                }
+                p.addExperiencePoints(experience);
                 addPlayer(p);
+                players.put(name, p);
             }
+            MapADT<Integer, Local> locals = new HashMap<>();
             JSONArray localsArray = (JSONArray) jsonObject.get("locals");
             iterator = localsArray.iterator();
             while (iterator.hasNext()) {
@@ -414,29 +423,36 @@ public class GameImpl implements Game {
                 int id = ((Long) local.get("id")).intValue();
                 String type = (String) local.get("type");
                 String name = (String) local.get("name");
-                int energy = ((Long) local.get("energy")).intValue();
-                Double latitude = (Double) local.get("latitude");
-                Double longitude = (Double) local.get("longitude");
-                JSONObject gameSettings = (JSONObject) jsonObject.get("gameSettings");
-                int maxEnergy = ((Long) gameSettings.get("maxEnergy")).intValue();
-                int cooldown = ((Long) gameSettings.get("cooldown")).intValue();
-                JSONObject ownership = (JSONObject) gameSettings.get("ownership");
-                String owner = (String) ownership.get("owner");
+                JSONObject coordinates = (JSONObject) local.get("coordinates");
+                Double latitude = (Double) coordinates.get("latitude");
+                Double longitude = (Double) coordinates.get("longitude");
+                JSONObject gameSettings = (JSONObject) local.get("gameSettings");
+                int energy = ((Long) gameSettings.get("energy")).intValue();
 
                 if (type.equals("Connector")) {
+                    int cooldown = ((Long) gameSettings.get("cooldown")).intValue();
                     Connector connector = new ConnectorImpl(id, name, latitude, longitude, energy, cooldown);
                     network.addVertex(connector);
-                } else if (type.equals("portal")) {
+                    locals.put(id, connector);
+                } else if (type.equals("Portal")) {
+                    int maxEnergy = ((Long) gameSettings.get("maxEnergy")).intValue();
+                    JSONObject ownership = (JSONObject) gameSettings.get("ownership");
+                    String owner = (String) ownership.get("player");
                     Portal portal = new PortalImpl(id, name, latitude, longitude, energy, maxEnergy);
+                    if (!owner.equals("None")) {
+                        portal.setOwner(players.get(owner));
+                    }
                     network.addVertex(portal);
+                    locals.put(id, portal);
                 }
             }
             JSONArray routesArray = (JSONArray) jsonObject.get("routes");
             iterator = routesArray.iterator();
             while (iterator.hasNext()) {
                 JSONObject route = iterator.next();
-                String from = (String) route.get("from");
-                String to = (String) route.get("to");
+                Integer from = ((Long) route.get("from")).intValue();
+                Integer to = ((Long) route.get("to")).intValue();
+                network.addEdge(locals.get(from), locals.get(to));
             }
         } catch (ParseException ignored) {
             throw new IOException("Error parsing file");

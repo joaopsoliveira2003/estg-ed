@@ -61,6 +61,25 @@ public class PortalImpl extends LocalImpl implements Portal {
     }
 
     @Override
+    public String toString() {
+        String owner;
+        try {
+            owner = getOwner().getName();
+        } catch (NoAssociationException ignored) {
+            owner = "None";
+        }
+        return "Portal {" +
+                "id=" + getID() +
+                ", name='" + getName() + '\'' +
+                ", latitude=" + getLatitude() +
+                ", longitude=" + getLongitude() +
+                ", energy=" + getEnergy() +
+                ", maxEnergy=" + maxEnergy +
+                ", owner=" + owner +
+                '}';
+    }
+
+    @Override
     public JSONObject getJSON() {
         JSONObject portal = new JSONObject();
         portal.put("id", getID());

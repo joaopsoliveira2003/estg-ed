@@ -86,8 +86,13 @@ public class ConnectorImpl extends LocalImpl implements Connector {
     //toString
     @Override
     public String toString() {
-        return "ConnectorImpl{" + "coolDownTime=" + coolDownTime + ", playerInstantMap=" + playerInstantMap + '}';
+        return "Conector { " +
+                "id = " + getID() +
+                ", name = '" + getName() +
+                ", latitude = " + getLatitude() +
+                ", longitude = " + getLongitude() +
+                ", energy = " + getEnergy() +
+                ", coolDownTime = " + getCoolDownTime() +
+                " }";
     }
-
-
-    }
+}

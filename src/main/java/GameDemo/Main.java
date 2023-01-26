@@ -1,9 +1,11 @@
 package GameDemo;
 
+import Collections.Lists.OrderedListADT;
 import Game.API.Game;
 import Game.API.GameImpl;
 import Game.Entities.*;
-import GameDemo.GUI.MainMenu;
+import Game.Enumerations.LocalFilter;
+import Game.Enumerations.PlayerFilter;
 
 import java.io.IOException;
 
@@ -11,20 +13,40 @@ public class Main {
     public static void main(String[] args) {
 
         Game game = new GameImpl();
-        new MainMenu(game);
 
-        Portal place1 = new PortalImpl(0, "Torre dos Clérigos - Porto", 41.1456745, -8.6167864, 180, 200);
+
+        try {
+            game.loadGameData("gameData.json");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        OrderedListADT<Local> locals = game.listLocalsOrdered(LocalFilter.ID);
+        OrderedListADT<Player> players = game.listPlayersOrdered(PlayerFilter.ID);
+
+        System.out.println("Locals:");
+        for (Local local : locals) {
+            System.out.println(local);
+        }
+
+        System.out.println("Players:");
+        for (Player player : players) {
+            System.out.println(player);
+        }
+
+
+        /*Portal place1 = new PortalImpl(0, "Torre dos Clérigos - Porto", 41.1456745, -8.6167864, 180, 200);
         Portal place2 = new PortalImpl(1, "Castelo de S.Jorge - Lisboa", 38.7136723, -9.1331109, 190, 200);
         Portal place3 = new PortalImpl(2, "Mosteiro da Batalha - Batalha", 39.657521, -8.8674718, 100, 250);
         Portal place4 = new PortalImpl(3, "Castelo de Bragança - Bragança", 41.8040229, -6.7499805, 75, 100);
         Portal place5 = new PortalImpl(4, "Sé Velha - Coimbra", 40.2087924, -8.4312746, 90, 100);
         Portal place6 = new PortalImpl(5, "Portugal dos Pequenitos - Coimbra", 40.2023015, -8.4365746, 75, 125);
-        Portal place7 = new PortalImpl(7, "Dom Afonso Henriques - Guimarães", 41.446926, -8.2922936, 90, 130);
+        Portal place7 = new PortalImpl(6, "Dom Afonso Henriques - Guimarães", 41.446926, -8.2922936, 90, 130);
 
-        Connector place8 = new ConnectorImpl(8, "Salinas Aveiro - Aveiro", 40.6448511, -8.6668641, 75, 5);
-        Connector place9 = new ConnectorImpl(9, "Sé de Leiria", 39.74604335, -8.81005909, 50, 3);
-        Connector place10 = new ConnectorImpl(10, "Universidade de Trás-os-Montes e Alto Douro - Vila Real", 41.2885442, -7.7412596, 50, 2);
-        Connector place11 = new ConnectorImpl(11, "Instituto Politécnico da Guarda - Guarda", 40.53703093, -7.2762619, 50, 3);
+        Connector place8 = new ConnectorImpl(7, "Salinas Aveiro - Aveiro", 40.6448511, -8.6668641, 75, 5);
+        Connector place9 = new ConnectorImpl(8, "Sé de Leiria", 39.74604335, -8.81005909, 50, 3);
+        Connector place10 = new ConnectorImpl(9, "Universidade de Trás-os-Montes e Alto Douro - Vila Real", 41.2885442, -7.7412596, 50, 2);
+        Connector place11 = new ConnectorImpl(10, "Instituto Politécnico da Guarda - Guarda", 40.53703093, -7.2762619, 50, 3);
 
         game.addLocal(place1);
         game.addLocal(place2);
@@ -80,38 +102,49 @@ public class Main {
 
         System.out.println("*********************");
 
+        System.out.println(game.listPlayersOrdered(PlayerFilter.ID));
+
         game.addPlayerToTeam(player6, team2);
 
         game.addPlayerToTeam(player11, team1);
 
         place7.setOwner(player11);
 
-        game.movePlayer(player6, place7);
+        game.movePlayer(player11, place7);
 
-        System.out.println("Player6 energy before acquiring place7: " + player6.getCurrentEnergy());
+        System.out.println("Player6 energy before acquiring place7: " + player11.getCurrentEnergy());
 
         System.out.println("Place7 energy before acquiring: " + place7.getEnergy());
 
-        game.acquirePortal(player6, place7);
+        System.out.println(player11);
 
-        System.out.println("Player6 energy after acquiring place7: " + player6.getCurrentEnergy());
+        game.acquirePortal(player11, place7);
+
+        System.out.println("Player11 energy after acquiring place7: " + player1.getCurrentEnergy());
 
         System.out.println("Place7 energy after acquiring: " + place7.getEnergy());
 
 
-        game.movePlayer(player6, place8);
+        game.movePlayer(player11, place8);
 
-        System.out.println("PLayer6 energy before charging in place8: " + player6.getCurrentEnergy());
+        System.out.println("PLayer11 energy before charging in place8: " + player11.getCurrentEnergy());
 
-        game.chargePlayer(player6, place8);
+        game.chargePlayer(player11, place8);
 
-        System.out.println("Player6 after charge in place8: " + player6.getCurrentEnergy());
+        System.out.println("Player11 after charge in place8: " + player11.getCurrentEnergy());*/
 
-        try {
+        //new MainMenu(game);
+
+        /*JFrame frame = new JFrame("Game");
+        NetworkVisualizationPanel panel = new NetworkVisualizationPanel(game);
+        frame.add(panel);
+        frame.setSize(800, 600);
+        frame.setVisible(true);*/
+
+        /*try {
             game.saveGameData("gameData.json");
         } catch (IOException e) {
             e.printStackTrace();
-        }
-
+        }*/
     }
 }

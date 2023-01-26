@@ -2,11 +2,15 @@
   "routes": [
     {
       "from": 0,
-      "to": 8
+      "to": 7
+    },
+    {
+      "from": 6,
+      "to": 10
     },
     {
       "from": 7,
-      "to": 11
+      "to": 8
     },
     {
       "from": 8,
@@ -15,18 +19,14 @@
     {
       "from": 9,
       "to": 10
-    },
-    {
-      "from": 10,
-      "to": 11
     }
   ],
   "teams": [
     {
-      "name": "Giants"
+      "name": "Sparks"
     },
     {
-      "name": "Sparks"
+      "name": "Giants"
     }
   ],
   "players": [
@@ -34,15 +34,15 @@
       "level": 0,
       "name": "João",
       "experiencePoints": 0,
-      "currentEnergy": 150,
+      "currentEnergy": 450,
       "id": 0,
-      "team": "None"
+      "team": "Sparks"
     },
     {
       "level": 0,
       "name": "Ana",
       "experiencePoints": 0,
-      "currentEnergy": 150,
+      "currentEnergy": 450,
       "id": 1,
       "team": "None"
     },
@@ -50,7 +50,7 @@
       "level": 0,
       "name": "Pedro",
       "experiencePoints": 0,
-      "currentEnergy": 150,
+      "currentEnergy": 450,
       "id": 2,
       "team": "None"
     },
@@ -58,7 +58,7 @@
       "level": 0,
       "name": "Maria",
       "experiencePoints": 0,
-      "currentEnergy": 150,
+      "currentEnergy": 450,
       "id": 3,
       "team": "None"
     },
@@ -66,7 +66,7 @@
       "level": 0,
       "name": "Rui",
       "experiencePoints": 0,
-      "currentEnergy": 150,
+      "currentEnergy": 450,
       "id": 4,
       "team": "None"
     },
@@ -74,7 +74,7 @@
       "level": 6,
       "name": "Sara",
       "experiencePoints": 9999,
-      "currentEnergy": 35,
+      "currentEnergy": 335,
       "id": 5,
       "team": "Giants"
     },
@@ -82,7 +82,7 @@
       "level": 0,
       "name": "Joana",
       "experiencePoints": 0,
-      "currentEnergy": 150,
+      "currentEnergy": 450,
       "id": 6,
       "team": "None"
     },
@@ -90,7 +90,7 @@
       "level": 0,
       "name": "Ricardo",
       "experiencePoints": 0,
-      "currentEnergy": 150,
+      "currentEnergy": 450,
       "id": 7,
       "team": "None"
     },
@@ -98,7 +98,7 @@
       "level": 0,
       "name": "Miguel",
       "experiencePoints": 0,
-      "currentEnergy": 150,
+      "currentEnergy": 450,
       "id": 8,
       "team": "None"
     },
@@ -106,7 +106,7 @@
       "level": 0,
       "name": "Inês",
       "experiencePoints": 0,
-      "currentEnergy": 150,
+      "currentEnergy": 450,
       "id": 9,
       "team": "None"
     },
@@ -114,7 +114,7 @@
       "level": 0,
       "name": "João",
       "experiencePoints": 0,
-      "currentEnergy": 150,
+      "currentEnergy": 450,
       "id": 10,
       "team": "Sparks"
     }
@@ -229,7 +229,7 @@
         "latitude": 41.446926,
         "longitude": -8.2922936
       },
-      "id": 7,
+      "id": 6,
       "type": "Portal"
     },
     {
@@ -242,7 +242,7 @@
         "latitude": 40.6448511,
         "longitude": -8.6668641
       },
-      "id": 8,
+      "id": 7,
       "type": "Connector"
     },
     {
@@ -255,7 +255,7 @@
         "latitude": 39.74604335,
         "longitude": -8.81005909
       },
-      "id": 9,
+      "id": 8,
       "type": "Connector"
     },
     {
@@ -268,7 +268,7 @@
         "latitude": 41.2885442,
         "longitude": -7.7412596
       },
-      "id": 10,
+      "id": 9,
       "type": "Connector"
     },
     {
@@ -281,7 +281,7 @@
         "latitude": 40.53703093,
         "longitude": -7.2762619
       },
-      "id": 11,
+      "id": 10,
       "type": "Connector"
     }
   ]

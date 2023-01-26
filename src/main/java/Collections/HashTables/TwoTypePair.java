@@ -36,6 +36,6 @@ public class TwoTypePair<K, V> {
 
     @Override
     public String toString() {
-        return "TwoTypePair {" + "key=" + key + ", value=" + value + '}';
+        return "\nTwoTypePair {" + "key=" + key + ", value=" + value + '}';
     }
 }
