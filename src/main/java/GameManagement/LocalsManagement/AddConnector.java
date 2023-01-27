@@ -72,27 +72,24 @@ public class AddConnector extends JFrame {
         add(panelName);
         add(panelLatitude);
         add(panelLongitude);
+        add(panelEnergy);
         add(panelcoolDownTime);
 
         JButton button = new JButton("CREATE");
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            //int id, String name, double latitude, double longitude, int energy, int maxEnergy
+        button.addActionListener(e -> {
 
+            try {
                 int id = Integer.parseInt(textFieldId.getText());
                 String name = textFieldName.getText();
-                double latitude = Double.parseDouble(textFieldLatitude.getText());
-                double longitude = Double.parseDouble(textFieldLongitude.getText());
+                double latitude = (double) Double.parseDouble(textFieldLatitude.getText());
+                double longitude = (double) Double.parseDouble(textFieldLongitude.getText());
                 int energy = Integer.parseInt(textFieldEnergy.getText());
                 int coolDownTime = Integer.parseInt(textFieldcoolDownTime.getText());
-
-                try {
-                    game.addConnector(id, name, latitude, longitude, energy, coolDownTime);
-                } catch (Exception exception) {
-                    JOptionPane.showMessageDialog(null, exception.getMessage());
-                }
-
+                game.addConnector(id, name, latitude, longitude, energy, coolDownTime);
+                JOptionPane.showMessageDialog(this, "Connector added successfully");
+                dispose();
+            } catch (Exception exception) {
+                JOptionPane.showMessageDialog(this, exception.getMessage());
             }
         });
 
@@ -108,8 +105,4 @@ public class AddConnector extends JFrame {
 
         setLocationRelativeTo(null);
     }
-
-
-
-
 }

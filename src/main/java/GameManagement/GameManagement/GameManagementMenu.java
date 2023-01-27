@@ -29,6 +29,15 @@ public class GameManagementMenu extends JFrame {
             }
         });
 
+        ShortestPaths shortestPaths = new ShortestPaths(game);
+        JButton shortestPathButton = new JButton("Shortest Path");
+        shortestPathButton.addActionListener(ignored -> {
+            if (!shortestPaths.isVisible()) {
+                shortestPaths.setVisible(true);
+            } else {
+                shortestPaths.toFront();
+            }
+        });
 
         JButton saveDataButton = new JButton("Save Data");
         saveDataButton.addActionListener(ignored -> {
@@ -46,29 +55,13 @@ public class GameManagementMenu extends JFrame {
             }
         });
 
-        JButton exportRouteButton = new JButton("Export Route");
-        exportRouteButton.addActionListener(ignored -> {
-            JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setDialogTitle("Choose a file to save data to");
-            fileChooser.setCurrentDirectory(new java.io.File("."));
-            int result = fileChooser.showSaveDialog(this);
-            if (result == JFileChooser.APPROVE_OPTION) {
-                try {
-                    throw new IOException("Not implemented yet");
-                    //game.exportShortestPath(game.getShortestPath(), fileChooser.getSelectedFile().getAbsolutePath());
-                    //JOptionPane.showMessageDialog(this, "Data saved successfully");
-                } catch (IOException exception) {
-                    new JOptionPane(exception.getMessage(), JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        });
-
-        setLayout(new GridLayout(1, 2));
+        setLayout(new GridLayout(3, 1));
 
         add(loadDataButton);
+        add(shortestPathButton);
         add(saveDataButton);
 
-        setSize(300, 300);
+        setSize(400, 400);
 
         setLocationRelativeTo(null);
     }

@@ -72,13 +72,13 @@ public class GameImpl implements Game {
         if (!locals.containsKey(id)) {
             throw new NoSuchLocalException("Portal with id " + id + " does not exist.");
         }
-        //Local local = locals.get(id);
-        Portal portal = (Portal) locals.get(id);
-        portal.setName(name);
-        portal.setLatitude(latitude);
-        portal.setLongitude(longitude);
-        portal.setEnergy(energy);
-        portal.setMaxEnergy(maxEnergy);
+        Local local = locals.get(id);
+        local.setName(name);
+        local.setLatitude(latitude);
+        local.setLongitude(longitude);
+        ((Portal) local).setMaxEnergy(maxEnergy);
+        local.setEnergy(energy);
+        //locals.put(local.getID(), local);
         //network.updateVertex(portal);
         //TODO: check if this is working if so remove updateVertex from ExtendedNetwork
     }
@@ -126,9 +126,7 @@ public class GameImpl implements Game {
     public Iterator<Local> listLocalsOrdered(SortLocals sort) {
         sortLocals = sort;
         OrderedListADT<Local> orderedList = new DoublyLinkedOrderedList<>();
-        Iterator<Local> iterator = network.iteratorVertexes();
-        while (iterator.hasNext()) {
-            Local local = iterator.next();
+        for (Local local : locals.getValues()) {
             orderedList.add(local);
         }
         return orderedList.iterator();
@@ -247,12 +245,19 @@ public class GameImpl implements Game {
             throw new NoSuchPlayerException("Player with id " + id + " does not exist.");
         }
         validateString(team, "Team");
-        if (!teams.containsKey(team)) {
-            throw new NoSuchTeamException("Team " + team + " does not exist.");
-        }
         Player player = players.get(id);
         player.setName(name);
-        player.setTeam(teams.get(team));
+        if (!teams.containsKey(team)) {
+            if (team.equals("None")) {
+                try {
+                    player.removeTeam();
+                } catch (NoAssociationException ignored) {}
+            } else {
+                throw new NoSuchTeamException("Team " + team + " does not exist.");
+            }
+        } else {
+            player.setTeam(teams.get(team));
+        }
     }
 
     @Override
@@ -530,11 +535,21 @@ public class GameImpl implements Game {
             throw new IllegalArgumentException("Iterator is empty.");
         }
         Local first = iterator.next();
-        path.add(first.getName());
+        JSONObject local = new JSONObject();
+        local.put("id", first.getID());
+        local.put("name", first.getName());
+        local.put("latitude", first.getLatitude());
+        local.put("longitude", first.getLongitude());
+        path.add(local);
         Local last = first;
         while (iterator.hasNext()) {
             last = iterator.next();
-            path.add(last.getName());
+            local = new JSONObject();
+            local.put("id", last.getID());
+            local.put("name", last.getName());
+            local.put("latitude", last.getLatitude());
+            local.put("longitude", last.getLongitude());
+            path.add(local);
         }
         json.put("from", first.getName());
         json.put("to", last.getName());

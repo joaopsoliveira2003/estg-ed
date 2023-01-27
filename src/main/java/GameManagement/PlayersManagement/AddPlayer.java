@@ -62,6 +62,7 @@ public class AddPlayer extends JFrame {
             try {
                 game.addPlayer(id, name, team);
                 JOptionPane.showMessageDialog(null, "Player added successfully!");
+                dispose();
             } catch (Exception exception) {
                 JOptionPane.showMessageDialog(null, exception.getMessage());
             }

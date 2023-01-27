@@ -10,56 +10,6 @@ public class PlayersManagementMenu extends JFrame {
     public PlayersManagementMenu(Game game) {
         super("Players Management");
 
-        AddPlayer addPlayer = new AddPlayer(game);
-        JButton addPlayerButton = new JButton("Add Player");
-        addPlayerButton.addActionListener(e -> {
-            if (!addPlayer.isVisible()) {
-                addPlayer.setVisible(true);
-            } else {
-                addPlayer.toFront();
-            }
-        });
-
-        EditPlayerList editPlayerList = new EditPlayerList(game);
-        JButton editPlayerButton = new JButton("Edit Player");
-        editPlayerButton.addActionListener(e -> {
-            if (!editPlayerList.isVisible()) {
-                editPlayerList.setVisible(true);
-            } else {
-                editPlayerList.toFront();
-            }
-        });
-
-        RemovePlayerList removePlayerList = new RemovePlayerList(game);
-        JButton removePlayerButton = new JButton("Remove Player");
-        removePlayerButton.addActionListener(e -> {
-            if (!removePlayerList.isVisible()) {
-                removePlayerList.setVisible(true);
-            } else {
-                removePlayerList.toFront();
-            }
-        });
-
-        AssPlayTeam assPlayTeam = new AssPlayTeam(game);
-        JButton assPlayTeamButton = new JButton("Associate Player - Team");
-        assPlayTeamButton.addActionListener(e -> {
-            if (!assPlayTeam.isVisible()) {
-                assPlayTeam.setVisible(true);
-            } else {
-                assPlayTeam.toFront();
-            }
-        });
-
-        DessPlayTeam dessPlayTeam = new DessPlayTeam(game);
-        JButton dessPlayTeamButton = new JButton("Desassociate Player - Team");
-        assPlayTeamButton.addActionListener(e -> {
-            if (!dessPlayTeam.isVisible()) {
-                dessPlayTeam.setVisible(true);
-            } else {
-                dessPlayTeam.toFront();
-            }
-        });
-
         JButton loadDataButton = new JButton("Load Data");
         loadDataButton.addActionListener(ignored -> {
             JFileChooser fileChooser = new JFileChooser();
@@ -73,6 +23,16 @@ public class PlayersManagementMenu extends JFrame {
                 } catch (IOException exception) {
                     new JOptionPane(exception.getMessage(), JOptionPane.ERROR_MESSAGE);
                 }
+            }
+        });
+
+        ManagePlayers managePlayers = new ManagePlayers(game);
+        JButton manageDataButton = new JButton("Manage Data");
+        manageDataButton.addActionListener(e -> {
+            if (!managePlayers.isVisible()) {
+                managePlayers.setVisible(true);
+            } else {
+                managePlayers.toFront();
             }
         });
 
@@ -95,12 +55,8 @@ public class PlayersManagementMenu extends JFrame {
 
         setLayout(new GridLayout(3, 3));
 
-        add(addPlayerButton);
-        add(editPlayerButton);
-        add(removePlayerButton);
-        add(assPlayTeamButton);
-        add(dessPlayTeamButton);
         add(loadDataButton);
+        add(manageDataButton);
         add(saveDataButton);
 
         setSize(450, 450);

@@ -14,11 +14,10 @@ public interface MapADT<K, V> {
      * Adds the given key-value pair to the map and returns true if the key did not already exist in the map.
      * If the key already exists, the value is updated and false is returned.
      *
-     * @param key the key to add
+     * @param key   the key to add
      * @param value the value to add
-     * @return true if the key did not already exist in the map
      */
-    boolean put(K key, V value) throws IllegalArgumentException;
+    void put(K key, V value) throws IllegalArgumentException;
 
     /**
      * Removes the key-value pair with the given key from the map and returns the value.
@@ -107,7 +106,4 @@ public interface MapADT<K, V> {
      * @return a string representation of the map
      */
     String toString();
-
-
-
 }

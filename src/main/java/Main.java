@@ -1,12 +1,8 @@
 import Game.API.Game;
 import Game.API.GameImpl;
-import Game.Entities.Connector;
-import Game.Entities.ConnectorImpl;
-import Game.Entities.Portal;
-import Game.Entities.PortalImpl;
+import Game.Enumerations.SortLocals;
 import Game.Enumerations.SortPlayers;
 import GameManagement.MainMenu;
-import Game.Enumerations.*;
 
 import java.io.IOException;
 
@@ -17,7 +13,7 @@ public class Main {
 
         new MainMenu(game);
 
-        boolean load = false;
+        /*boolean load = true;
 
         if (load) {
             try {
@@ -64,13 +60,11 @@ public class Main {
             game.addPlayer(11, "João", "None");
         }
 
-        try {
-            game.exportShortestPath(game.getShortestPath(0, 6), "shortestPath.json");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        System.out.println("Locals:");
+        game.listLocalsOrdered(SortLocals.ID).forEachRemaining(System.out::println);
 
-        game.listPlayersOrdered(SortPlayers.TEAM).forEachRemaining(System.out::println);
+        System.out.println("Players:");
+        game.listPlayersOrdered(SortPlayers.ID).forEachRemaining(System.out::println);*/
 
         /*try {
             game.saveGameData("gameData.json");

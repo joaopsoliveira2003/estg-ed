@@ -13,15 +13,37 @@ public class PortalImpl extends LocalImpl implements Portal {
 
     public PortalImpl(int id, String name, double latitude, double longitude, int energy, int maxEnergy) {
         super(id, name, latitude, longitude, energy);
-        setEnergy(energy);
         setMaxEnergy(maxEnergy);
+        setEnergy(energy);
     }
     
     public PortalImpl(int id, String name, double latitude, double longitude, int energy, int maxEnergy, Player owner) {
         super(id, name, latitude, longitude, energy);
-        setEnergy(energy);
         setMaxEnergy(maxEnergy);
+        setEnergy(energy);
         setOwner(owner);
+    }
+
+    @Override
+    public void setEnergy(int energy) throws IllegalArgumentException {
+        if (energy < 0) {
+            throw new IllegalArgumentException("Energy cannot be negative");
+        }
+        if (maxEnergy != 0 && energy > maxEnergy) {
+            throw new IllegalArgumentException("Energy cannot be greater than max energy");
+        }
+        super.energy = energy;
+    }
+
+    @Override
+    public void addEnergy(int energy) throws IllegalArgumentException {
+        if (energy < 0) {
+            throw new IllegalArgumentException("Energy cannot be negative");
+        }
+        if (energy + super.energy > (maxEnergy == 0 ? Integer.MAX_VALUE : maxEnergy)) {
+            throw new IllegalArgumentException("Energy cannot be greater than max energy");
+        }
+        super.energy += energy;
     }
 
     @Override

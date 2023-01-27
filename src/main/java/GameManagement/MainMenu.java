@@ -14,7 +14,6 @@ public class MainMenu extends JFrame {
 
         super("Main Menu");
 
-
         LocalsManagementMenu localsManagementMenu = new LocalsManagementMenu(game);
         JButton localsManagementButton = new JButton("Locals Management");
         localsManagementButton.addActionListener(e -> {

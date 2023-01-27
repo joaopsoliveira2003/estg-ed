@@ -9,8 +9,10 @@ import java.util.Iterator;
 
 public class HashSet<T> implements SetADT<T> {
 
-    private final static int DEFAULT_CAPACITY = 25;
-    private T[] set;
+    private final double LOAD_FACTOR = 0.75;
+    private final static int DEFAULT_CAPACITY = 16;
+    private UnorderedListADT<T>[] map;
+    private int capacity;
     private int size;
 
     public HashSet() {
@@ -18,35 +20,42 @@ public class HashSet<T> implements SetADT<T> {
     }
 
     public HashSet(int initialCapacity) {
-        this.set = (T[]) new Object[initialCapacity];
-        this.size = 0;
+        capacity = initialCapacity;
+        map = new UnorderedListADT[capacity];
+        size = 0;
     }
 
     private void resize() {
-        T[] oldSet = set;
-        set = (T[]) new Object[oldSet.length * 2];
+        capacity *= 2;
         size = 0;
-        for (T element : oldSet) {
-            add(element);
+        UnorderedListADT<T>[] oldEntries = map;
+        map = new LinkedUnorderedList[capacity];
+        for (UnorderedListADT<T> entryList : oldEntries) {
+            if (entryList != null) {
+                for (T entry : entryList) {
+                    add(entry);
+                }
+            }
         }
     }
 
-
     @Override
-    public void add(T element) throws IllegalArgumentException {
+    public boolean add(T element) throws IllegalArgumentException {
         if (element == null) {
             throw new IllegalArgumentException("Element cannot be null");
         }
-        if (size == set.length) {
+        int index = Math.abs(element.hashCode()) % capacity;
+        if (map[index] == null) {
+            map[index] = new LinkedUnorderedList<>();
+        }
+        if (map[index].contains(element))
+            return false;
+        map[index].addToRear(element);
+        size++;
+        if (size > capacity * LOAD_FACTOR) {
             resize();
         }
-        int index = Math.abs(element.hashCode()) % set.length;
-        if (set[index] != null) {
-            set[index] = element;
-        } else {
-            set[index] = element;
-            size++;
-        }
+        return true;
     }
 
     @Override
@@ -57,12 +66,11 @@ public class HashSet<T> implements SetADT<T> {
         if (isEmpty()) {
             throw new EmptyCollectionException("Set is empty");
         }
-        int index = Math.abs(element.hashCode()) % set.length;
-        T removed = set[index];
-        if (removed == null) {
+        int index = Math.abs(element.hashCode()) % capacity;
+        if (map[index] == null) {
             throw new NoSuchElementException("Element not found");
         }
-        set[index] = null;
+        T removed = map[index].remove(element);
         size--;
         return removed;
     }
@@ -75,24 +83,36 @@ public class HashSet<T> implements SetADT<T> {
         if (isEmpty()) {
             throw new EmptyCollectionException("Set is empty");
         }
-        int index = Math.abs(element.hashCode()) % set.length;
-        T found = set[index];
-        if (found == null) {
+        int index = Math.abs(element.hashCode()) % capacity;
+        if (map[index] == null) {
             throw new NoSuchElementException("Element not found");
         }
-        return found;
+        for (T entry : map[index]) {
+            if (entry.equals(element)) {
+                return entry;
+            }
+        }
+        throw new NoSuchElementException("Element not found");
     }
 
     @Override
     public boolean contains(T target) throws IllegalArgumentException {
         if (target == null) {
-            throw new IllegalArgumentException("Target cannot be null");
+            throw new IllegalArgumentException("Element cannot be null");
         }
         if (isEmpty()) {
             return false;
         }
-        int index = Math.abs(target.hashCode()) % set.length;
-        return set[index] != null;
+        int index = Math.abs(target.hashCode()) % capacity;
+        if (map[index] == null) {
+            return false;
+        }
+        for (T entry : map[index]) {
+            if (entry.equals(target)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -108,9 +128,11 @@ public class HashSet<T> implements SetADT<T> {
     @Override
     public Iterator<T> iterator() {
         UnorderedListADT<T> list = new LinkedUnorderedList<>();
-        for (T element : set) {
-            if (element != null) {
-                list.addToRear(element);
+        for (UnorderedListADT<T> entryList : map) {
+            if (entryList != null) {
+                for (T entry : entryList) {
+                    list.addToRear(entry);
+                }
             }
         }
         return list.iterator();

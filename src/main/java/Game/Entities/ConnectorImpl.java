@@ -1,8 +1,5 @@
 package Game.Entities;
 
-import java.io.IOException;
-import java.time.Instant;
-
 import Collections.Exceptions.EmptyCollectionException;
 import Collections.Exceptions.IllegalArgumentException;
 import Collections.Exceptions.NoSuchElementException;
@@ -10,8 +7,9 @@ import Collections.HashTables.HashMap;
 import Collections.HashTables.MapADT;
 import org.json.simple.JSONObject;
 
+import java.time.Instant;
+
 import static Game.Utilities.Validations.validateInteger;
-import static Game.Utilities.Validations.validateString;
 
 public class ConnectorImpl extends LocalImpl implements Connector {
 
@@ -32,14 +30,12 @@ public class ConnectorImpl extends LocalImpl implements Connector {
     @Override
     public void setCoolDownTime(int coolDownTime) throws IllegalArgumentException{
         validateInteger(coolDownTime, "Cool down time");
-        if (coolDownTime < 0) {
-            throw new IllegalArgumentException("Cool down time cannot be negative");
-        }
         this.coolDownTime = coolDownTime;
     }
 
     @Override
     public void addLastInteraction(Player player) throws IllegalArgumentException {
+        if (player == null) throw new IllegalArgumentException("Player is not valid");
         try {
             playerInstantMap.put(player, Instant.now());
         } catch (IllegalArgumentException ignored){
@@ -49,6 +45,7 @@ public class ConnectorImpl extends LocalImpl implements Connector {
 
     @Override
     public boolean isCoolDownOver(Player player) throws IllegalArgumentException {
+        if (player == null) throw new IllegalArgumentException("Player is not valid");
         try {
             return Instant.now().compareTo(playerInstantMap.get(player).plusSeconds(coolDownTime * 60L)) > 0;
         } catch (EmptyCollectionException | NoSuchElementException ignored) {
@@ -75,7 +72,6 @@ public class ConnectorImpl extends LocalImpl implements Connector {
         return connector;
     }
 
-    //toString
     @Override
     public String toString() {
         return "Conector { " +

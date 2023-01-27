@@ -16,8 +16,9 @@ public interface SetADT<T> {
      * Adds the specified element to this set.
      *
      * @param element the element to be added to this set
+     * @return
      */
-    void add(T element) throws IllegalArgumentException;
+    boolean add(T element) throws IllegalArgumentException;
 
     /**
      * Removes and returns the specified element from this set.

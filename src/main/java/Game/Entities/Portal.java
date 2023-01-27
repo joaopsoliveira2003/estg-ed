@@ -9,6 +9,22 @@ import Game.Exceptions.NoAssociationException;
 public interface Portal extends Local {
 
     /**
+     * Sets the energy of the local.
+     *
+     * @param energy the energy of the local
+     */
+    @Override
+    void setEnergy(int energy) throws IllegalArgumentException;
+
+    /**
+     * Adds energy to the local.
+     *
+     * @param energy the energy to add
+     */
+    @Override
+    void addEnergy(int energy) throws IllegalArgumentException;
+
+    /**
      * Returns the maximum energy that can be stored in the portal.
      * 
      * @return the maximum energy that can be stored in the portal

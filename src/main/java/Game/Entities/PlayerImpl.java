@@ -79,14 +79,13 @@ public class PlayerImpl implements Player {
         }
         try {
             tpa.removeAssociation(getTeam(), this);
-        } catch (NoAssociationException e) {
+        } catch (NoAssociationException ignored) {} finally {
             tpa.addAssociation(team, this);
         }
-
     }
 
     @Override
-    public void removeTeam() throws IllegalArgumentException, NoAssociationException {
+    public void removeTeam() throws NoAssociationException {
         tpa.removeAssociation(getTeam(), this);
     }
 

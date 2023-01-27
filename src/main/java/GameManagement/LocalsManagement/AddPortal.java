@@ -74,22 +74,19 @@ public class AddPortal extends JFrame {
         add(panelMaxEnergy);
 
         JButton button = new JButton("CREATE");
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        button.addActionListener(e -> {
+            try {
                 int id = Integer.parseInt(textFieldId.getText());
                 String name = textFieldName.getText();
                 double latitude = Double.parseDouble(textFieldLatitude.getText());
                 double longitude = Double.parseDouble(textFieldLongitude.getText());
                 int energy = Integer.parseInt(textFieldEnergy.getText());
                 int maxEnergy = Integer.parseInt(textFieldMaxEnergy.getText());
-
-                try {
-                    game.addPortal(id, name, latitude, longitude, energy, maxEnergy);
-                } catch (Exception exception) {
-                    JOptionPane.showMessageDialog(null, exception.getMessage());
-                }
-
+                game.addPortal(id, name, latitude, longitude, energy, maxEnergy);
+                JOptionPane.showMessageDialog(this, "Portal added successfully!");
+                dispose();
+            } catch (Exception exception) {
+                JOptionPane.showMessageDialog(this, exception.getMessage());
             }
         });
 
@@ -105,5 +102,4 @@ public class AddPortal extends JFrame {
 
         setLocationRelativeTo(null);
     }
-
 }

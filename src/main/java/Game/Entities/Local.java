@@ -3,66 +3,64 @@ package Game.Entities;
 import Collections.Exceptions.IllegalArgumentException;
 import org.json.simple.JSONObject;
 
-import java.io.IOException;
-
 /**
- * Local defines the interface for a place in the game.
+ * Local defines the interface for a local in the game.
  */
 public interface Local extends Comparable<Local> {
 
     /**
-     * Returns the id of the place.
+     * Returns the id of the local.
      *
-     * @return the id of the place
+     * @return the id of the local
      */
     int getID();
 
     /**
-     * Sets the id of the place.
+     * Sets the id of the local.
      *
-     * @param id the id of the place
+     * @param id the id of the local
      */
     void setID(int id) throws IllegalArgumentException;
 
     /**
-     * Returns the name of the place.
+     * Returns the name of the local.
      *
-     * @return the name of the place
+     * @return the name of the local
      */
     String getName();
 
     /**
-     * Sets the name of the place.
+     * Sets the name of the local.
      *
-     * @param name the name of the place
+     * @param name the name of the local
      */
     void setName(String name) throws IllegalArgumentException;
 
     /**
-     * Returns the description of the place.
+     * Returns the description of the local.
      *
-     * @return the description of the place
+     * @return the description of the local
      */
     double getLatitude();
 
     /**
-     * Sets the latitude of the place.
+     * Sets the latitude of the local.
      *
-     * @param latitude the latitude of the place
+     * @param latitude the latitude of the local
      */
     void setLatitude(double latitude) throws IllegalArgumentException;
 
     /**
-     * Returns the longitude of the place.
+     * Returns the longitude of the local.
      *
-     * @return the longitude of the place
+     * @return the longitude of the local
      */
     double getLongitude();
 
     /**
-     * Sets the longitude of the place.
+     * Sets the longitude of the local.
      *
-     * @param longitude the longitude of the place
+     * @param longitude the longitude of the local
      */
     void setLongitude(double longitude) throws IllegalArgumentException;
 
@@ -75,52 +73,61 @@ public interface Local extends Comparable<Local> {
     double getDistanceTo(Local local) throws IllegalArgumentException;
 
     /**
-     * Returns the energy of the place.
+     * Returns the energy of the local.
      *
-     * @return the energy of the place
+     * @return the energy of the local
      */
     int getEnergy();
 
     /**
-     * Sets the energy of the place.
+     * Sets the energy of the local.
      *
-     * @param energy the energy of the place
+     * @param energy the energy of the local
      */
     void setEnergy(int energy) throws IllegalArgumentException;
 
+    /**
+     * Adds energy to the local.
+     *
+     * @param energy the energy to add
+     */
     void addEnergy(int energy) throws IllegalArgumentException;
 
+    /**
+     * Removes energy from the local.
+     *
+     * @param energy the energy to remove
+     */
     void removeEnergy(int energy) throws IllegalArgumentException;
 
     /**
-     * Returns the json of the place.
+     * Returns the json of the local.
      *
-     * @return the json of the place
+     * @return the json of the local
      */
     JSONObject getJSON();
 
     /**
-     * Generates a hash code for the place.
+     * Generates a hash code for the local.
      *
-     * @return a hash code for the place
+     * @return a hash code for the local
      */
     @Override
     int hashCode();
 
     /**
-     * Compares the place to the specified object.
+     * Compares the local to the specified object.
      *
      * @param obj the object to compare
-     * @return true if the place is equal to the specified object, false otherwise
+     * @return true if the local is equal to the specified object, false otherwise
      */
     @Override
     boolean equals(Object obj);
 
     /**
-     * Returns the description of the place.
+     * Returns the description of the local.
      *
-     * @return the description of the place
+     * @return the description of the local
      */
     String toString();
-    
 }

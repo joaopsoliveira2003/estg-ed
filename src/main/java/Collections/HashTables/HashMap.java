@@ -5,11 +5,14 @@ import Collections.Exceptions.NoSuchElementException;
 import Collections.Exceptions.IllegalArgumentException;
 import Collections.Lists.LinkedUnorderedList;
 import Collections.Lists.ListADT;
+import Collections.Lists.UnorderedListADT;
 
 public class HashMap<K, V> implements MapADT<K, V> {
 
-    private final static int DEFAULT_CAPACITY = 15;
-    private TwoTypePair<K, V>[] map;
+    private final double LOAD_FACTOR = 0.75;
+    private final static int DEFAULT_CAPACITY = 16;
+    private UnorderedListADT<TwoTypePair<K, V>>[] map;
+    private int capacity;
     private int size;
 
     public HashMap() {
@@ -17,37 +20,44 @@ public class HashMap<K, V> implements MapADT<K, V> {
     }
 
     public HashMap(int initialCapacity) {
-        this.map = new TwoTypePair[initialCapacity];
-        this.size = 0;
+        capacity = initialCapacity;
+        map = new UnorderedListADT[capacity];
+        size = 0;
     }
 
     private void resize() {
-        TwoTypePair<K, V>[] oldMap = map;
-        map = new TwoTypePair[oldMap.length * 2];
+        capacity *= 2;
         size = 0;
-        for (TwoTypePair<K, V> pair : oldMap) {
-            try {
-                put(pair.getKey(), pair.getValue());
-            } catch (IllegalArgumentException ignored) {}
+        UnorderedListADT<TwoTypePair<K, V>>[] oldEntries = map;
+        map = new LinkedUnorderedList[capacity];
+        for (UnorderedListADT<TwoTypePair<K, V>> entryList : oldEntries) {
+            if (entryList != null) {
+                for (TwoTypePair<K, V> entry : entryList) {
+                    put(entry.getKey(), entry.getValue());
+                }
+            }
         }
     }
 
     @Override
-    public boolean put(K key, V value) throws IllegalArgumentException {
+    public void put(K key, V value) throws IllegalArgumentException {
         if (key == null) {
             throw new IllegalArgumentException("Key cannot be null");
         }
-        if (size == map.length) {
-            resize();
+        int index = Math.abs(key.hashCode()) % capacity;
+        if (map[index] == null) {
+            map[index] = new LinkedUnorderedList<>();
         }
-        int index = Math.abs(key.hashCode()) % map.length;
-        if (map[index] != null) {
-            map[index].setValue(value);
-            return false;
-        } else {
-            map[index] = new TwoTypePair<>(key, value);
-            size++;
-            return true;
+        for (TwoTypePair<K, V> entry : map[index]) {
+            if (entry.getKey().equals(key)) {
+                entry.setValue(value);
+                return;
+            }
+        }
+        map[index].addToRear(new TwoTypePair<>(key, value));
+        size++;
+        if (size > capacity * LOAD_FACTOR) {
+            resize();
         }
     }
 
@@ -59,29 +69,39 @@ public class HashMap<K, V> implements MapADT<K, V> {
         if (isEmpty()) {
             throw new EmptyCollectionException("Map is empty");
         }
-        V value = get(key);
-        int index = Math.abs(key.hashCode()) % map.length;
+        int index = Math.abs(key.hashCode()) % capacity;
         if (map[index] == null) {
             throw new NoSuchElementException("Key not found");
         }
-        map[index] = null;
-        size--;
-        return value;
+        for (TwoTypePair<K, V> entry : map[index]) {
+            if (entry.getKey().equals(key)) {
+                V value = entry.getValue();
+                map[index].remove(entry);
+                size--;
+                return value;
+            }
+        }
+        throw new NoSuchElementException("Key not found");
     }
 
     @Override
     public V get(K key) throws EmptyCollectionException, NoSuchElementException, IllegalArgumentException {
-        if (isEmpty()) {
-            throw new EmptyCollectionException("Map is empty");
-        }
         if (key == null) {
             throw new IllegalArgumentException("Key cannot be null");
         }
-        int index = Math.abs(key.hashCode()) % map.length;
+        if (isEmpty()) {
+            throw new EmptyCollectionException("Map is empty");
+        }
+        int index = Math.abs(key.hashCode()) % capacity;
         if (map[index] == null) {
             throw new NoSuchElementException("Key not found");
         }
-        return map[index].getValue();
+        for (TwoTypePair<K, V> entry : map[index]) {
+            if (entry.getKey().equals(key)) {
+                return entry.getValue();
+            }
+        }
+        throw new NoSuchElementException("Key not found");
     }
 
     @Override
@@ -102,9 +122,13 @@ public class HashMap<K, V> implements MapADT<K, V> {
         if (value == null) {
             throw new IllegalArgumentException("Value cannot be null");
         }
-        for (TwoTypePair<K, V> pair : map) {
-            if (pair != null && pair.getValue().equals(value)) {
-                return true;
+        for (UnorderedListADT<TwoTypePair<K, V>> entryList : map) {
+            if (entryList != null) {
+                for (TwoTypePair<K, V> entry : entryList) {
+                    if (entry.getValue().equals(value)) {
+                        return true;
+                    }
+                }
             }
         }
         return false;
@@ -112,10 +136,12 @@ public class HashMap<K, V> implements MapADT<K, V> {
 
     @Override
     public ListADT<K> getKeys() {
-        LinkedUnorderedList<K> keys = new LinkedUnorderedList<>();
-        for (TwoTypePair<K, V> pair : map) {
-            if (pair != null) {
-                keys.addToRear(pair.getKey());
+        UnorderedListADT<K> keys = new LinkedUnorderedList<>();
+        for (UnorderedListADT<TwoTypePair<K, V>> entryList : map) {
+            if (entryList != null) {
+                for (TwoTypePair<K, V> entry : entryList) {
+                    keys.addToRear(entry.getKey());
+                }
             }
         }
         return keys;
@@ -123,10 +149,14 @@ public class HashMap<K, V> implements MapADT<K, V> {
 
     @Override
     public ListADT<K> getKeys(V value) {
-        LinkedUnorderedList<K> keys = new LinkedUnorderedList<>();
-        for (TwoTypePair<K, V> pair : map) {
-            if (pair != null && pair.getValue().equals(value)) {
-                keys.addToRear(pair.getKey());
+        UnorderedListADT<K> keys = new LinkedUnorderedList<>();
+        for (UnorderedListADT<TwoTypePair<K, V>> entryList : map) {
+            if (entryList != null) {
+                for (TwoTypePair<K, V> entry : entryList) {
+                    if (entry.getValue().equals(value)) {
+                        keys.addToRear(entry.getKey());
+                    }
+                }
             }
         }
         return keys;
@@ -134,10 +164,12 @@ public class HashMap<K, V> implements MapADT<K, V> {
 
     @Override
     public ListADT<V> getValues() {
-        LinkedUnorderedList<V> values = new LinkedUnorderedList<>();
-        for (TwoTypePair<K, V> pair : map) {
-            if (pair != null) {
-                values.addToRear(pair.getValue());
+        UnorderedListADT<V> values = new LinkedUnorderedList<>();
+        for (UnorderedListADT<TwoTypePair<K, V>> entryList : map) {
+            if (entryList != null) {
+                for (TwoTypePair<K, V> entry : entryList) {
+                    values.addToRear(entry.getValue());
+                }
             }
         }
         return values;
@@ -145,10 +177,12 @@ public class HashMap<K, V> implements MapADT<K, V> {
 
     @Override
     public ListADT<TwoTypePair<K, V>> entrySet() {
-        LinkedUnorderedList<TwoTypePair<K, V>> entrySet = new LinkedUnorderedList<>();
-        for (TwoTypePair<K, V> pair : map) {
-            if (pair != null) {
-                entrySet.addToRear(pair);
+        UnorderedListADT<TwoTypePair<K, V>> entrySet = new LinkedUnorderedList<>();
+        for (UnorderedListADT<TwoTypePair<K, V>> entryList : map) {
+            if (entryList != null) {
+                for (TwoTypePair<K, V> entry : entryList) {
+                    entrySet.addToRear(entry);
+                }
             }
         }
         return entrySet;
@@ -166,20 +200,20 @@ public class HashMap<K, V> implements MapADT<K, V> {
 
     @Override
     public void clear() {
-        map = new TwoTypePair[DEFAULT_CAPACITY];
+        map = new UnorderedListADT[capacity];
         size = 0;
     }
 
     @Override
     public String toString() {
         String result = "HashMap { ";
-        for (TwoTypePair<K, V> pair : map) {
-            if (pair != null) {
-                result += pair + " ";
+        for (UnorderedListADT<TwoTypePair<K, V>> entryList : map) {
+            if (entryList != null) {
+                for (TwoTypePair<K, V> entry : entryList) {
+                    result += entry.toString() + ", ";
+                }
             }
         }
         return result + "}";
     }
-
-
 }

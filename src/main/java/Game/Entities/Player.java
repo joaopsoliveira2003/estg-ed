@@ -52,7 +52,7 @@ public interface Player extends Comparable<Player> {
      */
     void setTeam(Team team) throws IllegalArgumentException;
 
-    void removeTeam() throws IllegalArgumentException, NoAssociationException;
+    void removeTeam() throws NoAssociationException;
 
     /**
      * Returns the Current Energy of the player.

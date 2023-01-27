@@ -32,10 +32,10 @@ public class RemoveRoutes extends JFrame {
 
         JButton button = new JButton("REMOVE");
         button.addActionListener((ignored) -> {
-            int id1 = Integer.parseInt(textFieldId1.getText());
-            int id2 = Integer.parseInt(textFieldId2.getText());
 
             try {
+                int id1 = Integer.parseInt(textFieldId1.getText());
+                int id2 = Integer.parseInt(textFieldId2.getText());
                 game.removeRoute(id1,id2);
                 JOptionPane.showMessageDialog(null, "Route removed successfully!");
             } catch (Exception exception) {

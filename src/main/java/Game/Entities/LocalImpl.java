@@ -3,13 +3,16 @@ package Game.Entities;
 import Collections.Exceptions.IllegalArgumentException;
 import Game.API.GameImpl;
 
+import static Game.Utilities.Validations.validateInteger;
+import static Game.Utilities.Validations.validateString;
+
 public abstract class LocalImpl implements Local {
 
-    private int id;
-    private String name;
-    private double latitude;
-    private double longitude;
-    private int energy;
+    protected int id;
+    protected String name;
+    protected double latitude;
+    protected double longitude;
+    protected int energy;
 
     public LocalImpl(int id, String name, double latitude, double longitude, int energy) {
         setID(id);
@@ -26,9 +29,7 @@ public abstract class LocalImpl implements Local {
     
     @Override
     public void setID(int id) throws IllegalArgumentException {
-        if (id < 0) {
-            throw new IllegalArgumentException("ID cannot be negative");
-        }
+        validateInteger(id, "ID");
         this.id = id;
     }
     
@@ -39,9 +40,7 @@ public abstract class LocalImpl implements Local {
     
     @Override
     public void setName(String name) throws IllegalArgumentException {
-        if (name == null || name.isEmpty() || name.isBlank()) {
-            throw new IllegalArgumentException("Name cannot be null, empty or blank");
-        }
+        validateString(name, "Name");
         this.name = name;
     }
     
@@ -94,23 +93,20 @@ public abstract class LocalImpl implements Local {
     
     @Override
     public void setEnergy(int energy) throws IllegalArgumentException {
-        if (energy < 0) {
-            throw new IllegalArgumentException("Energy cannot be negative");
-        }
+        validateInteger(energy, "Energy");
         this.energy = energy;
     }
 
     @Override
     public void addEnergy(int energy) throws IllegalArgumentException {
-        if (energy <= 0) {
-            throw new IllegalArgumentException("Energy must be positive");
-        }
+        validateInteger(energy, "Energy");
         this.energy += energy;
     }
 
     public void removeEnergy(int energy) throws IllegalArgumentException {
-        if (energy <= 0) {
-            throw new IllegalArgumentException("Energy must be positive");
+        validateInteger(energy, "Energy");
+        if (energy > this.energy) {
+            throw new IllegalArgumentException("Not enough energy");
         }
         this.energy -= energy;
     }

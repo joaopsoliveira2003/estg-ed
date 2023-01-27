@@ -32,10 +32,10 @@ public class AddRoutes extends JFrame {
 
         JButton button = new JButton("CREATE");
         button.addActionListener((ignored) -> {
-            int id1 = Integer.parseInt(textFieldId1.getText());
-            int id2 = Integer.parseInt(textFieldId2.getText());
 
             try {
+                int id1 = Integer.parseInt(textFieldId1.getText());
+                int id2 = Integer.parseInt(textFieldId2.getText());
                 game.addRoute(id1,id2);
                 JOptionPane.showMessageDialog(null, "Route added successfully!");
             } catch (Exception exception) {
@@ -44,7 +44,6 @@ public class AddRoutes extends JFrame {
         });
 
         add(button);
-
 
         setLayout(new GridLayout(0, 1));
 
