@@ -102,9 +102,4 @@ public class PortalImpl extends LocalImpl implements Portal {
         portal.put("gameSettings", gameSettings);
         return portal;
     }
-
-    @Override
-    public void setJSON(JSONObject json) throws IOException, IllegalArgumentException {
-
-    }
 }

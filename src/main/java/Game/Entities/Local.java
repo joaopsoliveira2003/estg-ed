@@ -92,20 +92,12 @@ public interface Local extends Comparable<Local> {
 
     void removeEnergy(int energy) throws IllegalArgumentException;
 
-    //json
     /**
      * Returns the json of the place.
      *
      * @return the json of the place
      */
     JSONObject getJSON();
-
-    /**
-     * Sets the json of the place.
-     *
-     * @param json the json of the place
-     */
-    void setJSON(JSONObject json) throws IOException, IllegalArgumentException;
 
     /**
      * Generates a hash code for the place.

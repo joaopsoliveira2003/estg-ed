@@ -333,6 +333,17 @@ public class Graph<T> implements GraphADT<T> {
         return numVertices;
     }
 
+    @Override
+    public void clear() {
+        numVertices = 0;
+        for (int i = 0; i < vertices.length; i++) {
+            vertices[i] = null;
+            for (int j = 0; j < vertices.length; j++) {
+                adjMatrix[i][j] = false;
+            }
+        }
+    }
+
     public String toString() {
         if (numVertices == 0) {
             return "Graph is empty";

@@ -4,12 +4,13 @@ import Collections.HashTables.HashMap;
 import Collections.HashTables.MapADT;
 import Game.API.Game;
 import Game.Entities.Player;
-import Game.Enumerations.PlayerFilter;
+import Game.Enumerations.SortPlayers;
 import Game.Exceptions.NoAssociationException;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.util.Iterator;
 
 public class EditPlayerList extends JFrame {
     public EditPlayerList(Game game) {
@@ -23,7 +24,8 @@ public class EditPlayerList extends JFrame {
 
         MapADT<Integer,Player> players = new HashMap<>();
 
-        for (Player player : game.listPlayersOrdered(PlayerFilter.ID)) {
+        for (Iterator<Player> it = game.listPlayersOrdered(SortPlayers.ID); it.hasNext(); ) {
+            Player player = it.next();
             players.put(player.getID(), player);
             String team;
             try {
@@ -64,8 +66,6 @@ public class EditPlayerList extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         setLocationRelativeTo(null);
-
-        setVisible(true);
     }
 
 }

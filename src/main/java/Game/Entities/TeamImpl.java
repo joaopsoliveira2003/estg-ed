@@ -25,7 +25,7 @@ public class TeamImpl implements Team {
     }
 
     @Override
-    public JSONObject toJSON() {
+    public JSONObject getJSON() {
         JSONObject json = new JSONObject();
         json.put("name", name);
         return json;

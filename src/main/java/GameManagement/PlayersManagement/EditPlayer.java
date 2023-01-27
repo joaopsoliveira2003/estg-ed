@@ -2,7 +2,7 @@ package GameManagement.PlayersManagement;
 
 import Game.API.Game;
 import Game.Entities.Player;
-import Game.Enumerations.PlayerFilter;
+import Game.Enumerations.SortPlayers;
 import Game.Exceptions.NoAssociationException;
 import Game.Exceptions.NoSuchPlayerException;
 import Game.Exceptions.NoSuchTeamException;
@@ -78,7 +78,7 @@ public class EditPlayer extends JFrame {
             }
         });
 
-        setLayout(new GridLayout(game.listPlayersOrdered(PlayerFilter.ID).size(), 5));
+        setLayout(new GridLayout(6, 5));
 
         //adiciona os componentes a janela
         panelId.add(labelId);
@@ -108,8 +108,6 @@ public class EditPlayer extends JFrame {
 
 
 
-
-
         setSize(400, 400);
 
         pack();
@@ -117,12 +115,6 @@ public class EditPlayer extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         setLocationRelativeTo(null);
-
-        setVisible(true);
-
-
-
-
 
     }
 }

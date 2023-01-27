@@ -34,14 +34,14 @@
       "level": 0,
       "name": "João",
       "experiencePoints": 0,
-      "currentEnergy": 450,
+      "currentEnergy": 0,
       "id": 0,
       "team": "Sparks"
     },
     {
       "level": 0,
       "name": "Ana",
-      "experiencePoints": 0,
+      "experiencePoints": 75,
       "currentEnergy": 450,
       "id": 1,
       "team": "None"
@@ -49,7 +49,7 @@
     {
       "level": 0,
       "name": "Pedro",
-      "experiencePoints": 0,
+      "experiencePoints": 150,
       "currentEnergy": 450,
       "id": 2,
       "team": "None"
@@ -57,7 +57,7 @@
     {
       "level": 0,
       "name": "Maria",
-      "experiencePoints": 0,
+      "experiencePoints": 200,
       "currentEnergy": 450,
       "id": 3,
       "team": "None"
@@ -65,7 +65,7 @@
     {
       "level": 0,
       "name": "Rui",
-      "experiencePoints": 0,
+      "experiencePoints": 500,
       "currentEnergy": 450,
       "id": 4,
       "team": "None"
@@ -73,7 +73,7 @@
     {
       "level": 6,
       "name": "Sara",
-      "experiencePoints": 9999,
+      "experiencePoints": 1234,
       "currentEnergy": 335,
       "id": 5,
       "team": "Giants"
@@ -81,7 +81,7 @@
     {
       "level": 0,
       "name": "Joana",
-      "experiencePoints": 0,
+      "experiencePoints": 990,
       "currentEnergy": 450,
       "id": 6,
       "team": "None"
@@ -89,7 +89,7 @@
     {
       "level": 0,
       "name": "Ricardo",
-      "experiencePoints": 0,
+      "experiencePoints": 9990,
       "currentEnergy": 450,
       "id": 7,
       "team": "None"
@@ -97,7 +97,7 @@
     {
       "level": 0,
       "name": "Miguel",
-      "experiencePoints": 0,
+      "experiencePoints": 7500,
       "currentEnergy": 450,
       "id": 8,
       "team": "None"
@@ -105,7 +105,7 @@
     {
       "level": 0,
       "name": "Inês",
-      "experiencePoints": 0,
+      "experiencePoints": 2000,
       "currentEnergy": 450,
       "id": 9,
       "team": "None"
@@ -113,7 +113,7 @@
     {
       "level": 0,
       "name": "João",
-      "experiencePoints": 0,
+      "experiencePoints": 100,
       "currentEnergy": 450,
       "id": 10,
       "team": "Sparks"

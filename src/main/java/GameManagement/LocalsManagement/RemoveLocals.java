@@ -5,8 +5,6 @@ import Collections.HashTables.HashMap;
 import Collections.HashTables.MapADT;
 import Game.API.Game;
 import Game.Entities.Local;
-import Game.Entities.Portal;
-import Game.Enumerations.LocalFilter;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -26,7 +24,7 @@ public class RemoveLocals extends JFrame {
         model.addColumn("Longitude");
         model.addColumn("Energy");
 
-        /*for (Local local : game.listLocalsOrdered(LocalFilter.ID)) {
+        /*for (Local local : game.listLocalsOrdered(SortLocals.ID)) {
             String type;
             if (local instanceof Portal) {
                 type = "Portal";

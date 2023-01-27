@@ -10,6 +10,9 @@ import Collections.HashTables.HashMap;
 import Collections.HashTables.MapADT;
 import org.json.simple.JSONObject;
 
+import static Game.Utilities.Validations.validateInteger;
+import static Game.Utilities.Validations.validateString;
+
 public class ConnectorImpl extends LocalImpl implements Connector {
 
     int coolDownTime;
@@ -28,6 +31,7 @@ public class ConnectorImpl extends LocalImpl implements Connector {
 
     @Override
     public void setCoolDownTime(int coolDownTime) throws IllegalArgumentException{
+        validateInteger(coolDownTime, "Cool down time");
         if (coolDownTime < 0) {
             throw new IllegalArgumentException("Cool down time cannot be negative");
         }
@@ -69,18 +73,6 @@ public class ConnectorImpl extends LocalImpl implements Connector {
         gameSettings.put("cooldown", getCoolDownTime());
         connector.put("gameSettings", gameSettings);
         return connector;
-    }
-
-    @Override
-    public void setJSON(JSONObject json) throws IOException, IllegalArgumentException {
-        setID((int) (long) json.get("id"));
-        setName((String) json.get("name"));
-        JSONObject coordinates = (JSONObject) json.get("coordinates");
-        setLatitude((double) coordinates.get("latitude"));
-        setLongitude((double) coordinates.get("longitude"));
-        JSONObject gameSettings = (JSONObject) json.get("gameSettings");
-        setEnergy((int) (long) gameSettings.get("energy"));
-        setCoolDownTime((int) (long) gameSettings.get("cooldown"));
     }
 
     //toString

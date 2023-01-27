@@ -1,6 +1,9 @@
 package GameManagement.GameManagement;
 
+import Collections.Lists.OrderedListADT;
+import Collections.Lists.UnorderedListADT;
 import Game.API.Game;
+import Game.Enumerations.SortLocals;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,7 +38,7 @@ public class GameManagementMenu extends JFrame {
             int result = fileChooser.showSaveDialog(this);
             if (result == JFileChooser.APPROVE_OPTION) {
                 try {
-                    game.saveGameData(fileChooser.getSelectedFile().getAbsolutePath());
+                    game.exportGameData(fileChooser.getSelectedFile().getAbsolutePath());
                     JOptionPane.showMessageDialog(this, "Data saved successfully");
                 } catch (IOException exception) {
                     new JOptionPane(exception.getMessage(), JOptionPane.ERROR_MESSAGE);
@@ -43,7 +46,24 @@ public class GameManagementMenu extends JFrame {
             }
         });
 
-        setLayout(new GridLayout(0, 1));
+        JButton exportRouteButton = new JButton("Export Route");
+        exportRouteButton.addActionListener(ignored -> {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Choose a file to save data to");
+            fileChooser.setCurrentDirectory(new java.io.File("."));
+            int result = fileChooser.showSaveDialog(this);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                try {
+                    throw new IOException("Not implemented yet");
+                    //game.exportShortestPath(game.getShortestPath(), fileChooser.getSelectedFile().getAbsolutePath());
+                    //JOptionPane.showMessageDialog(this, "Data saved successfully");
+                } catch (IOException exception) {
+                    new JOptionPane(exception.getMessage(), JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        setLayout(new GridLayout(1, 2));
 
         add(loadDataButton);
         add(saveDataButton);

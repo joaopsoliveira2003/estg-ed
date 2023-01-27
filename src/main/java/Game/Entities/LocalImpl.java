@@ -1,6 +1,7 @@
 package Game.Entities;
 
 import Collections.Exceptions.IllegalArgumentException;
+import Game.API.GameImpl;
 
 public abstract class LocalImpl implements Local {
 
@@ -134,7 +135,20 @@ public abstract class LocalImpl implements Local {
 
     @Override
     public int compareTo(Local other) {
-        return this.id - other.getID();
+        switch (GameImpl.sortLocals) {
+            case ID:
+                return this.id - other.getID();
+            case TYPE:
+                return this.getClass().getSimpleName().compareTo(other.getClass().getSimpleName());
+            case LATITUDE:
+                return (int) (this.latitude - other.getLatitude());
+            case LONGITUDE:
+                return (int) (this.longitude - other.getLongitude());
+            case ENERGY:
+                return this.energy - other.getEnergy();
+            default:
+                return 0;
+        }
     }
 
     @Override

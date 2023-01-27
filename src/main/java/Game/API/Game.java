@@ -2,11 +2,11 @@ package Game.API;
 
 import Collections.Exceptions.IllegalArgumentException;
 import Collections.Lists.LinkedOrderedList;
+import Collections.Lists.OrderedListADT;
 import Game.Entities.Local;
 import Game.Entities.Player;
-import Game.Entities.Team;
-import Game.Enumerations.LocalFilter;
-import Game.Enumerations.PlayerFilter;
+import Game.Enumerations.SortLocals;
+import Game.Enumerations.SortPlayers;
 import Game.Exceptions.*;
 
 import java.io.IOException;
@@ -16,6 +16,8 @@ import java.util.Iterator;
  * Game defines the interface for the game.
  */
 public interface Game {
+
+    // LOCALS MANAGEMENT
 
     void addPortal(int id, String name, double latitude, double longitude, int energy, int maxEnergy) throws IllegalArgumentException, AlreadyExistsException;
 
@@ -29,17 +31,23 @@ public interface Game {
 
     void removeConnector(int id) throws IllegalArgumentException, NoSuchLocalException;
 
-    Iterator<Local> listLocalsOrdered(LocalFilter filter);
+    Iterator<Local> listLocalsOrdered(SortLocals filter);
+
+    void loadLocals(String fileName) throws IllegalArgumentException, IOException;
+
+    void exportLocals(String fileName) throws IllegalArgumentException, IOException;
+
+    // ROUTES MANAGEMENT
 
     void addRoute(int id1, int id2) throws IllegalArgumentException, NoSuchLocalException;
 
     void removeRoute(int id1, int id2) throws IllegalArgumentException, NoSuchLocalException;
 
-    Iterator<Local> getShortestPath(Local local1, Local local2) throws IllegalArgumentException, NoSuchLocalException;
+    void loadRoutesLocals(String fileName) throws IllegalArgumentException, IOException;
 
-    Iterator<Local> getShortestPath(Local vertex1, Local vertex2, boolean portals) throws IllegalArgumentException, NoSuchLocalException;
+    void exportRoutesLocals(String fileName) throws IllegalArgumentException, IOException;
 
-    void exportShortestPath(Iterator<Local> path, String fileName) throws IllegalArgumentException, IOException;
+    // PLAYERS MANAGEMENT
 
     void addPlayer(int id, String name, String team) throws IllegalArgumentException, AlreadyExistsException, NoSuchTeamException;
 
@@ -55,7 +63,13 @@ public interface Game {
 
     void removePlayerFromTeam(int player, String team) throws IllegalArgumentException, NoSuchPlayerException, NoSuchTeamException;
 
-    LinkedOrderedList<Player> listPlayersOrdered(PlayerFilter filter);
+    Iterator<Player> listPlayersOrdered(SortPlayers filter);
+
+    void loadPlayers(String fileName) throws IllegalArgumentException, IOException;
+
+    void exportPlayers(String fileName) throws IllegalArgumentException, IOException;
+
+    // GAME MANAGEMENT
 
     void chargePlayer(int player, int local) throws IllegalArgumentException, NoSuchPlayerException, NoSuchLocalException, InvalidLocalException, WrongLocationException, CooldownNotOverException;
 
@@ -63,7 +77,13 @@ public interface Game {
 
     void chargePortal(int player, int local, int energy) throws IllegalArgumentException, NoSuchPlayerException, NoSuchLocalException, InvalidLocalException, WrongLocationException, NoTeamException, NotEnoughEnergyException, NotConqueredPortalException;
 
+    Iterator<Local> getShortestPath(int local1, int local2) throws IllegalArgumentException, NoSuchLocalException;
+
+    Iterator<Local> getShortestPath(int local1, int local2, boolean portals) throws IllegalArgumentException, NoSuchLocalException;
+
+    void exportShortestPath(Iterator<Local> path, String fileName) throws IllegalArgumentException, IOException;
+
     void loadGameData(String fileName) throws IllegalArgumentException, IOException;
 
-    void saveGameData(String fileName) throws IllegalArgumentException, IOException;
+    void exportGameData(String fileName) throws IllegalArgumentException, IOException;
 }

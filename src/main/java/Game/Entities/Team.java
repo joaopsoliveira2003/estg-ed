@@ -22,7 +22,7 @@ public interface Team {
      */
     void setName(String name) throws IllegalArgumentException;
 
-    JSONObject toJSON();
+    JSONObject getJSON();
 
     void fromJSON(JSONObject json);
 

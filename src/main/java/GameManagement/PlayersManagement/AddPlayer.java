@@ -12,7 +12,6 @@ import java.awt.event.*;
 public class AddPlayer extends JFrame {
 
     public AddPlayer(Game game) {
-
         super("Add Player");
 
         JPanel panelId = new JPanel();
@@ -80,6 +79,5 @@ public class AddPlayer extends JFrame {
 
         setLocationRelativeTo(null);
 
-        setVisible(true);
     }
 }

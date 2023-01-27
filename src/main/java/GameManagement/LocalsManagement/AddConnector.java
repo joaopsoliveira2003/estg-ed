@@ -9,68 +9,46 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class AddConnector extends JFrame {
-    //
-    private JPanel panelId;
-    private JPanel panelName;
-    private JPanel panelLatitude;
-    private JPanel panelLongitude;
-    private JPanel panelEnergy;
-    private JPanel panelcoolDownTime;
-
-    private JLabel labelId;
-    private JLabel labelName;
-    private JLabel labelLatitude;
-    private JLabel labelLongitude;
-    private JLabel labelEnergy;
-    private JLabel labelcoolDownTime;
-
-    private JTextField textFieldId;
-    private JTextField textFieldName;
-    private JTextField textFieldLatitude;
-    private JTextField textFieldLongitude;
-    private JTextField textFieldEnergy;
-    private JTextField textFieldcoolDownTime;
-
 
     public AddConnector(Game game) {
         super("Add Connector");
 
-        panelId = new JPanel();
+        JPanel panelId = new JPanel();
         panelId.setLayout(new GridLayout(1, 0));
 
-        panelName = new JPanel();
+        JPanel panelName = new JPanel();
         panelName.setLayout(new GridLayout(1, 0));
 
-        panelLatitude = new JPanel();
+        JPanel panelLatitude = new JPanel();
         panelLatitude.setLayout(new GridLayout(1, 0));
 
-        panelLongitude = new JPanel();
+        JPanel panelLongitude = new JPanel();
         panelLongitude.setLayout(new GridLayout(1, 0));
 
-        panelEnergy = new JPanel();
+        JPanel panelEnergy = new JPanel();
         panelEnergy.setLayout(new GridLayout(1, 0));
 
-        panelcoolDownTime = new JPanel();
+        JPanel panelcoolDownTime = new JPanel();
         panelcoolDownTime.setLayout(new GridLayout(1, 0));
 
 
-        labelId = new JLabel("ID: ");
-        textFieldId = new JTextField(15);
+        JLabel labelId = new JLabel("ID: ");
+        JTextField textFieldId = new JTextField(15);
 
-        labelName = new JLabel("NAME: ");
-        textFieldName = new JTextField(15);
+        JLabel labelName = new JLabel("NAME: ");
+        JTextField textFieldName = new JTextField(15);
 
-        labelLatitude = new JLabel("LATITUDE: ");
-        textFieldLatitude = new JTextField(15);
+        JLabel labelLatitude = new JLabel("LATITUDE: ");
+        JTextField textFieldLatitude = new JTextField(15);
 
-        labelLongitude = new JLabel("LONGITUDE: ");
-        textFieldLongitude = new JTextField(15);
+        JLabel labelLongitude = new JLabel("LONGITUDE: ");
+        JTextField textFieldLongitude = new JTextField(15);
 
-        labelEnergy = new JLabel("ENERGY: ");
-        textFieldEnergy = new JTextField(15);
+        JLabel labelEnergy = new JLabel("ENERGY: ");
+        JTextField textFieldEnergy = new JTextField(15);
 
-        labelcoolDownTime = new JLabel("COOL DOWN TIME: ");
-        textFieldcoolDownTime = new JTextField(15);
+        JLabel labelcoolDownTime = new JLabel("COOL DOWN TIME: ");
+        JTextField textFieldcoolDownTime = new JTextField(15);
 
         panelId.add(labelId);
         panelId.add(textFieldId);

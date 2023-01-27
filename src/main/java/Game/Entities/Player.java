@@ -117,9 +117,7 @@ public interface Player extends Comparable<Player> {
      */
     UnorderedListADT<Portal> getPortals() throws NoAssociationException;
 
-    JSONObject toJSON();
-
-    void fromJSON(JSONObject json);
+    JSONObject getJSON();
 
     /**
      * Generates a hash code for the player.

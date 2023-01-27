@@ -1,21 +1,16 @@
 package Game.API;
 
-import Collections.Exceptions.EmptyCollectionException;
 import Collections.Exceptions.IllegalArgumentException;
-import Collections.Exceptions.NoSuchElementException;
 import Collections.HashTables.HashMap;
 import Collections.HashTables.MapADT;
-import Collections.HashTables.SetADT;
-import Collections.HashTables.HashSet;
+import Collections.Lists.DoublyLinkedOrderedList;
 import Collections.Lists.LinkedOrderedList;
 import Collections.Lists.OrderedListADT;
-import Collections.Trees.HeapADT;
-import Collections.Trees.LinkedHeap;
 import Game.CustomCollections.ExtendedNetworkADT;
 import Game.CustomCollections.ExtendedNetwork;
 import Game.Entities.*;
-import Game.Enumerations.LocalFilter;
-import Game.Enumerations.PlayerFilter;
+import Game.Enumerations.SortLocals;
+import Game.Enumerations.SortPlayers;
 import Game.Exceptions.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -24,9 +19,14 @@ import org.json.simple.parser.ParseException;
 
 import java.io.*;
 import java.util.Iterator;
-import java.util.Objects;
+
+import static Game.Utilities.Validations.validateInteger;
+import static Game.Utilities.Validations.validateString;
 
 public class GameImpl implements Game {
+
+    public static SortLocals sortLocals = SortLocals.ID;
+    public static SortPlayers sortPlayers = SortPlayers.ID;
 
     private final ExtendedNetworkADT<Local> network;
     private final MapADT<Integer, Local> locals;
@@ -42,18 +42,7 @@ public class GameImpl implements Game {
         playerPositions = new HashMap<>();
     }
 
-    protected void validateInteger(int value, String name) throws IllegalArgumentException {
-        if (value < 0) {
-            throw new IllegalArgumentException(name + " cannot be negative.");
-        }
-    }
-
-    protected void validateString(String value, String name) throws IllegalArgumentException {
-        if (value == null || value.isEmpty() || value.isBlank()) {
-            throw new IllegalArgumentException(name + " cannot be null, empty or blank.");
-        }
-    }
-
+    // LOCALS MANAGEMENT
 
     @Override
     public void addPortal(int id, String name, double latitude, double longitude, int energy, int maxEnergy) throws IllegalArgumentException, AlreadyExistsException {
@@ -134,9 +123,9 @@ public class GameImpl implements Game {
     }
 
     @Override
-    public Iterator<Local> listLocalsOrdered(LocalFilter filter) {
-        //TODO: implement sorting
-        OrderedListADT<Local> orderedList = new LinkedOrderedList<>();
+    public Iterator<Local> listLocalsOrdered(SortLocals sort) {
+        sortLocals = sort;
+        OrderedListADT<Local> orderedList = new DoublyLinkedOrderedList<>();
         Iterator<Local> iterator = network.iteratorVertexes();
         while (iterator.hasNext()) {
             Local local = iterator.next();
@@ -144,6 +133,33 @@ public class GameImpl implements Game {
         }
         return orderedList.iterator();
     }
+
+    @Override
+    public void loadLocals(String fileName) throws IllegalArgumentException, IOException {
+        //TODO: clear data structures before adding?
+        try {
+            JSONObject json = loadFile(fileName);
+
+            // LOCALS
+            loadLocals((JSONArray) json.get("locals"));
+
+        } catch (Exception exception) {
+            throw new IOException(exception.getMessage());
+        }
+    }
+
+    @Override
+    public void exportLocals(String fileName) throws IllegalArgumentException, IOException {
+        validateString(fileName, "File name");
+
+        JSONObject json = new JSONObject();
+
+        json.put("locals", saveLocals());
+
+        writeFile(fileName, json);
+    }
+
+    // ROUTES MANAGEMENT
 
     @Override
     public void addRoute(int id1, int id2) throws IllegalArgumentException, NoSuchLocalException {
@@ -176,58 +192,36 @@ public class GameImpl implements Game {
     }
 
     @Override
-    public Iterator<Local> getShortestPath(Local local1, Local local2) throws IllegalArgumentException, NoSuchLocalException {
-        if (local1 == null || local2 == null) {
-            throw new IllegalArgumentException("Local cannot be null.");
+    public void loadRoutesLocals(String fileName) throws IllegalArgumentException, IOException {
+        //TODO: clear data structures before adding?
+        try {
+            JSONObject json = loadFile(fileName);
+
+            // LOCALS
+            loadLocals((JSONArray) json.get("locals"));
+
+            // ROUTES
+            loadRoutes((JSONArray) json.get("routes"));
+
+        } catch (Exception exception) {
+            throw new IOException(exception.getMessage());
         }
-        if (!locals.containsValue(local1)) {
-            throw new NoSuchLocalException("Local " + local1.getName() + " does not exist.");
-        }
-        if (!locals.containsValue(local2)) {
-            throw new NoSuchLocalException("Local " + local2.getName() + " does not exist.");
-        }
-        return network.iteratorShortestPath(local1, local2);
     }
 
     @Override
-    public Iterator<Local> getShortestPath(Local vertex1, Local vertex2, boolean portals) throws IllegalArgumentException, NoSuchLocalException {
-        return network.iteratorShortestPath(vertex1, vertex2, portals);
-    }
+    public void exportRoutesLocals(String fileName) throws IllegalArgumentException, IOException {
+        validateString(fileName, "File name");
 
-    @Override
-    public void exportShortestPath(Iterator<Local> iterator, String fileName) throws IllegalArgumentException, IOException {
-        /*if (iterator == null) {
-            throw new IllegalArgumentException("Iterator cannot be null.");
-        }
-        if (fileName == null) {
-            throw new IllegalArgumentException("File name cannot be null.");
-        }
-        if (!iterator.hasNext()) {
-            throw new IllegalArgumentException("Iterator is empty.");
-        }
         JSONObject json = new JSONObject();
 
-        JSONArray array = new JSONArray();
-        while (iterator.hasNext()) {
-            Local local = iterator.next();
-            JSONObject localJson = new JSONObject();
-            localJson.put("id", local.getId());
-            localJson.put("name", local.getName());
-            localJson.put("latitude", local.getLatitude());
-            localJson.put("longitude", local.getLongitude());
-            array.add(localJson);
-        }
-        File file = new File(fileName);
-        if (!file.exists()) {
-            file.createNewFile();
-        }
-        try (PrintWriter writer = new PrintWriter(file)) {
-            while (iterator.hasNext()) {
-                Local local = iterator.next();
-                writer.println(local.getName());
-            }
-        }*/
+        json.put("locals", saveLocals());
+
+        json.put("routes", saveRoutes());
+
+        writeFile(fileName, json);
     }
+
+    // PLAYERS MANAGEMENT
 
     @Override
     public void addPlayer(int id, String name, String team) throws IllegalArgumentException, AlreadyExistsException, NoSuchTeamException {
@@ -285,6 +279,7 @@ public class GameImpl implements Game {
 
     @Override
     public void addTeam(String name) throws IllegalArgumentException, AlreadyExistsException {
+        validateString(name, "Name");
         if (teams.containsKey(name)) {
             throw new AlreadyExistsException("Team " + name + " already exists.");
         }
@@ -323,14 +318,46 @@ public class GameImpl implements Game {
     }
 
     @Override
-    public LinkedOrderedList<Player> listPlayersOrdered(PlayerFilter filter) {
-        //TODO: implement sorting
-        LinkedOrderedList<Player> list = new LinkedOrderedList<>();
+    public Iterator<Player> listPlayersOrdered(SortPlayers sort) {
+        sortPlayers = sort;
+        OrderedListADT<Player> list = new DoublyLinkedOrderedList<>();
         for (Player player : players.getValues()) {
             list.add(player);
         }
-        return list;
+        return list.iterator();
     }
+
+    @Override
+    public void loadPlayers(String fileName) throws IllegalArgumentException, IOException {
+        //TODO: clear data structures before adding?
+        try {
+            JSONObject json = loadFile(fileName);
+
+            // TEAMS
+            loadTeams((JSONArray) json.get("teams"));
+
+            // PLAYERS
+            loadPlayers((JSONArray) json.get("players"));
+
+        } catch (Exception exception) {
+            throw new IOException(exception.getMessage());
+        }
+    }
+
+    @Override
+    public void exportPlayers(String fileName) throws IllegalArgumentException, IOException {
+        validateString(fileName, "File name");
+
+        JSONObject json = new JSONObject();
+
+        json.put("teams", saveTeams());
+
+        json.put("players", savePlayers());
+
+        writeFile(fileName, json);
+    }
+
+    // GAME MANAGEMENT
 
     @Override
     public void chargePlayer(int player, int local) throws IllegalArgumentException, NoSuchPlayerException, NoSuchLocalException, InvalidLocalException, WrongLocationException, CooldownNotOverException {
@@ -466,131 +493,219 @@ public class GameImpl implements Game {
     }
 
     @Override
+    public Iterator<Local> getShortestPath(int local1, int local2) throws IllegalArgumentException, NoSuchLocalException {
+        validateInteger(local1, "Local 1");
+        validateInteger(local2, "Local 2");
+        if (!locals.containsKey(local1)) {
+            throw new NoSuchLocalException("Local with id " + local1 + " does not exist.");
+        }
+        if (!locals.containsKey(local2)) {
+            throw new NoSuchLocalException("Local with id " + local2 + " does not exist.");
+        }
+        return network.iteratorShortestPath(locals.get(local1), locals.get(local2));
+    }
+
+    @Override
+    public Iterator<Local> getShortestPath(int local1, int local2, boolean portals) throws IllegalArgumentException, NoSuchLocalException {
+        validateInteger(local1, "Local 1");
+        validateInteger(local2, "Local 2");
+        if (!locals.containsKey(local1)) {
+            throw new NoSuchLocalException("Local with id " + local1 + " does not exist.");
+        }
+        if (!locals.containsKey(local2)) {
+            throw new NoSuchLocalException("Local with id " + local2 + " does not exist.");
+        }
+        return network.iteratorShortestPath(locals.get(local1), locals.get(local2), portals);
+    }
+
+    @Override
+    public void exportShortestPath(Iterator<Local> iterator, String fileName) throws IllegalArgumentException, IOException {
+        validateString(fileName, "File name");
+
+        JSONObject json = new JSONObject();
+
+        JSONArray path = new JSONArray();
+
+        if (!iterator.hasNext()) {
+            throw new IllegalArgumentException("Iterator is empty.");
+        }
+        Local first = iterator.next();
+        path.add(first.getName());
+        Local last = first;
+        while (iterator.hasNext()) {
+            last = iterator.next();
+            path.add(last.getName());
+        }
+        json.put("from", first.getName());
+        json.put("to", last.getName());
+        json.put("path", path);
+
+        writeFile(fileName, json);
+    }
+
+    @Override
     public void loadGameData(String fileName) throws IllegalArgumentException, IOException {
         //TODO: clear data structures before adding?
-        validateString(fileName, "File name");
         try {
-            JSONObject json = null;
-            try {
-                json = (JSONObject) new JSONParser().parse(new FileReader(fileName));
-            } catch (ParseException e) {
-                throw new RuntimeException(e);
-            }
+            JSONObject json = loadFile(fileName);
 
             // TEAMS
-
-            JSONArray teamsArray = (JSONArray) json.get("teams");
-            Iterator<JSONObject> iterator = teamsArray.iterator();
-            while (iterator.hasNext()) {
-                addTeam((String) iterator.next().get("name"));
-            }
+            loadTeams((JSONArray) json.get("teams"));
 
             // PLAYERS
-
-            JSONArray playersArray = (JSONArray) json.get("players");
-            iterator = playersArray.iterator();
-            while (iterator.hasNext()) {
-                JSONObject player = iterator.next();
-                int id = ((Long) player.get("id")).intValue();
-                String name = (String) player.get("name");
-                String team = (String) player.get("team");
-                int energy = ((Long) player.get("currentEnergy")).intValue();
-                int experience = ((Long) player.get("experiencePoints")).intValue();
-                addPlayer(id, name, team);
-                Player playerObject = players.get(id);
-                playerObject.addEnergy(energy);
-                playerObject.addExperiencePoints(experience);
-                if (!team.equals("None")) {
-                    addPlayerToTeam(id, team);
-                }
-            }
+            loadPlayers((JSONArray) json.get("players"));
 
             // LOCALS
-
-            JSONArray localsArray = (JSONArray) json.get("locals");
-            iterator = localsArray.iterator();
-            while (iterator.hasNext()) {
-                JSONObject local = iterator.next();
-                int id = ((Long) local.get("id")).intValue();
-                String type = (String) local.get("type");
-                String name = (String) local.get("name");
-                JSONObject coordinates = (JSONObject) local.get("coordinates");
-                Double latitude = (Double) coordinates.get("latitude");
-                Double longitude = (Double) coordinates.get("longitude");
-                JSONObject gameSettings = (JSONObject) local.get("gameSettings");
-                int energy = ((Long) gameSettings.get("energy")).intValue();
-
-                if (type.equals("Connector")) {
-                    int cooldown = ((Long) gameSettings.get("cooldown")).intValue();
-                    addConnector(id, name, latitude, longitude, energy, cooldown);
-                } else if (type.equals("Portal")) {
-                    int maxEnergy = ((Long) gameSettings.get("maxEnergy")).intValue();
-                    JSONObject ownership = (JSONObject) gameSettings.get("ownership");
-                    int owner = ((Long) ownership.get("player")).intValue();
-                    addPortal(id, name, latitude, longitude, energy, maxEnergy);
-                    Portal portalObject = (Portal) locals.get(id);
-                    if (owner != -1) {
-                        portalObject.setOwner(players.get(owner));
-                    }
-                }
-            }
+            loadLocals((JSONArray) json.get("locals"));
 
             // ROUTES
+            loadRoutes((JSONArray) json.get("routes"));
 
-            JSONArray routesArray = (JSONArray) json.get("routes");
-            iterator = routesArray.iterator();
-            while (iterator.hasNext()) {
-                JSONObject route = iterator.next();
-                int from = ((Long) route.get("from")).intValue();
-                int to = ((Long) route.get("to")).intValue();
-                addRoute(from, to);
-            }
         } catch (Exception exception) {
             throw new IOException(exception.getMessage());
         }
     }
 
     @Override
-    public void saveGameData(String fileName) throws IllegalArgumentException, IOException {
+    public void exportGameData(String fileName) throws IllegalArgumentException, IOException {
+        validateString(fileName, "File name");
+
         JSONObject json = new JSONObject();
+
+        json.put("locals", saveLocals());
+
+        json.put("routes", saveRoutes());
+
+        json.put("players", savePlayers());
+
+        json.put("teams", saveTeams());
+
+        writeFile(fileName, json);
+    }
+
+    //JSON
+
+    protected void writeFile(String fileName, JSONObject json) throws IOException {
+        File file = new File(fileName);
+        if (!file.exists()) {
+            file.createNewFile();
+        }
+        FileOutputStream fileOutputStream = new FileOutputStream(file);
+        fileOutputStream.write(json.toJSONString().getBytes());
+        fileOutputStream.close();
+    }
+
+    protected JSONObject loadFile(String fileName) throws IOException {
+        validateString(fileName, "File name");
+        JSONObject json;
+        try {
+            json = (JSONObject) new JSONParser().parse(new FileReader(fileName));
+        } catch (ParseException e) {
+            throw new IOException("File is not a valid JSON");
+        }
+        return json;
+    }
+
+    protected void loadTeams(JSONArray teamsArray) {
+        for (JSONObject jsonObject : (Iterable<JSONObject>) teamsArray) {
+            addTeam((String) jsonObject.get("name"));
+        }
+    }
+
+    protected JSONArray saveTeams() {
+        JSONArray teamsArray = new JSONArray();
+        for (Team team : teams.getValues()) {
+            teamsArray.add(team.getJSON());
+        }
+        return teamsArray;
+    }
+
+    protected void loadPlayers(JSONArray playersArray) {
+        for (JSONObject player : (Iterable<JSONObject>) playersArray) {
+            int id = ((Long) player.get("id")).intValue();
+            String name = (String) player.get("name");
+            String team = (String) player.get("team");
+            int energy = ((Long) player.get("currentEnergy")).intValue();
+            int experience = ((Long) player.get("experiencePoints")).intValue();
+            addPlayer(id, name, team);
+            Player playerObject = players.get(id);
+            playerObject.addEnergy(energy);
+            playerObject.addExperiencePoints(experience);
+        }
+    }
+
+    protected JSONArray savePlayers() {
+        JSONArray playersArray = new JSONArray();
+        for (Player player : players.getValues()) {
+            playersArray.add(player.getJSON());
+        }
+        return playersArray;
+    }
+
+    protected void loadLocals(JSONArray localsArray) {
+        for (JSONObject local : (Iterable<JSONObject>) localsArray) {
+            int id = ((Long) local.get("id")).intValue();
+            String type = (String) local.get("type");
+            String name = (String) local.get("name");
+            JSONObject coordinates = (JSONObject) local.get("coordinates");
+            Double latitude = (Double) coordinates.get("latitude");
+            Double longitude = (Double) coordinates.get("longitude");
+            JSONObject gameSettings = (JSONObject) local.get("gameSettings");
+            int energy = ((Long) gameSettings.get("energy")).intValue();
+
+            if (type.equals("Connector")) {
+                int cooldown = ((Long) gameSettings.get("cooldown")).intValue();
+                addConnector(id, name, latitude, longitude, energy, cooldown);
+            } else if (type.equals("Portal")) {
+                int maxEnergy = ((Long) gameSettings.get("maxEnergy")).intValue();
+                JSONObject ownership = (JSONObject) gameSettings.get("ownership");
+                int owner = ((Long) ownership.get("player")).intValue();
+                addPortal(id, name, latitude, longitude, energy, maxEnergy);
+                Portal portalObject = (Portal) locals.get(id);
+                if (owner != -1) {
+                    portalObject.setOwner(players.get(owner));
+                }
+            }
+        }
+    }
+
+    protected JSONArray saveLocals() {
         JSONArray localsArray = new JSONArray();
         Iterator<Local> iterator = network.iteratorVertexes();
         while (iterator.hasNext()) {
             Local place = iterator.next();
             localsArray.add(place.getJSON());
         }
-        json.put("locals", localsArray);
+        return localsArray;
+    }
+
+    protected void loadRoutes(JSONArray routesArray) {
+        for (JSONObject route : (Iterable<JSONObject>) routesArray) {
+            int from = ((Long) route.get("from")).intValue();
+            int to = ((Long) route.get("to")).intValue();
+            addRoute(from, to);
+        }
+    }
+
+    protected JSONArray saveRoutes() {
         JSONArray routesArray = new JSONArray();
-        iterator = network.iteratorRoutes();
+        Iterator<Local> iterator = network.iteratorRoutes();
         while (iterator.hasNext()) {
             JSONObject route = new JSONObject();
             route.put("from", iterator.next().getID());
             route.put("to", iterator.next().getID());
             routesArray.add(route);
         }
-        json.put("routes", routesArray);
+        return routesArray;
+    }
 
-        JSONArray playersArray = new JSONArray();
-        for (Player player : players.getValues()) {
-            playersArray.add(player.toJSON());
-        }
-        json.put("players", playersArray);
+    // CLEAR DATA STRUCTURES
 
-        JSONArray teamsArray = new JSONArray();
-        for (Team team : teams.getValues()) {
-            teamsArray.add(team.toJSON());
-        }
-        json.put("teams", teamsArray);
-
-        //write to a file with fileName
-        File file = new File(fileName);
-        if (!file.exists()) {
-            file.createNewFile();
-        }
-
-        //write to text file
-        FileOutputStream fileOutputStream = new FileOutputStream(file);
-        fileOutputStream.write(json.toJSONString().getBytes());
-        fileOutputStream.close();
+    protected void clear() {
+        network.clear();
+        locals.clear();
+        players.clear();
+        teams.clear();
+        playerPositions.clear();
     }
 }

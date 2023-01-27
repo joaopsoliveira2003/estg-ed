@@ -2,6 +2,8 @@ package Game.Entities;
 
 import Collections.Exceptions.IllegalArgumentException;
 import Collections.Lists.UnorderedListADT;
+import Game.API.GameImpl;
+import Game.Enumerations.SortPlayers;
 import Game.Exceptions.NoAssociationException;
 import org.json.simple.JSONObject;
 
@@ -147,7 +149,7 @@ public class PlayerImpl implements Player {
     }
 
     @Override
-    public JSONObject toJSON() {
+    public JSONObject getJSON() {
         JSONObject json = new JSONObject();
 
         json.put("id", id);
@@ -162,14 +164,6 @@ public class PlayerImpl implements Player {
         json.put("currentEnergy", currentEnergy);
 
         return json;
-    }
-
-    @Override
-    public void fromJSON(JSONObject json) {
-        setID((int) json.get(id));
-        setName((String) json.get(name));
-        setCurrentEnergy((int) json.get(currentEnergy));
-        setExperiencePoints((int) json.get(experiencePoints));
     }
 
     @Override
@@ -191,31 +185,37 @@ public class PlayerImpl implements Player {
 
     @Override
     public int compareTo(Player o) {
-        return this.id - o.getID();
-    }
-
-    /*public int compareTo(Player o, PlayerFilter filter) {
-        switch (filter) {
+        switch (GameImpl.sortPlayers) {
             case ID:
                 return this.id - o.getID();
-            case NAME:
-                return this.name.compareTo(o.getName());
             case TEAM:
                 try {
-                    return this.getTeam().getName().compareTo(o.getTeam().getName());
+                    String name = this.getTeam().getName();
+                    try {
+                        return name.compareTo(o.getTeam().getName());
+                    } catch (NoAssociationException e) {
+                        return 1;
+                    }
                 } catch (NoAssociationException e) {
                     return -1;
                 }
-            case CURRENT_ENERGY:
-                return this.currentEnergy - o.getCurrentEnergy();
             case LEVEL:
-                return this.level - o.getLevel();
-            case EXPERIENCE_POINTS:
-                return this.experiencePoints - o.getExperiencePoints();
+                return this.getLevel() - o.getLevel();
+            case PORTALS:
+                try {
+                    int portals = this.getPortals().size();
+                    try {
+                        return portals - o.getPortals().size();
+                    } catch (NoAssociationException e) {
+                        return 1;
+                    }
+                } catch (NoAssociationException e) {
+                    return -1;
+                }
             default:
                 return 0;
         }
-    }*/
+    }
 
     @Override
         public String toString() {
@@ -223,12 +223,17 @@ public class PlayerImpl implements Player {
             try {
                 team = getTeam().getName();
             } catch (NoAssociationException ignored) {}
-            return "Player {"
+            int portals = 0;
+            try {
+                portals = getPortals().size();
+            } catch (NoAssociationException ignored) {}
+            return "\nPlayer {"
             + "id=" + id
             + ", name=" + name
             + ", team=" + team
             + ", currentEnergy=" + currentEnergy
             + ", level=" + getLevel()
+            + ", portals=" + portals
             + ", experiencePoints=" + experiencePoints + '}';
         }
 }

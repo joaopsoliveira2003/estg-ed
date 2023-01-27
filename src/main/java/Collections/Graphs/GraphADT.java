@@ -84,6 +84,11 @@ public interface GraphADT<T> {
     int size();
 
     /**
+     * Clears the graph.
+     */
+    void clear();
+
+    /**
      * Returns a string representation of the adjacency matrix.
      *
      * @return a string representation of the adjacency matrix

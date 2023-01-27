@@ -5,12 +5,13 @@ import Collections.HashTables.HashMap;
 import Collections.HashTables.MapADT;
 import Game.API.Game;
 import Game.Entities.Player;
-import Game.Enumerations.PlayerFilter;
+import Game.Enumerations.SortPlayers;
 import Game.Exceptions.NoAssociationException;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.util.Iterator;
 
 public class RemovePlayerList extends JFrame {
     public RemovePlayerList(Game game) {
@@ -26,7 +27,8 @@ public class RemovePlayerList extends JFrame {
         modelPlayer.addColumn("Current Energy");
         modelPlayer.addColumn("Experience Points");
 
-        for(Player player : game.listPlayersOrdered(PlayerFilter.ID)){
+        for (Iterator<Player> it = game.listPlayersOrdered(SortPlayers.ID); it.hasNext(); ) {
+            Player player = it.next();
             map.put(player.getID(), player);
             String team;
             try {
@@ -69,6 +71,5 @@ public class RemovePlayerList extends JFrame {
         pack();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        setVisible(true);
     }
 }
