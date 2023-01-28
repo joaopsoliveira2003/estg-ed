@@ -86,4 +86,20 @@ public interface Game {
     void loadGameData(String fileName) throws IllegalArgumentException, IOException;
 
     void exportGameData(String fileName) throws IllegalArgumentException, IOException;
+
+    // PLAYER ONLY NEEDED FUNCTIONS
+
+    int getPlayerEnergy(int player) throws IllegalArgumentException, NoSuchPlayerException;
+
+    int getPlayerLocal(int player) throws IllegalArgumentException, NoSuchPlayerException;
+
+    String getPlayerTeam(int player) throws IllegalArgumentException, NoSuchPlayerException;
+
+    int getPlayerExperiencePoints(int player) throws IllegalArgumentException, NoSuchPlayerException;
+
+    int getPlayerLevel(int player) throws IllegalArgumentException, NoSuchPlayerException;
+
+    Iterator<Local> getConqueredPortals(int player) throws IllegalArgumentException, NoSuchPlayerException;
+
+    Iterator<Local> getLocalsInRange(int local, double range) throws IllegalArgumentException, NoSuchLocalException;
 }

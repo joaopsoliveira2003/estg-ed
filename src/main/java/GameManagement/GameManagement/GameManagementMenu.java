@@ -1,13 +1,9 @@
 package GameManagement.GameManagement;
 
-import Collections.Lists.OrderedListADT;
-import Collections.Lists.UnorderedListADT;
 import Game.API.Game;
-import Game.Enumerations.SortLocals;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 
 public class GameManagementMenu extends JFrame {
     public GameManagementMenu(Game game) {
@@ -23,7 +19,7 @@ public class GameManagementMenu extends JFrame {
                 try {
                     game.loadGameData(fileChooser.getSelectedFile().getAbsolutePath());
                     JOptionPane.showMessageDialog(this, "Data loaded successfully");
-                } catch (IOException exception) {
+                } catch (Exception exception) {
                     new JOptionPane(exception.getMessage(), JOptionPane.ERROR_MESSAGE);
                 }
             }
@@ -49,7 +45,7 @@ public class GameManagementMenu extends JFrame {
                 try {
                     game.exportGameData(fileChooser.getSelectedFile().getAbsolutePath());
                     JOptionPane.showMessageDialog(this, "Data saved successfully");
-                } catch (IOException exception) {
+                } catch (Exception exception) {
                     new JOptionPane(exception.getMessage(), JOptionPane.ERROR_MESSAGE);
                 }
             }

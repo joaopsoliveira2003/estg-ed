@@ -1,17 +1,17 @@
 import Game.API.Game;
 import Game.API.GameImpl;
-import Game.Enumerations.SortLocals;
-import Game.Enumerations.SortPlayers;
 import GameManagement.MainMenu;
-
-import java.io.IOException;
+import PlayerSimulator.PlayerDemo;
 
 public class Main {
     public static void main(String[] args) {
 
         Game game = new GameImpl();
 
+        new PlayerDemo(game);
+
         new MainMenu(game);
+
 
         /*boolean load = true;
 

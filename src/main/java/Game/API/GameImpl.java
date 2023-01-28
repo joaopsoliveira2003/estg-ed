@@ -598,6 +598,41 @@ public class GameImpl implements Game {
         writeFile(fileName, json);
     }
 
+    @Override
+    public int getPlayerEnergy(int player) throws IllegalArgumentException, NoSuchPlayerException {
+        return 0;
+    }
+
+    @Override
+    public int getPlayerLocal(int player) throws IllegalArgumentException, NoSuchPlayerException {
+        return 0;
+    }
+
+    @Override
+    public String getPlayerTeam(int player) throws IllegalArgumentException, NoSuchPlayerException {
+        return null;
+    }
+
+    @Override
+    public int getPlayerExperiencePoints(int player) throws IllegalArgumentException, NoSuchPlayerException {
+        return 0;
+    }
+
+    @Override
+    public int getPlayerLevel(int player) throws IllegalArgumentException, NoSuchPlayerException {
+        return 0;
+    }
+
+    @Override
+    public Iterator<Local> getConqueredPortals(int player) throws IllegalArgumentException, NoSuchPlayerException {
+        return null;
+    }
+
+    @Override
+    public Iterator<Local> getLocalsInRange(int local, double range) throws IllegalArgumentException, NoSuchLocalException {
+        return null;
+    }
+
     //JSON
 
     protected void writeFile(String fileName, JSONObject json) throws IOException {
