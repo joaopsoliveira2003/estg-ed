@@ -9,6 +9,9 @@ import Collections.Lists.LinkedUnorderedList;
 import Collections.Lists.UnorderedListADT;
 import Game.Exceptions.NoAssociationException;
 
+/**
+ * TeamPlayerAssociation is a singleton class that manages the association between teams and players.
+ */
 public class TeamPlayerAssociation {
 
     private static TeamPlayerAssociation instance;

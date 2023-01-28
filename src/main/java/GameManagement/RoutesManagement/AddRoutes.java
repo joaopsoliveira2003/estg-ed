@@ -5,6 +5,9 @@ import Game.API.Game;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * AddRoutes is a JFrame that allows the user to add a route to the game.
+ */
 public class AddRoutes extends JFrame {
     public AddRoutes(Game game) {
         super("Add Route");

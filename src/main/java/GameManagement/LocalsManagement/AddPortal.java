@@ -1,11 +1,13 @@
 package GameManagement.LocalsManagement;
 
+import Game.API.Game;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-import Game.API.Game;
+/**
+ * AddConnector is a JFrame that allows the user to add a portal to the game.
+ */
 public class AddPortal extends JFrame {
 
     public AddPortal(Game game) {

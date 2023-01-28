@@ -3,15 +3,26 @@ package PlayerSimulator;
 import javax.swing.*;
 
 import Game.API.Game;
+import Game.Exceptions.NoSuchPlayerException;
 
+/**
+ * PlayerDemo is a class that allows the user to simulate the actions of a player
+ */
 public class PlayerDemo extends JFrame {
+
+    public void updateFields(Game game, JTextField id, JTextField level, JTextField exp, JTextField pos, JTextField energy) throws NoSuchPlayerException {
+        level.setText(String.valueOf(game.getPlayerLevel(Integer.parseInt(id.getText()))));
+        exp.setText(String.valueOf(game.getPlayerExperiencePoints(Integer.parseInt(id.getText()))));
+        try {
+            pos.setText(String.valueOf(game.getPlayerPosition(Integer.parseInt(id.getText()))));
+        } catch (Exception exception) {
+            pos.setText("None");
+        }
+        energy.setText(String.valueOf(game.getPlayerEnergy(Integer.parseInt(id.getText()))));
+    }
+    
     public PlayerDemo(Game game) {
         super("Player Simulator");
-
-        //the objective of this window is to have a textbox where we can enter the id of the player and simulate actions of the player
-        //we also need a textbox or a label where we can see the level of the player, another for the experience points, and the position of the player
-        //there should be a place to simulate the player moving to a new location, one to charge the player, one to charge the portal, one to acquire the portal
-        //one to calculate the shortest path
 
         JPanel idPanel = new JPanel();
         JLabel idLabel = new JLabel("Player ID: ");
@@ -22,29 +33,36 @@ public class PlayerDemo extends JFrame {
         JPanel levelPanel = new JPanel();
         JLabel levelLabel = new JLabel("Level: ");
         JTextField levelField = new JTextField(10);
-        levelField.setEnabled(false);
+        levelField.setEditable(false);
         levelPanel.add(levelLabel);
         levelPanel.add(levelField);
 
         JPanel expPanel = new JPanel();
         JLabel expLabel = new JLabel("Experience Points: ");
         JTextField expField = new JTextField(10);
-        expField.setEnabled(false);
+        expField.setEditable(false);
         expPanel.add(expLabel);
         expPanel.add(expField);
 
         JPanel posPanel = new JPanel();
         JLabel posLabel = new JLabel("Position: ");
         JTextField posField = new JTextField(10);
-        posField.setEnabled(false);
+        posField.setEditable(false);
         posPanel.add(posLabel);
         posPanel.add(posField);
 
         JPanel energyPanel = new JPanel();
-        JLabel energyLabel = new JLabel("Energy to Add: ");
+        JLabel energyLabel = new JLabel("Energy: ");
         JTextField energyField = new JTextField(10);
+        energyField.setEditable(false);
         energyPanel.add(energyLabel);
         energyPanel.add(energyField);
+
+        JPanel energyToAddPanel = new JPanel();
+        JLabel energyToAddLabel = new JLabel("Energy to Add: ");
+        JTextField energyToAddField = new JTextField(10);
+        energyToAddPanel.add(energyToAddLabel);
+        energyToAddPanel.add(energyToAddField);
 
         JPanel movePanel = new JPanel();
         JLabel moveLabel = new JLabel("Move to: ");
@@ -52,69 +70,77 @@ public class PlayerDemo extends JFrame {
         movePanel.add(moveLabel);
         movePanel.add(moveField);
 
+        JButton showInfoButton = new JButton("Show Info");
+        showInfoButton.addActionListener(e -> {
+            try {
+                updateFields(game, idField, levelField, expField, posField, energyField);
+            } catch (Exception exception) {
+                JOptionPane.showMessageDialog(null, exception.getMessage());
+            }
+        });
+
         JPanel buttonPanel = new JPanel();
         JButton moveButton = new JButton("Move Player");
         moveButton.addActionListener(e -> {
-            //get the id from the idField
-            //get the position from the moveField
-            //call the movePlayer method from the game class
-            //update the levelField, expField, and posField
+
             try {
                 game.movePlayer(Integer.parseInt(idField.getText()), Integer.parseInt(moveField.getText()));
+                updateFields(game, idField, levelField, expField, posField, energyField);
                 JOptionPane.showMessageDialog(null, "Player moved");
             } catch (Exception exception) {
                 JOptionPane.showMessageDialog(null, exception.getMessage());
             }
         });
+
         JButton chargeButton = new JButton("Charge Player");
         chargeButton.addActionListener(e -> {
-            //get the id from the idField
-            //call the chargePlayer method from the game class
-            //update the levelField, expField, and posField
 
             try {
                 game.chargePlayer(Integer.parseInt(idField.getText()), Integer.parseInt(moveField.getText()));
+                updateFields(game, idField, levelField, expField, posField, energyField);
                 JOptionPane.showMessageDialog(null, "Player charged");
             } catch (Exception exception) {
                 JOptionPane.showMessageDialog(null, exception.getMessage());
             }
         });
+
         JButton chargePortalButton = new JButton("Charge Portal");
         chargePortalButton.addActionListener(e -> {
-            //get the id from the idField
-            //call the chargePortal method from the game class
-            //update the levelField, expField, and posField
+
             try {
-                game.chargePortal(Integer.parseInt(idField.getText()), Integer.parseInt(moveField.getText()), Integer.parseInt(energyField.getText()));
+                game.chargePortal(Integer.parseInt(idField.getText()), Integer.parseInt(moveField.getText()), Integer.parseInt(energyToAddField.getText()));
+                updateFields(game, idField, levelField, expField, posField, energyField);
                 JOptionPane.showMessageDialog(null, "Portal charged");
             } catch (Exception exception) {
                 JOptionPane.showMessageDialog(null, exception.getMessage());
             }
         });
+
         JButton acquirePortalButton = new JButton("Acquire Portal");
         acquirePortalButton.addActionListener(e -> {
-            //get the id from the idField
-            //call the acquirePortal method from the game class
-            //update the levelField, expField, and posField
+
             try {
                 game.acquirePortal(Integer.parseInt(idField.getText()), Integer.parseInt(moveField.getText()));
+                updateFields(game, idField, levelField, expField, posField, energyField);
                 JOptionPane.showMessageDialog(null, "Portal acquired");
             } catch (Exception exception) {
                 JOptionPane.showMessageDialog(null, exception.getMessage());
             }
         });
+
         JButton shortestPathButton = new JButton("Shortest Path");
         shortestPathButton.addActionListener(e -> {
-            //get the id from the idField
-            //call the shortestPath method from the game class
-            //update the levelField, expField, and posField
+
             try {
                 throw new Exception("Not implemented yet");
                 //game.getShortestPath(Integer.parseInt(idField.getText()), Integer.parseInt(moveField.getText()));
+                //updateFields(game, idField, levelField, expField, posField, energyField);
             } catch (Exception exception) {
                 JOptionPane.showMessageDialog(null, exception.getMessage());
             }
         });
+
+        buttonPanel.add(showInfoButton);
         buttonPanel.add(moveButton);
         buttonPanel.add(chargeButton);
         buttonPanel.add(chargePortalButton);
@@ -127,6 +153,7 @@ public class PlayerDemo extends JFrame {
         mainPanel.add(expPanel);
         mainPanel.add(posPanel);
         mainPanel.add(energyPanel);
+        mainPanel.add(energyToAddPanel);
         mainPanel.add(movePanel);
         mainPanel.add(buttonPanel);
 

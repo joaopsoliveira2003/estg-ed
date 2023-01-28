@@ -6,6 +6,9 @@ import Game.API.GameImpl;
 import static Game.Utilities.Validations.validateInteger;
 import static Game.Utilities.Validations.validateString;
 
+/**
+ * LocalImpl defines the implementation of a local in the game.
+ */
 public abstract class LocalImpl implements Local {
 
     protected int id;

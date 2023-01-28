@@ -19,12 +19,16 @@ public interface Team {
      * Sets the name of the team.
      *
      * @param name the name of the team
+     * @throws IllegalArgumentException if the name is null.
      */
     void setName(String name) throws IllegalArgumentException;
 
+    /**
+     * Generates a JSON object representing the team.
+     *
+     * @return a JSON object representing the team
+     */
     JSONObject getJSON();
-
-    void fromJSON(JSONObject json);
 
     /**
      * Returns true if the team is equal to the specified object.

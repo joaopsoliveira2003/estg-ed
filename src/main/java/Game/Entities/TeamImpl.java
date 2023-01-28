@@ -3,6 +3,11 @@ package Game.Entities;
 import Collections.Exceptions.IllegalArgumentException;
 import org.json.simple.JSONObject;
 
+import static Game.Utilities.Validations.validateString;
+
+/**
+ * TeamImpl defines the implementation of a team in the game.
+ */
 public class TeamImpl implements Team {
 
     private String name;
@@ -18,9 +23,7 @@ public class TeamImpl implements Team {
 
     @Override
     public void setName(String name) throws IllegalArgumentException {
-        if (name == null || name.isEmpty() || name.isBlank()) {
-            throw new IllegalArgumentException("Name cannot be null, empty or blank");
-        }
+        validateString(name, "Name");
         this.name = name;
     }
 
@@ -29,11 +32,6 @@ public class TeamImpl implements Team {
         JSONObject json = new JSONObject();
         json.put("name", name);
         return json;
-    }
-
-    @Override
-    public void fromJSON(JSONObject json) {
-
     }
 
     @Override

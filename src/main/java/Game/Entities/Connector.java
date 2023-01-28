@@ -45,5 +45,4 @@ public interface Connector extends Local {
      * @return the description of the place
      */
     String toString();
-
 }

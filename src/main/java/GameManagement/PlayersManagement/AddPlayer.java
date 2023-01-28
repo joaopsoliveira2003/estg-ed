@@ -1,14 +1,13 @@
 package GameManagement.PlayersManagement;
 
+import Game.API.Game;
+
 import javax.swing.*;
 import java.awt.*;
-import Game.API.Game;
-import Game.Entities.Player;
-import Game.Entities.PlayerImpl;
-import Game.Entities.Team;
-import Game.Entities.TeamImpl;
-import java.awt.event.*;
 
+/**
+ * AddPlayer is a JFrame that allows the user to add a player to the game.
+ */
 public class AddPlayer extends JFrame {
 
     public AddPlayer(Game game) {

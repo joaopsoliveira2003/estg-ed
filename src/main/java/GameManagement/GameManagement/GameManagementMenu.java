@@ -5,6 +5,9 @@ import Game.API.Game;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * GameManagementMenu is a JFrame for managing the game.
+ */
 public class GameManagementMenu extends JFrame {
     public GameManagementMenu(Game game) {
         super("Game Management");

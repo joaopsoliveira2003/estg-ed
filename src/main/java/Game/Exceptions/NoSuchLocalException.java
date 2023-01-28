@@ -1,7 +1,7 @@
 package Game.Exceptions;
 
 /**
- * NoSuchLocalException is thrown when a portal does not exist.
+ * NoSuchLocalException is thrown when a local does not exist.
  */
 public class NoSuchLocalException extends RuntimeException {
 

@@ -5,6 +5,9 @@ import Game.API.Game;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * AddRoutes is a JFrame that allows the user to remove a route from the game.
+ */
 public class RemoveRoutes extends JFrame {
     public RemoveRoutes(Game game) {
         super("Remove Route");

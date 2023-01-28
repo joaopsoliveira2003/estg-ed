@@ -11,6 +11,9 @@ import java.time.Instant;
 
 import static Game.Utilities.Validations.validateInteger;
 
+/**
+ * ConnectorImpl defines the implementation of a connector in the game.
+ */
 public class ConnectorImpl extends LocalImpl implements Connector {
 
     int coolDownTime;

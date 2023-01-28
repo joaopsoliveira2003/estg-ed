@@ -4,25 +4,23 @@ import Collections.Exceptions.IllegalArgumentException;
 import Collections.Exceptions.NoSuchElementException;
 import Collections.Lists.UnorderedListADT;
 import Game.API.Game;
-import Game.Entities.Connector;
-import Game.Entities.Local;
 import Game.Entities.Player;
 import Game.Entities.Portal;
-import Game.Enumerations.SortLocals;
 import Game.Enumerations.SortPlayers;
 import Game.Exceptions.NoAssociationException;
-import Game.Exceptions.NoSuchLocalException;
 import Game.Exceptions.NoSuchPlayerException;
 import Game.Exceptions.NoSuchTeamException;
 import GameManagement.LocalsManagement.AddConnector;
 import GameManagement.LocalsManagement.AddPortal;
-import GameManagement.LocalsManagement.ManagePortals;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.Iterator;
 
+/**
+ * ManagePortal is a JFrame that allows the user to manage the players of the game.
+ */
 public class ManagePlayers extends JFrame {
     public ManagePlayers(Game game) {
         super("Manage Players");

@@ -1,7 +1,7 @@
 package Game.Exceptions;
 
 /**
- * AssociationException is thrown when an association between two objects is not found.
+ * NoAssociationException is thrown when an association between two objects is not found.
  */
 public class NoAssociationException extends RuntimeException {
 

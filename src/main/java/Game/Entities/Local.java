@@ -19,6 +19,7 @@ public interface Local extends Comparable<Local> {
      * Sets the id of the local.
      *
      * @param id the id of the local
+     * @throws IllegalArgumentException if the id is negative.
      */
     void setID(int id) throws IllegalArgumentException;
 
@@ -33,6 +34,7 @@ public interface Local extends Comparable<Local> {
      * Sets the name of the local.
      *
      * @param name the name of the local
+     * @throws IllegalArgumentException if the name is null.
      */
     void setName(String name) throws IllegalArgumentException;
 
@@ -47,6 +49,7 @@ public interface Local extends Comparable<Local> {
      * Sets the latitude of the local.
      *
      * @param latitude the latitude of the local
+     * @throws IllegalArgumentException if the latitude is not valid.
      */
     void setLatitude(double latitude) throws IllegalArgumentException;
 
@@ -61,6 +64,7 @@ public interface Local extends Comparable<Local> {
      * Sets the longitude of the local.
      *
      * @param longitude the longitude of the local
+     * @throws IllegalArgumentException if the longitude is not valid.
      */
     void setLongitude(double longitude) throws IllegalArgumentException;
 
@@ -69,6 +73,7 @@ public interface Local extends Comparable<Local> {
      *
      * @param local the local to compare
      * @return the distance between the local and the specified local
+     * @throws IllegalArgumentException if the local is null.
      */
     double getDistanceTo(Local local) throws IllegalArgumentException;
 
@@ -83,6 +88,7 @@ public interface Local extends Comparable<Local> {
      * Sets the energy of the local.
      *
      * @param energy the energy of the local
+     * @throws IllegalArgumentException if the energy is negative.
      */
     void setEnergy(int energy) throws IllegalArgumentException;
 
@@ -90,6 +96,7 @@ public interface Local extends Comparable<Local> {
      * Adds energy to the local.
      *
      * @param energy the energy to add
+     * @throws IllegalArgumentException if the energy is negative.
      */
     void addEnergy(int energy) throws IllegalArgumentException;
 
@@ -97,6 +104,7 @@ public interface Local extends Comparable<Local> {
      * Removes energy from the local.
      *
      * @param energy the energy to remove
+     * @throws IllegalArgumentException if the energy is negative.
      */
     void removeEnergy(int energy) throws IllegalArgumentException;
 

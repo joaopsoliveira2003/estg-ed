@@ -12,6 +12,7 @@ public interface Portal extends Local {
      * Sets the energy of the local.
      *
      * @param energy the energy of the local
+     * @throws IllegalArgumentException if the energy is negative.
      */
     @Override
     void setEnergy(int energy) throws IllegalArgumentException;
@@ -20,6 +21,7 @@ public interface Portal extends Local {
      * Adds energy to the local.
      *
      * @param energy the energy to add
+     * @throws IllegalArgumentException if the energy is negative.
      */
     @Override
     void addEnergy(int energy) throws IllegalArgumentException;
@@ -35,6 +37,7 @@ public interface Portal extends Local {
      * Sets the maximum energy that can be stored in the portal.
      * 
      * @param maxEnergy the maximum energy that can be stored in the portal
+     * @throws IllegalArgumentException if the maximum energy is negative
      */
     void setMaxEnergy(int maxEnergy) throws IllegalArgumentException;
 
@@ -50,8 +53,14 @@ public interface Portal extends Local {
      * Sets the owner of the portal.
      * 
      * @param owner the owner of the portal
+     * @throws IllegalArgumentException if the owner is null
      */
     void setOwner(Player owner) throws IllegalArgumentException;
 
+    /**
+     * Removes the owner of the portal.
+     *
+     * @throws NoAssociationException if the portal has no owner
+     */
     void removeOwner() throws NoAssociationException;
 }

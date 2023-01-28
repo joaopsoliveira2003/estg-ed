@@ -1,13 +1,13 @@
 package GameManagement.LocalsManagement;
 
 import Game.API.Game;
-import Game.Entities.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
+/**
+ * AddConnector is a JFrame that allows the user to add a connector to the game.
+ */
 public class AddConnector extends JFrame {
 
     public AddConnector(Game game) {

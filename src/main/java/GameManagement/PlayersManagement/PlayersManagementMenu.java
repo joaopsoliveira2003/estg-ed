@@ -6,6 +6,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 
+/**
+ * PlayersManagementMenu is a JFrame that allows the user to manage the players and teams of the game.
+ */
 public class PlayersManagementMenu extends JFrame {
     public PlayersManagementMenu(Game game) {
         super("Players Management");
@@ -18,7 +21,7 @@ public class PlayersManagementMenu extends JFrame {
             int result = fileChooser.showOpenDialog(this);
             if (result == JFileChooser.APPROVE_OPTION) {
                 try {
-                    game.loadPlayers(fileChooser.getSelectedFile().getAbsolutePath());
+                    game.loadPlayersTeams(fileChooser.getSelectedFile().getAbsolutePath());
                     JOptionPane.showMessageDialog(this, "Data loaded successfully");
                 } catch (IOException exception) {
                     new JOptionPane(exception.getMessage(), JOptionPane.ERROR_MESSAGE);
@@ -45,7 +48,7 @@ public class PlayersManagementMenu extends JFrame {
             int result = fileChooser.showSaveDialog(this);
             if (result == JFileChooser.APPROVE_OPTION) {
                 try {
-                    game.exportPlayers(fileChooser.getSelectedFile().getAbsolutePath());
+                    game.exportPlayersTeams(fileChooser.getSelectedFile().getAbsolutePath());
                     JOptionPane.showMessageDialog(this, "Data saved successfully");
                 } catch (IOException exception) {
                     new JOptionPane(exception.getMessage(), JOptionPane.ERROR_MESSAGE);

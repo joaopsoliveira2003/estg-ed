@@ -8,6 +8,9 @@ import Game.Entities.Local;
 import java.awt.*;
 import java.util.Iterator;
 
+/**
+ * ShortestPaths is a window that allows the user to calculate and export the shortest path between two locals.
+ */
 public class ShortestPaths extends JFrame {
     public ShortestPaths(Game game){
         super("Shortest Paths");

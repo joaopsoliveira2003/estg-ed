@@ -6,6 +6,9 @@ import org.json.simple.JSONObject;
 
 import java.io.IOException;
 
+/**
+ * PortalImpl defines the implementation of a portal in the game.
+ */
 public class PortalImpl extends LocalImpl implements Portal {
 
     PortalPlayerAssociation ppa = PortalPlayerAssociation.getInstance();

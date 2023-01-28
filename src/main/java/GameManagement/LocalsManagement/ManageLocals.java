@@ -15,8 +15,11 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.Iterator;
 
-public class ManagePortals extends JFrame {
-    public ManagePortals(Game game) {
+/**
+ * ManagePortal is a JFrame that allows the user to manage the portals and connectors of the game.
+ */
+public class ManageLocals extends JFrame {
+    public ManageLocals(Game game) {
         super("Manage Locals");
 
         class CustomTableModel extends DefaultTableModel {
@@ -32,12 +35,12 @@ public class ManagePortals extends JFrame {
                         if (column == 6) return;
                         game.updateConnector(Integer.parseInt(String.valueOf(getValueAt(row, 0))), String.valueOf(getValueAt(row, 1)), (double) Double.parseDouble(String.valueOf(getValueAt(row, 3))), (double) Double.parseDouble(String.valueOf(getValueAt(row, 4))), Integer.parseInt(String.valueOf(getValueAt(row, 5))), Integer.parseInt(String.valueOf(getValueAt(row, 7))));
                     }
-                    JOptionPane.showMessageDialog(ManagePortals.this, "Local edited successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(ManageLocals.this, "Local edited successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
                 } catch (IllegalArgumentException | NoSuchLocalException exception) {
-                    JOptionPane.showMessageDialog(ManagePortals.this, exception.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(ManageLocals.this, exception.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                     super.setValueAt("Error", row, column);
                 } catch (NumberFormatException ignored) {
-                    JOptionPane.showMessageDialog(ManagePortals.this, "Invalid value", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(ManageLocals.this, "Invalid value", "Error", JOptionPane.ERROR_MESSAGE);
                     super.setValueAt("Error", row, column);
                 }
             }

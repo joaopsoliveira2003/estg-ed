@@ -21,6 +21,7 @@ public interface Player extends Comparable<Player> {
      * Sets the id of the player.
      *
      * @param id the id of the player
+     * @throws IllegalArgumentException if the id is negative.
      */
     void setID(int id) throws IllegalArgumentException;
 
@@ -35,6 +36,7 @@ public interface Player extends Comparable<Player> {
      * Sets the name of the player.
      * 
      * @param name the name of the player
+     * @throws IllegalArgumentException if the name is null.
      */
     void setName(String name) throws IllegalArgumentException;
 
@@ -42,6 +44,7 @@ public interface Player extends Comparable<Player> {
      * Returns the team of the player.
      *
      * @return the team of the player
+     * @throws NoAssociationException if the player is not associated with a team.
      */
     Team getTeam() throws NoAssociationException;
 
@@ -49,9 +52,15 @@ public interface Player extends Comparable<Player> {
      * Sets the team of the player.
      *
      * @param team the of the player
+     * @throws IllegalArgumentException if the team is null.
      */
     void setTeam(Team team) throws IllegalArgumentException;
 
+    /**
+     * Removes the team of the player.
+     *
+     * @throws NoAssociationException if the player is not associated with a team.
+     */
     void removeTeam() throws NoAssociationException;
 
     /**
@@ -65,6 +74,7 @@ public interface Player extends Comparable<Player> {
      * Sets the Current Energy of the player.
      *
      * @param energy the Current Energy of the player
+     * @throws IllegalArgumentException if the energy is negative.
      */
     void setCurrentEnergy(int energy) throws IllegalArgumentException;
 
@@ -72,6 +82,7 @@ public interface Player extends Comparable<Player> {
      * Adds the specified energy to the player.
      *
      * @param energy the energy to add
+     * @throws IllegalArgumentException if the energy is negative.
      */
     void addEnergy(int energy) throws IllegalArgumentException;
 
@@ -79,6 +90,7 @@ public interface Player extends Comparable<Player> {
      * Removes the specified energy from the player.
      *
      * @param energy the energy to remove
+     * @throws IllegalArgumentException if the energy is negative.
      */
     void removeEnergy(int energy) throws IllegalArgumentException;
 
@@ -100,6 +112,7 @@ public interface Player extends Comparable<Player> {
      * Sets the experiencePoints of the player.
      *
      * @param experiencePoints the experience of the player
+     * @throws IllegalArgumentException if the experiencePoints is negative.
      */
     void setExperiencePoints(int experiencePoints) throws IllegalArgumentException;
 
@@ -107,6 +120,7 @@ public interface Player extends Comparable<Player> {
      * Adds the specified experiencePoints to the player.
      *
      * @param experiencePoints the experiencePoints to add
+     * @throws IllegalArgumentException if the experiencePoints is negative.
      */
     void addExperiencePoints(int experiencePoints) throws IllegalArgumentException;
 
@@ -114,9 +128,15 @@ public interface Player extends Comparable<Player> {
      * Returns the list of portals the player owns.
      *
      * @return the portals the player owns
+     * @throws NoAssociationException if the player is not associated with a team.
      */
     UnorderedListADT<Portal> getPortals() throws NoAssociationException;
 
+    /**
+     * Generates a JSON object for the player.
+     *
+     * @return a JSON object for the player
+     */
     JSONObject getJSON();
 
     /**

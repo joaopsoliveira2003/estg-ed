@@ -4,7 +4,7 @@ import Collections.Exceptions.IllegalArgumentException;
 import Collections.HashTables.HashMap;
 import Collections.HashTables.MapADT;
 import Collections.Lists.DoublyLinkedOrderedList;
-import Collections.Lists.LinkedOrderedList;
+import Collections.Lists.LinkedUnorderedList;
 import Collections.Lists.OrderedListADT;
 import Game.CustomCollections.ExtendedNetworkADT;
 import Game.CustomCollections.ExtendedNetwork;
@@ -23,6 +23,9 @@ import java.util.Iterator;
 import static Game.Utilities.Validations.validateInteger;
 import static Game.Utilities.Validations.validateString;
 
+/**
+ * GameImpl class implements the Game interface.
+ */
 public class GameImpl implements Game {
 
     public static SortLocals sortLocals = SortLocals.ID;
@@ -279,6 +282,12 @@ public class GameImpl implements Game {
         if (!locals.containsKey(local)) {
             throw new NoSuchLocalException("Local with id " + local + " does not exist.");
         }
+        if (playerPositions.containsKey(player)) {
+            Local oldLocal = playerPositions.get(player);
+            if (oldLocal.getID() == local) {
+                throw new IllegalArgumentException("Player is already in local " + local + ".");
+            }
+        }
         playerPositions.put(player, locals.get(local));
     }
 
@@ -333,7 +342,7 @@ public class GameImpl implements Game {
     }
 
     @Override
-    public void loadPlayers(String fileName) throws IllegalArgumentException, IOException {
+    public void loadPlayersTeams(String fileName) throws IllegalArgumentException, IOException {
         //TODO: clear data structures before adding?
         try {
             JSONObject json = loadFile(fileName);
@@ -350,7 +359,7 @@ public class GameImpl implements Game {
     }
 
     @Override
-    public void exportPlayers(String fileName) throws IllegalArgumentException, IOException {
+    public void exportPlayersTeams(String fileName) throws IllegalArgumentException, IOException {
         validateString(fileName, "File name");
 
         JSONObject json = new JSONObject();
@@ -407,11 +416,9 @@ public class GameImpl implements Game {
         Portal portalObject = (Portal) locals.get(local);
         try {
             if (playerObject.getTeam() == portalObject.getOwner().getTeam()) {
-                throw new AlreadyConqueredPortalException("Portal is already owned by a player of the same team.");
+                throw new AlreadyConqueredPortalException("Portal is already owned by the same team.");
             }
-        } catch (NoAssociationException exception) {
-            throw new NoTeamException(exception.getMessage());
-        }
+        } catch (NoAssociationException ignored) {}
         if (playerPositions.get(player) != portalObject) {
             throw new WrongLocationException("Player is not at the local.");
         }
@@ -600,37 +607,79 @@ public class GameImpl implements Game {
 
     @Override
     public int getPlayerEnergy(int player) throws IllegalArgumentException, NoSuchPlayerException {
-        return 0;
+        validateInteger(player, "Player");
+        if (!players.containsKey(player)) {
+            throw new NoSuchPlayerException("Player with id " + player + " does not exist.");
+        }
+        return players.get(player).getCurrentEnergy();
     }
 
     @Override
-    public int getPlayerLocal(int player) throws IllegalArgumentException, NoSuchPlayerException {
-        return 0;
+    public int getPlayerPosition(int player) throws IllegalArgumentException, NoSuchPlayerException {
+        validateInteger(player, "Player");
+        if (!players.containsKey(player)) {
+            throw new NoSuchPlayerException("Player with id " + player + " does not exist.");
+        }
+        if (!playerPositions.containsKey(player)) {
+            throw new IllegalArgumentException("Player is not at a local.");
+        }
+        return playerPositions.get(player).getID();
     }
 
     @Override
     public String getPlayerTeam(int player) throws IllegalArgumentException, NoSuchPlayerException {
-        return null;
+        validateInteger(player, "Player");
+        if (!players.containsKey(player)) {
+            throw new NoSuchPlayerException("Player with id " + player + " does not exist.");
+        }
+        if (players.get(player).getTeam() == null) {
+            throw new IllegalArgumentException("Player is not in a team.");
+        }
+        try {
+            return players.get(player).getTeam().getName();
+        } catch (NoAssociationException ignored) {
+            return "None";
+        }
     }
 
     @Override
     public int getPlayerExperiencePoints(int player) throws IllegalArgumentException, NoSuchPlayerException {
-        return 0;
+        validateInteger(player, "Player");
+        if (!players.containsKey(player)) {
+            throw new NoSuchPlayerException("Player with id " + player + " does not exist.");
+        }
+        return players.get(player).getExperiencePoints();
     }
 
     @Override
     public int getPlayerLevel(int player) throws IllegalArgumentException, NoSuchPlayerException {
-        return 0;
+        validateInteger(player, "Player");
+        if (!players.containsKey(player)) {
+            throw new NoSuchPlayerException("Player with id " + player + " does not exist.");
+        }
+        return players.get(player).getLevel();
     }
 
     @Override
-    public Iterator<Local> getConqueredPortals(int player) throws IllegalArgumentException, NoSuchPlayerException {
-        return null;
+    public Iterator<Portal> getConqueredPortals(int player) throws IllegalArgumentException, NoSuchPlayerException {
+        validateInteger(player, "Player");
+        if (!players.containsKey(player)) {
+            throw new NoSuchPlayerException("Player with id " + player + " does not exist.");
+        }
+        try {
+            return players.get(player).getPortals().iterator();
+        } catch (NoAssociationException ignored) {
+            return new LinkedUnorderedList<Portal>().iterator();
+        }
     }
 
     @Override
-    public Iterator<Local> getLocalsInRange(int local, double range) throws IllegalArgumentException, NoSuchLocalException {
-        return null;
+    public Iterator<Local> getLocalsInRange(int local) throws IllegalArgumentException, NoSuchLocalException {
+        validateInteger(local, "Local");
+        if (!locals.containsKey(local)) {
+            throw new NoSuchLocalException("Local with id " + local + " does not exist.");
+        }
+        return network.iteratorBFS(locals.get(local));
     }
 
     //JSON

@@ -6,6 +6,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 
+/**
+ * LocalsManagementMenu is a JFrame that allows the user to manage the locals of the game.
+ */
 public class LocalsManagementMenu extends JFrame {
     public LocalsManagementMenu(Game game) {
         super("Locals Management");
@@ -26,13 +29,13 @@ public class LocalsManagementMenu extends JFrame {
             }
         });
 
-        ManagePortals managePortals = new ManagePortals(game);
+        ManageLocals manageLocals = new ManageLocals(game);
         JButton manageDataButton = new JButton("Manage Data");
         manageDataButton.addActionListener(e -> {
-            if (!managePortals.isVisible()) {
-                managePortals.setVisible(true);
+            if (!manageLocals.isVisible()) {
+                manageLocals.setVisible(true);
             } else {
-                managePortals.toFront();
+                manageLocals.toFront();
             }
         });
 

@@ -1,7 +1,7 @@
 package Game.Exceptions;
 
 /**
- * AlreadyConqueredPortalException is thrown when a portal is already conquered.
+ * AlreadyConqueredPortalException is thrown when a portal is already conquered by the same team.
  */
 public class AlreadyConqueredPortalException extends RuntimeException {
 

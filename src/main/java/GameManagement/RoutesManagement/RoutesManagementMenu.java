@@ -1,12 +1,14 @@
 package GameManagement.RoutesManagement;
 
 import Game.API.Game;
-import GameManagement.LocalsManagement.AddPortal;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 
+/**
+ * RoutesManagementMenu is a JFrame that allows the user to manage the routes of the game.
+ */
 public class RoutesManagementMenu extends JFrame {
     public RoutesManagementMenu(Game game) {
         super("Routes Management");

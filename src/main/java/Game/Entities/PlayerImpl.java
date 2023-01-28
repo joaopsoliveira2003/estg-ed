@@ -7,6 +7,9 @@ import Game.Enumerations.SortPlayers;
 import Game.Exceptions.NoAssociationException;
 import org.json.simple.JSONObject;
 
+/**
+ * PlayerImpl defines the implementation of a player in the game.
+ */
 public class PlayerImpl implements Player {
 
     PortalPlayerAssociation ppa = PortalPlayerAssociation.getInstance();

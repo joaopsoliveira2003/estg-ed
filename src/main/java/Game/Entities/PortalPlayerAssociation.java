@@ -9,6 +9,9 @@ import Collections.Lists.LinkedUnorderedList;
 import Collections.Lists.UnorderedListADT;
 import Game.Exceptions.NoAssociationException;
 
+/**
+ * PortalPlayerAssociation is a singleton class that manages the association between portals and players.
+ */
 public class PortalPlayerAssociation {
 
     private static PortalPlayerAssociation instance;

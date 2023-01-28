@@ -1,5 +1,8 @@
 package Game.Exceptions;
 
+/**
+ * NoTeamException is thrown when a team is not found.
+ */
 public class NoTeamException extends RuntimeException {
 
     /**

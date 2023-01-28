@@ -1,5 +1,8 @@
 package Game.Exceptions;
 
+/**
+ * AlreadyExistsException is thrown when an object already exists.
+ */
 public class AlreadyExistsException extends RuntimeException {
 
     /**

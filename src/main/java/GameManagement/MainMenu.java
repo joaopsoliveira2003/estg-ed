@@ -9,6 +9,9 @@ import GameManagement.RoutesManagement.RoutesManagementMenu;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * MainMenu is a JFrame that allows the user to access the different menus of the game.
+ */
 public class MainMenu extends JFrame {
     public MainMenu(Game game) {
 

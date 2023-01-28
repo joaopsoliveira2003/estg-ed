@@ -1,5 +1,8 @@
 package Game.Exceptions;
 
+/**
+ * InvalidLocalException is thrown when a local is invalid for a specific action.
+ */
 public class InvalidLocalException extends RuntimeException {
 
         /**
