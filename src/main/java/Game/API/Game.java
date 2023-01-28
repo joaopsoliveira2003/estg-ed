@@ -228,12 +228,11 @@ public interface Game {
      * Removes a player from a team.
      *
      * @param player The id of the player.
-     * @param team The name of the team.
      * @throws IllegalArgumentException If any of the parameters is invalid.
      * @throws NoSuchPlayerException If the player does not exist.
      * @throws NoSuchTeamException If the team does not exist.
      */
-    void removePlayerFromTeam(int player, String team) throws IllegalArgumentException, NoSuchPlayerException, NoSuchTeamException;
+    void removePlayerFromTeam(int player) throws IllegalArgumentException, NoSuchPlayerException, NoSuchTeamException;
 
     /**
      * Lists all the players ordered by the given filter.

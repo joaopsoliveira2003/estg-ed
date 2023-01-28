@@ -21,6 +21,7 @@ public class MainMenu extends JFrame {
         JButton localsManagementButton = new JButton("Locals Management");
         localsManagementButton.addActionListener(e -> {
             if (!localsManagementMenu.isVisible()) {
+                localsManagementMenu.setLocationRelativeTo(this);
                 localsManagementMenu.setVisible(true);
             } else {
                 localsManagementMenu.toFront();
@@ -31,6 +32,7 @@ public class MainMenu extends JFrame {
         JButton routesManagementButton = new JButton("Routes Management");
         routesManagementButton.addActionListener(e -> {
             if (!routesManagementMenu.isVisible()) {
+                routesManagementMenu.setLocationRelativeTo(this);
                 routesManagementMenu.setVisible(true);
             } else {
                 routesManagementMenu.toFront();
@@ -41,6 +43,7 @@ public class MainMenu extends JFrame {
         JButton playersManagementButton = new JButton("Players Management");
         playersManagementButton.addActionListener(e -> {
             if (!playersManagementMenu.isVisible()) {
+                playersManagementMenu.setLocationRelativeTo(this);
                 playersManagementMenu.setVisible(true);
             } else {
                 playersManagementMenu.toFront();
@@ -51,6 +54,7 @@ public class MainMenu extends JFrame {
         JButton gameManagementButton = new JButton("Game Management");
         gameManagementButton.addActionListener(e -> {
             if (!gameManagementMenu.isVisible()) {
+                gameManagementMenu.setLocationRelativeTo(this);
                 gameManagementMenu.setVisible(true);
             } else {
                 gameManagementMenu.toFront();
@@ -68,7 +72,7 @@ public class MainMenu extends JFrame {
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        setLocationRelativeTo(null);
+        setLocation(500, 250);
 
         setResizable(false);
 

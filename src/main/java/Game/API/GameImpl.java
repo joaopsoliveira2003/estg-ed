@@ -37,12 +37,21 @@ public class GameImpl implements Game {
     private final MapADT<String, Team> teams;
     private final MapADT<Integer, Local> playerPositions;
 
+    private int movePlayerPoints;
+    private int acquirePortalPoints;
+    private int chargePortalPoints;
+    private int chargePlayerPoints;
+
     public GameImpl() {
         network = new ExtendedNetwork<>();
         locals = new HashMap<>();
         players = new HashMap<>();
         teams = new HashMap<>();
         playerPositions = new HashMap<>();
+        movePlayerPoints = 5;
+        acquirePortalPoints = 250;
+        chargePortalPoints = 100;
+        chargePlayerPoints = 15;
     }
 
     // LOCALS MANAGEMENT
@@ -259,6 +268,12 @@ public class GameImpl implements Game {
                 throw new NoSuchTeamException("Team " + team + " does not exist.");
             }
         } else {
+            try {
+                Team currentTeam = players.get(id).getTeam();
+                if (currentTeam.getName().equals(team)) {
+                    throw new IllegalArgumentException("Player is already in team " + team + ".");
+                }
+            } catch (NoAssociationException ignored) {}
             player.setTeam(teams.get(team));
         }
     }
@@ -289,6 +304,7 @@ public class GameImpl implements Game {
             }
         }
         playerPositions.put(player, locals.get(local));
+        players.get(player).addExperiencePoints(movePlayerPoints);
     }
 
     @Override
@@ -311,18 +327,20 @@ public class GameImpl implements Game {
         if (!teams.containsKey(team)) {
             throw new NoSuchTeamException("Team " + team + " does not exist.");
         }
+        try {
+            Team currentTeam = players.get(player).getTeam();
+            if (currentTeam.getName().equals(team)) {
+                throw new IllegalArgumentException("Player is already in team " + team + ".");
+            }
+        } catch (NoAssociationException ignored) {}
         players.get(player).setTeam(teams.get(team));
     }
 
     @Override
-    public void removePlayerFromTeam(int player, String team) throws IllegalArgumentException, NoSuchPlayerException, NoSuchTeamException, NoTeamException {
+    public void removePlayerFromTeam(int player) throws IllegalArgumentException, NoSuchPlayerException, NoSuchTeamException, NoTeamException {
         validateInteger(player, "Player");
         if (!players.containsKey(player)) {
             throw new NoSuchPlayerException("Player with id " + player + " does not exist.");
-        }
-        validateString(team, "Team");
-        if (!teams.containsKey(team)) {
-            throw new NoSuchTeamException("Team " + team + " does not exist.");
         }
         try {
             players.get(player).removeTeam();
@@ -393,6 +411,7 @@ public class GameImpl implements Game {
         }
         if (localObject.isCoolDownOver(playerObject)) {
             playerObject.addEnergy((int) (localObject.getEnergy() * 0.1));
+            playerObject.addExperiencePoints(chargePlayerPoints);
             localObject.addLastInteraction(playerObject);
         } else {
             throw new CooldownNotOverException("Cooldown is not over.");
@@ -415,6 +434,11 @@ public class GameImpl implements Game {
         }
         Portal portalObject = (Portal) locals.get(local);
         try {
+            playerObject.getTeam();
+        } catch (NoTeamException exception) {
+            throw new NoTeamException(exception.getMessage());
+        }
+        try {
             if (playerObject.getTeam() == portalObject.getOwner().getTeam()) {
                 throw new AlreadyConqueredPortalException("Portal is already owned by the same team.");
             }
@@ -432,6 +456,7 @@ public class GameImpl implements Game {
                     portalObject.removeOwner();
                     playerObject.removeEnergy(portalObject.getEnergy());
                     portalObject.removeEnergy(portalObject.getEnergy());
+                    playerObject.addExperiencePoints(acquirePortalPoints);
 
                     //now check if the player has enough energy to charge the portal with 25% of the max energy of the portal
                     if (playerObject.getCurrentEnergy() >= (portalObject.getMaxEnergy() * 0.25)) {
@@ -439,15 +464,19 @@ public class GameImpl implements Game {
                         portalObject.setOwner(playerObject);
                         playerObject.removeEnergy((int) (portalObject.getMaxEnergy() * 0.25));
                         portalObject.addEnergy((int) (portalObject.getMaxEnergy() * 0.25));
+                        playerObject.addExperiencePoints(chargePortalPoints);
                     } else {
                         portalObject.removeEnergy(playerObject.getCurrentEnergy());
                         playerObject.removeEnergy(playerObject.getCurrentEnergy());
+                        playerObject.addExperiencePoints(chargePortalPoints / 2);
                         //not enough energy
                         throw new NotEnoughEnergyException("Player " + playerObject.getName() + " does not have enough energy to conquer the portal");
                     }
                 } else {
                     portalObject.removeEnergy(playerObject.getCurrentEnergy());
                     playerObject.removeEnergy(playerObject.getCurrentEnergy());
+                    playerObject.addExperiencePoints(chargePortalPoints / 4);
+
                     //not enough energy
                     throw new NotEnoughEnergyException("Player " + playerObject.getName() + " does not have enough energy to reset the portal");
                 }
@@ -464,6 +493,7 @@ public class GameImpl implements Game {
                 portalObject.setOwner(playerObject);
                 playerObject.removeEnergy((int) (portalObject.getMaxEnergy() * 0.25));
                 portalObject.addEnergy((int) (portalObject.getMaxEnergy() * 0.25));
+                playerObject.addExperiencePoints(chargePortalPoints);
             } else {
                 //not enough energy
                 throw new NotEnoughEnergyException("Player " + playerObject.getName() + " does not have enough energy to conquer the portal");
@@ -499,6 +529,7 @@ public class GameImpl implements Game {
         if (playerObject.getCurrentEnergy() >= energy) {
             playerObject.removeEnergy(energy);
             portalObject.addEnergy(energy);
+            playerObject.addExperiencePoints(chargePortalPoints);
         } else {
             throw new NotEnoughEnergyException("Player does not have the specified energy to charge the portal.");
         }
@@ -583,6 +614,14 @@ public class GameImpl implements Game {
             // ROUTES
             loadRoutes((JSONArray) json.get("routes"));
 
+
+            // POINTS
+            JSONObject points = (JSONObject) json.get("points");
+            acquirePortalPoints = Integer.parseInt(points.get("acquirePortal").toString());
+            chargePortalPoints = Integer.parseInt(points.get("chargePortal").toString());
+            chargePlayerPoints = Integer.parseInt(points.get("chargePlayer").toString());
+            movePlayerPoints = Integer.parseInt(points.get("movePlayer").toString());
+
         } catch (Exception exception) {
             throw new IOException(exception.getMessage());
         }
@@ -601,6 +640,13 @@ public class GameImpl implements Game {
         json.put("players", savePlayers());
 
         json.put("teams", saveTeams());
+
+        JSONObject points = new JSONObject();
+        points.put("acquirePortal", acquirePortalPoints);
+        points.put("chargePortal", chargePortalPoints);
+        points.put("chargePlayer", chargePlayerPoints);
+        points.put("movePlayer", movePlayerPoints);
+        json.put("points", points);
 
         writeFile(fileName, json);
     }
@@ -705,9 +751,13 @@ public class GameImpl implements Game {
         return json;
     }
 
-    protected void loadTeams(JSONArray teamsArray) {
-        for (JSONObject jsonObject : (Iterable<JSONObject>) teamsArray) {
-            addTeam((String) jsonObject.get("name"));
+    protected void loadTeams(JSONArray teamsArray) throws IOException {
+        try {
+            for (JSONObject jsonObject : (Iterable<JSONObject>) teamsArray) {
+                addTeam((String) jsonObject.get("name"));
+            }
+        } catch (RuntimeException exception) {
+            throw new IOException(exception.getMessage());
         }
     }
 
@@ -719,17 +769,21 @@ public class GameImpl implements Game {
         return teamsArray;
     }
 
-    protected void loadPlayers(JSONArray playersArray) {
-        for (JSONObject player : (Iterable<JSONObject>) playersArray) {
-            int id = ((Long) player.get("id")).intValue();
-            String name = (String) player.get("name");
-            String team = (String) player.get("team");
-            int energy = ((Long) player.get("currentEnergy")).intValue();
-            int experience = ((Long) player.get("experiencePoints")).intValue();
-            addPlayer(id, name, team);
-            Player playerObject = players.get(id);
-            playerObject.addEnergy(energy);
-            playerObject.addExperiencePoints(experience);
+    protected void loadPlayers(JSONArray playersArray) throws IOException {
+        try {
+            for (JSONObject player : (Iterable<JSONObject>) playersArray) {
+                int id = ((Long) player.get("id")).intValue();
+                String name = (String) player.get("name");
+                String team = (String) player.get("team");
+                int energy = ((Long) player.get("currentEnergy")).intValue();
+                int experience = ((Long) player.get("experiencePoints")).intValue();
+                addPlayer(id, name, team);
+                Player playerObject = players.get(id);
+                playerObject.setCurrentEnergy(energy);
+                playerObject.addExperiencePoints(experience);
+            }
+        } catch (RuntimeException exception) {
+            throw new IOException(exception.getMessage());
         }
     }
 
@@ -741,30 +795,34 @@ public class GameImpl implements Game {
         return playersArray;
     }
 
-    protected void loadLocals(JSONArray localsArray) {
-        for (JSONObject local : (Iterable<JSONObject>) localsArray) {
-            int id = ((Long) local.get("id")).intValue();
-            String type = (String) local.get("type");
-            String name = (String) local.get("name");
-            JSONObject coordinates = (JSONObject) local.get("coordinates");
-            Double latitude = (Double) coordinates.get("latitude");
-            Double longitude = (Double) coordinates.get("longitude");
-            JSONObject gameSettings = (JSONObject) local.get("gameSettings");
-            int energy = ((Long) gameSettings.get("energy")).intValue();
+    protected void loadLocals(JSONArray localsArray) throws IOException {
+        try {
+            for (JSONObject local : (Iterable<JSONObject>) localsArray) {
+                int id = ((Long) local.get("id")).intValue();
+                String type = (String) local.get("type");
+                String name = (String) local.get("name");
+                JSONObject coordinates = (JSONObject) local.get("coordinates");
+                Double latitude = (Double) coordinates.get("latitude");
+                Double longitude = (Double) coordinates.get("longitude");
+                JSONObject gameSettings = (JSONObject) local.get("gameSettings");
+                int energy = ((Long) gameSettings.get("energy")).intValue();
 
-            if (type.equals("Connector")) {
-                int cooldown = ((Long) gameSettings.get("cooldown")).intValue();
-                addConnector(id, name, latitude, longitude, energy, cooldown);
-            } else if (type.equals("Portal")) {
-                int maxEnergy = ((Long) gameSettings.get("maxEnergy")).intValue();
-                JSONObject ownership = (JSONObject) gameSettings.get("ownership");
-                int owner = ((Long) ownership.get("player")).intValue();
-                addPortal(id, name, latitude, longitude, energy, maxEnergy);
-                Portal portalObject = (Portal) locals.get(id);
-                if (owner != -1) {
-                    portalObject.setOwner(players.get(owner));
+                if (type.equals("Connector")) {
+                    int cooldown = ((Long) gameSettings.get("cooldown")).intValue();
+                    addConnector(id, name, latitude, longitude, energy, cooldown);
+                } else if (type.equals("Portal")) {
+                    int maxEnergy = ((Long) gameSettings.get("maxEnergy")).intValue();
+                    JSONObject ownership = (JSONObject) gameSettings.get("ownership");
+                    int owner = ((Long) ownership.get("player")).intValue();
+                    addPortal(id, name, latitude, longitude, energy, maxEnergy);
+                    Portal portalObject = (Portal) locals.get(id);
+                    if (owner != -1) {
+                        portalObject.setOwner(players.get(owner));
+                    }
                 }
             }
+        } catch (RuntimeException exception) {
+            throw new IOException(exception.getMessage());
         }
     }
 
@@ -778,11 +836,15 @@ public class GameImpl implements Game {
         return localsArray;
     }
 
-    protected void loadRoutes(JSONArray routesArray) {
-        for (JSONObject route : (Iterable<JSONObject>) routesArray) {
-            int from = ((Long) route.get("from")).intValue();
-            int to = ((Long) route.get("to")).intValue();
-            addRoute(from, to);
+    protected void loadRoutes(JSONArray routesArray) throws IOException {
+        try {
+            for (JSONObject route : (Iterable<JSONObject>) routesArray) {
+                int from = ((Long) route.get("from")).intValue();
+                int to = ((Long) route.get("to")).intValue();
+                addRoute(from, to);
+            }
+        } catch (RuntimeException exception) {
+            throw new IOException(exception.getMessage());
         }
     }
 

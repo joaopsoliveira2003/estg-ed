@@ -4,6 +4,7 @@ import Game.API.Game;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 
 /**
  * GameManagementMenu is a JFrame for managing the game.
@@ -22,7 +23,7 @@ public class GameManagementMenu extends JFrame {
                 try {
                     game.loadGameData(fileChooser.getSelectedFile().getAbsolutePath());
                     JOptionPane.showMessageDialog(this, "Data loaded successfully");
-                } catch (Exception exception) {
+                } catch (RuntimeException | IOException exception) {
                     new JOptionPane(exception.getMessage(), JOptionPane.ERROR_MESSAGE);
                 }
             }

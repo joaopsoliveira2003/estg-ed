@@ -95,6 +95,21 @@ public interface Player extends Comparable<Player> {
     void removeEnergy(int energy) throws IllegalArgumentException;
 
     /**
+     * Returns the max energy of the player.
+     *
+     * @return the max energy of the player
+     */
+    int getMaxEnergy();
+
+    /**
+     * Sets the max energy of the player.
+     *
+     * @param maxEnergy the max energy of the player
+     * @throws IllegalArgumentException if the maxEnergy is negative.
+     */
+    void setMaxEnergy(int maxEnergy) throws IllegalArgumentException;
+
+    /**
      * Returns the level of the player.
      *
      * @return the level of the player

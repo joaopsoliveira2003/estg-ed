@@ -4,6 +4,9 @@ import javax.swing.*;
 
 import Game.API.Game;
 import Game.Exceptions.NoSuchPlayerException;
+import GameManagement.GameManagement.ShortestPaths;
+
+import java.awt.*;
 
 /**
  * PlayerDemo is a class that allows the user to simulate the actions of a player
@@ -20,7 +23,7 @@ public class PlayerDemo extends JFrame {
         }
         energy.setText(String.valueOf(game.getPlayerEnergy(Integer.parseInt(id.getText()))));
     }
-    
+
     public PlayerDemo(Game game) {
         super("Player Simulator");
 
@@ -58,12 +61,6 @@ public class PlayerDemo extends JFrame {
         energyPanel.add(energyLabel);
         energyPanel.add(energyField);
 
-        JPanel energyToAddPanel = new JPanel();
-        JLabel energyToAddLabel = new JLabel("Energy to Add: ");
-        JTextField energyToAddField = new JTextField(10);
-        energyToAddPanel.add(energyToAddLabel);
-        energyToAddPanel.add(energyToAddField);
-
         JPanel movePanel = new JPanel();
         JLabel moveLabel = new JLabel("Move to: ");
         JTextField moveField = new JTextField(10);
@@ -75,7 +72,7 @@ public class PlayerDemo extends JFrame {
             try {
                 updateFields(game, idField, levelField, expField, posField, energyField);
             } catch (Exception exception) {
-                JOptionPane.showMessageDialog(null, exception.getMessage());
+                JOptionPane.showMessageDialog(this, exception.getMessage());
             }
         });
 
@@ -86,9 +83,9 @@ public class PlayerDemo extends JFrame {
             try {
                 game.movePlayer(Integer.parseInt(idField.getText()), Integer.parseInt(moveField.getText()));
                 updateFields(game, idField, levelField, expField, posField, energyField);
-                JOptionPane.showMessageDialog(null, "Player moved");
+                JOptionPane.showMessageDialog(this, "Player moved");
             } catch (Exception exception) {
-                JOptionPane.showMessageDialog(null, exception.getMessage());
+                JOptionPane.showMessageDialog(this, exception.getMessage());
             }
         });
 
@@ -98,9 +95,9 @@ public class PlayerDemo extends JFrame {
             try {
                 game.chargePlayer(Integer.parseInt(idField.getText()), Integer.parseInt(moveField.getText()));
                 updateFields(game, idField, levelField, expField, posField, energyField);
-                JOptionPane.showMessageDialog(null, "Player charged");
+                JOptionPane.showMessageDialog(this, "Player charged");
             } catch (Exception exception) {
-                JOptionPane.showMessageDialog(null, exception.getMessage());
+                JOptionPane.showMessageDialog(this, exception.getMessage());
             }
         });
 
@@ -108,11 +105,16 @@ public class PlayerDemo extends JFrame {
         chargePortalButton.addActionListener(e -> {
 
             try {
-                game.chargePortal(Integer.parseInt(idField.getText()), Integer.parseInt(moveField.getText()), Integer.parseInt(energyToAddField.getText()));
+                String energyToAdd = JOptionPane.showInputDialog(this, "Enter energy to add");
+                if (energyToAdd == null) {
+                    throw new Exception("Energy to add not entered");
+                }
+                int energyToAddInt = Integer.parseInt(energyToAdd);
+                game.chargePortal(Integer.parseInt(idField.getText()), Integer.parseInt(moveField.getText()), energyToAddInt);
                 updateFields(game, idField, levelField, expField, posField, energyField);
-                JOptionPane.showMessageDialog(null, "Portal charged");
+                JOptionPane.showMessageDialog(this, "Portal charged");
             } catch (Exception exception) {
-                JOptionPane.showMessageDialog(null, exception.getMessage());
+                JOptionPane.showMessageDialog(this, exception.getMessage());
             }
         });
 
@@ -122,48 +124,77 @@ public class PlayerDemo extends JFrame {
             try {
                 game.acquirePortal(Integer.parseInt(idField.getText()), Integer.parseInt(moveField.getText()));
                 updateFields(game, idField, levelField, expField, posField, energyField);
-                JOptionPane.showMessageDialog(null, "Portal acquired");
+                JOptionPane.showMessageDialog(this, "Portal acquired");
             } catch (Exception exception) {
-                JOptionPane.showMessageDialog(null, exception.getMessage());
+                JOptionPane.showMessageDialog(this, exception.getMessage());
             }
         });
 
         JButton shortestPathButton = new JButton("Shortest Path");
         shortestPathButton.addActionListener(e -> {
+            ShortestPaths shortestPaths = new ShortestPaths(game);
+            shortestPaths.setLocationRelativeTo(this);
+            shortestPaths.setVisible(true);
+        });
 
+        //add player to team
+        JButton addPlayerToTeamButton = new JButton("Add Player to Team");
+        addPlayerToTeamButton.addActionListener(e -> {
             try {
-                throw new Exception("Not implemented yet");
-                //game.getShortestPath(Integer.parseInt(idField.getText()), Integer.parseInt(moveField.getText()));
-                //updateFields(game, idField, levelField, expField, posField, energyField);
+                String teamName = JOptionPane.showInputDialog(this, "Enter team name");
+                if (teamName == null || teamName.isEmpty()) {
+                    throw new Exception("Team name cannot be empty");
+                }
+                game.addPlayerToTeam(Integer.parseInt(idField.getText()), teamName);
+                updateFields(game, idField, levelField, expField, posField, energyField);
+                JOptionPane.showMessageDialog(this, "Player added to team");
             } catch (Exception exception) {
-                JOptionPane.showMessageDialog(null, exception.getMessage());
+                JOptionPane.showMessageDialog(this, exception.getMessage());
             }
         });
 
-        buttonPanel.add(showInfoButton);
-        buttonPanel.add(moveButton);
-        buttonPanel.add(chargeButton);
-        buttonPanel.add(chargePortalButton);
-        buttonPanel.add(acquirePortalButton);
-        buttonPanel.add(shortestPathButton);
+        //remove player from team
+        JButton removePlayerFromTeamButton = new JButton("Remove Player from Team");
+        removePlayerFromTeamButton.addActionListener(e -> {
+            try {
+                game.removePlayerFromTeam(Integer.parseInt(idField.getText()));
+                updateFields(game, idField, levelField, expField, posField, energyField);
+                JOptionPane.showMessageDialog(this, "Player removed from team");
+            } catch (Exception exception) {
+                JOptionPane.showMessageDialog(this, exception.getMessage());
+            }
+        });
 
         JPanel mainPanel = new JPanel();
         mainPanel.add(idPanel);
+        mainPanel.add(movePanel);
         mainPanel.add(levelPanel);
         mainPanel.add(expPanel);
         mainPanel.add(posPanel);
         mainPanel.add(energyPanel);
-        mainPanel.add(energyToAddPanel);
-        mainPanel.add(movePanel);
-        mainPanel.add(buttonPanel);
+
+        mainPanel.add(showInfoButton);
+        mainPanel.add(moveButton);
+        mainPanel.add(chargeButton);
+        mainPanel.add(chargePortalButton);
+        mainPanel.add(acquirePortalButton);
+        mainPanel.add(shortestPathButton);
+        mainPanel.add(addPlayerToTeamButton);
+        JButton emptyButton = new JButton("");
+        emptyButton.setEnabled(false);
+        mainPanel.add(emptyButton);
+        mainPanel.add(removePlayerFromTeamButton);
+
+        mainPanel.setLayout(new GridLayout(5, 3));
+
 
         add(mainPanel);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        setSize(1250, 500);
+        setSize(600, 600);
 
-        setLocationRelativeTo(null);
+        setLocation(1000, 250);
 
         setVisible(true);
     }

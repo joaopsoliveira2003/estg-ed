@@ -7,6 +7,8 @@ import Game.Enumerations.SortPlayers;
 import Game.Exceptions.NoAssociationException;
 import org.json.simple.JSONObject;
 
+import static Game.Utilities.Validations.validateInteger;
+
 /**
  * PlayerImpl defines the implementation of a player in the game.
  */
@@ -18,12 +20,14 @@ public class PlayerImpl implements Player {
     private int id;
     private String name;
     private int currentEnergy;
+    private int maxEnergy;
     private int experiencePoints;
 
     public PlayerImpl(int id, String name) {
         setID(id);
         setName(name);
         setCurrentEnergy(150);
+        setMaxEnergy(150);
         setExperiencePoints(0);
     }
 
@@ -32,6 +36,7 @@ public class PlayerImpl implements Player {
         setName(name);
         setTeam(team);
         setCurrentEnergy(150);
+        setMaxEnergy(150);
         setExperiencePoints(0);
     }
 
@@ -40,6 +45,7 @@ public class PlayerImpl implements Player {
         setName(name);
         setTeam(team);
         setCurrentEnergy(currentEnergy);
+        setMaxEnergy(150);
         setExperiencePoints(experiencePoints);
 
     }
@@ -107,6 +113,10 @@ public class PlayerImpl implements Player {
 
     @Override
     public void addEnergy(int energy) throws IllegalArgumentException {
+        validateInteger(energy, "Energy");
+        if (energy + currentEnergy > getMaxEnergy()) {
+            throw new IllegalArgumentException("Energy cannot be greater than max energy");
+        }
         this.currentEnergy += energy;
     }
 
@@ -116,6 +126,19 @@ public class PlayerImpl implements Player {
             throw new IllegalArgumentException("Energy cannot be negative");
         }
         this.currentEnergy -= energy;
+    }
+
+    @Override
+    public int getMaxEnergy() {
+        return (int) (maxEnergy * Math.pow(1.1, getLevel()));
+    }
+
+    @Override
+    public void setMaxEnergy(int maxEnergy) throws IllegalArgumentException {
+        if (maxEnergy < 0) {
+            throw new IllegalArgumentException("Max Energy cannot be negative");
+        }
+        this.maxEnergy = maxEnergy;
     }
 
     @Override

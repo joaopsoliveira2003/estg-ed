@@ -33,6 +33,7 @@ public class LocalsManagementMenu extends JFrame {
         JButton manageDataButton = new JButton("Manage Data");
         manageDataButton.addActionListener(e -> {
             if (!manageLocals.isVisible()) {
+                manageLocals.setLocationRelativeTo(this);
                 manageLocals.setVisible(true);
             } else {
                 manageLocals.toFront();
