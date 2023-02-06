@@ -68,6 +68,17 @@ public class ExtendedNetwork<T> extends Network<T> implements ExtendedNetworkADT
     }
 
     @Override
+    public void clearRoutes() {
+        for (int i = 0; i < numVertices; i++) {
+            for (int j = 0; j < numVertices; j++) {
+                if (i != j) {
+                    adjMatrix[i][j] = Double.POSITIVE_INFINITY;
+                }
+            }
+        }
+    }
+
+    @Override
     public Iterator<T> iteratorVertexes() {
         LinkedUnorderedList<T> templist = new LinkedUnorderedList<>();
         for (int i = 0; i < numVertices; i++) {

@@ -1,17 +1,14 @@
-import Game.API.GameImpl;
 import Game.API.Game;
+import Game.API.GameImpl;
 import Game.Entities.Connector;
 import Game.Entities.Local;
 import Game.Entities.Portal;
-import Game.Entities.PortalImpl;
 import Game.Enumerations.SortLocals;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Iterator;
-
-import static org.junit.Assert.assertEquals;
 
 /*
  * Test for the Game class
@@ -53,10 +50,5 @@ public class GameTest {
         Assertions.assertEquals(20, connector.getLongitude());
         Assertions.assertEquals(100, connector.getEnergy());
         Assertions.assertEquals(2, connector.getCoolDownTime());
-    }
-
-    @Test
-    public void testAddRoute() {
-
     }
 }

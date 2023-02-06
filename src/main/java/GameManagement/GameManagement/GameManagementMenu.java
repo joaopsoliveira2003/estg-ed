@@ -23,8 +23,8 @@ public class GameManagementMenu extends JFrame {
                 try {
                     game.loadGameData(fileChooser.getSelectedFile().getAbsolutePath());
                     JOptionPane.showMessageDialog(this, "Data loaded successfully");
-                } catch (RuntimeException | IOException exception) {
-                    new JOptionPane(exception.getMessage(), JOptionPane.ERROR_MESSAGE);
+                } catch (Exception exception) {
+                    JOptionPane.showMessageDialog(this, exception.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -50,7 +50,7 @@ public class GameManagementMenu extends JFrame {
                     game.exportGameData(fileChooser.getSelectedFile().getAbsolutePath());
                     JOptionPane.showMessageDialog(this, "Data saved successfully");
                 } catch (Exception exception) {
-                    new JOptionPane(exception.getMessage(), JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this, exception.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });

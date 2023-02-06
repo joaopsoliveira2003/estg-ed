@@ -90,9 +90,6 @@ public class GameImpl implements Game {
         local.setLongitude(longitude);
         ((Portal) local).setMaxEnergy(maxEnergy);
         local.setEnergy(energy);
-        //locals.put(local.getID(), local);
-        //network.updateVertex(portal);
-        //TODO: check if this is working if so remove updateVertex from ExtendedNetwork
     }
 
     @Override
@@ -101,15 +98,12 @@ public class GameImpl implements Game {
         if (!locals.containsKey(id)) {
             throw new NoSuchLocalException("Connector with id " + id + " does not exist.");
         }
-        //Local local = locals.get(id);
         Connector connector = (Connector) locals.get(id);
         connector.setName(name);
         connector.setLatitude(latitude);
         connector.setLongitude(longitude);
         connector.setEnergy(energy);
         connector.setCoolDownTime(cooldown);
-        //network.updateVertex(connector);
-        //TODO: check if this is working if so remove updateVertex from ExtendedNetwork
     }
 
     @Override
@@ -146,7 +140,6 @@ public class GameImpl implements Game {
 
     @Override
     public void loadLocals(String fileName) throws IllegalArgumentException, IOException {
-        //TODO: clear data structures before adding?
         try {
             JSONObject json = loadFile(fileName);
 
@@ -203,7 +196,6 @@ public class GameImpl implements Game {
 
     @Override
     public void loadRoutesLocals(String fileName) throws IllegalArgumentException, IOException {
-        //TODO: clear data structures before adding?
         try {
             JSONObject json = loadFile(fileName);
 
@@ -301,6 +293,8 @@ public class GameImpl implements Game {
             Local oldLocal = playerPositions.get(player);
             if (oldLocal.getID() == local) {
                 throw new IllegalArgumentException("Player is already in local " + local + ".");
+            } else {
+                playerPositions.remove(player);
             }
         }
         playerPositions.put(player, locals.get(local));
@@ -361,8 +355,11 @@ public class GameImpl implements Game {
 
     @Override
     public void loadPlayersTeams(String fileName) throws IllegalArgumentException, IOException {
-        //TODO: clear data structures before adding?
         try {
+            players.clear();
+            teams.clear();
+            playerPositions.clear();
+
             JSONObject json = loadFile(fileName);
 
             // TEAMS
@@ -446,7 +443,6 @@ public class GameImpl implements Game {
         if (playerPositions.get(player) != portalObject) {
             throw new WrongLocationException("Player is not at the local.");
         }
-        //TODO: optimize this
         try {
             if (portalObject.getOwner().getTeam() != playerObject.getTeam()) {
                 //equipa adversária
@@ -598,7 +594,6 @@ public class GameImpl implements Game {
 
     @Override
     public void loadGameData(String fileName) throws IllegalArgumentException, IOException {
-        //TODO: clear data structures before adding?
         try {
             JSONObject json = loadFile(fileName);
 
@@ -618,9 +613,13 @@ public class GameImpl implements Game {
             // POINTS
             JSONObject points = (JSONObject) json.get("points");
             acquirePortalPoints = Integer.parseInt(points.get("acquirePortal").toString());
+            validateInteger(acquirePortalPoints, "Acquire portal points");
             chargePortalPoints = Integer.parseInt(points.get("chargePortal").toString());
+            validateInteger(chargePortalPoints, "Charge portal points");
             chargePlayerPoints = Integer.parseInt(points.get("chargePlayer").toString());
+            validateInteger(chargePlayerPoints, "Charge player points");
             movePlayerPoints = Integer.parseInt(points.get("movePlayer").toString());
+            validateInteger(movePlayerPoints, "Move player points");
 
         } catch (Exception exception) {
             throw new IOException(exception.getMessage());
@@ -753,10 +752,12 @@ public class GameImpl implements Game {
 
     protected void loadTeams(JSONArray teamsArray) throws IOException {
         try {
+            teams.clear();
+
             for (JSONObject jsonObject : (Iterable<JSONObject>) teamsArray) {
                 addTeam((String) jsonObject.get("name"));
             }
-        } catch (RuntimeException exception) {
+        } catch (Exception exception) {
             throw new IOException(exception.getMessage());
         }
     }
@@ -771,6 +772,9 @@ public class GameImpl implements Game {
 
     protected void loadPlayers(JSONArray playersArray) throws IOException {
         try {
+            players.clear();
+            playerPositions.clear();
+
             for (JSONObject player : (Iterable<JSONObject>) playersArray) {
                 int id = ((Long) player.get("id")).intValue();
                 String name = (String) player.get("name");
@@ -782,7 +786,7 @@ public class GameImpl implements Game {
                 playerObject.setCurrentEnergy(energy);
                 playerObject.addExperiencePoints(experience);
             }
-        } catch (RuntimeException exception) {
+        } catch (Exception exception) {
             throw new IOException(exception.getMessage());
         }
     }
@@ -797,6 +801,8 @@ public class GameImpl implements Game {
 
     protected void loadLocals(JSONArray localsArray) throws IOException {
         try {
+            locals.clear();
+
             for (JSONObject local : (Iterable<JSONObject>) localsArray) {
                 int id = ((Long) local.get("id")).intValue();
                 String type = (String) local.get("type");
@@ -821,7 +827,7 @@ public class GameImpl implements Game {
                     }
                 }
             }
-        } catch (RuntimeException exception) {
+        } catch (Exception exception) {
             throw new IOException(exception.getMessage());
         }
     }
@@ -838,12 +844,14 @@ public class GameImpl implements Game {
 
     protected void loadRoutes(JSONArray routesArray) throws IOException {
         try {
+            network.clearRoutes();
+
             for (JSONObject route : (Iterable<JSONObject>) routesArray) {
                 int from = ((Long) route.get("from")).intValue();
                 int to = ((Long) route.get("to")).intValue();
                 addRoute(from, to);
             }
-        } catch (RuntimeException exception) {
+        } catch (Exception exception) {
             throw new IOException(exception.getMessage());
         }
     }
@@ -858,15 +866,5 @@ public class GameImpl implements Game {
             routesArray.add(route);
         }
         return routesArray;
-    }
-
-    // CLEAR DATA STRUCTURES
-
-    protected void clear() {
-        network.clear();
-        locals.clear();
-        players.clear();
-        teams.clear();
-        playerPositions.clear();
     }
 }

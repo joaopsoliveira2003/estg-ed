@@ -1,1 +1,108 @@
-{"teams":[{"name":"Sparks"},{"name":"Giants"}],"players":[{"level":0,"name":"João","experiencePoints":0,"currentEnergy":150,"id":0,"team":"Sparks"},{"level":0,"name":"Ana","experiencePoints":0,"currentEnergy":150,"id":1,"team":"Giants"},{"level":0,"name":"Mariana","experiencePoints":0,"currentEnergy":150,"id":2,"team":"Giants"},{"level":0,"name":"Pedro","experiencePoints":0,"currentEnergy":150,"id":3,"team":"Giants"},{"level":0,"name":"Maria","experiencePoints":0,"currentEnergy":150,"id":4,"team":"Sparks"},{"level":0,"name":"Rui","experiencePoints":0,"currentEnergy":150,"id":5,"team":"Sparks"},{"level":0,"name":"Sara","experiencePoints":0,"currentEnergy":150,"id":6,"team":"None"},{"level":0,"name":"Joana","experiencePoints":0,"currentEnergy":150,"id":7,"team":"Giants"},{"level":0,"name":"Ricardo","experiencePoints":0,"currentEnergy":150,"id":8,"team":"None"},{"level":0,"name":"Miguel","experiencePoints":0,"currentEnergy":150,"id":9,"team":"Giants"},{"level":0,"name":"Inês","experiencePoints":0,"currentEnergy":150,"id":10,"team":"Giants"},{"level":0,"name":"João","experiencePoints":0,"currentEnergy":150,"id":11,"team":"None"}]}
+{
+  "teams": [
+    {
+      "name": "Sparks"
+    },
+    {
+      "name": "Giants"
+    }
+  ],
+  "players": [
+    {
+      "level": 0,
+      "name": "João",
+      "experiencePoints": 0,
+      "currentEnergy": 150,
+      "id": 0,
+      "team": "Sparks"
+    },
+    {
+      "level": 0,
+      "name": "Ana",
+      "experiencePoints": 0,
+      "currentEnergy": 150,
+      "id": 1,
+      "team": "Giants"
+    },
+    {
+      "level": 0,
+      "name": "Mariana",
+      "experiencePoints": 0,
+      "currentEnergy": 150,
+      "id": 2,
+      "team": "Giants"
+    },
+    {
+      "level": 0,
+      "name": "Pedro",
+      "experiencePoints": 0,
+      "currentEnergy": 150,
+      "id": 3,
+      "team": "Giants"
+    },
+    {
+      "level": 0,
+      "name": "Maria",
+      "experiencePoints": 0,
+      "currentEnergy": 150,
+      "id": 4,
+      "team": "Sparks"
+    },
+    {
+      "level": 0,
+      "name": "Rui",
+      "experiencePoints": 0,
+      "currentEnergy": 150,
+      "id": 5,
+      "team": "Sparks"
+    },
+    {
+      "level": 0,
+      "name": "Sara",
+      "experiencePoints": 0,
+      "currentEnergy": 150,
+      "id": 6,
+      "team": "None"
+    },
+    {
+      "level": 0,
+      "name": "Joana",
+      "experiencePoints": 0,
+      "currentEnergy": 150,
+      "id": 7,
+      "team": "Giants"
+    },
+    {
+      "level": 0,
+      "name": "Ricardo",
+      "experiencePoints": 0,
+      "currentEnergy": 150,
+      "id": 8,
+      "team": "None"
+    },
+    {
+      "level": 0,
+      "name": "Miguel",
+      "experiencePoints": 0,
+      "currentEnergy": 150,
+      "id": 9,
+      "team": "Giants"
+    },
+    {
+      "level": 0,
+      "name": "Inês",
+      "experiencePoints": 0,
+      "currentEnergy": 150,
+      "id": 10,
+      "team": "Giants"
+    },
+    {
+      "level": 0,
+      "name": "João",
+      "experiencePoints": 0,
+      "currentEnergy": 150,
+      "id": 11,
+      "team": "None"
+    }
+  ]
+}

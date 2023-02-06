@@ -46,7 +46,6 @@ public class LinkedBinarySearchTree<T> extends LinkedBinaryTree<T> implements Bi
         size++;
     }
 
-    //TODO: check if the NonComparableElementException is actually needed
     @Override
     public T removeElement(T targetElement) throws EmptyCollectionException, ElementNotFoundException {
         if (isEmpty()) {

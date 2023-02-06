@@ -43,8 +43,8 @@ public class RoutesManagementMenu extends JFrame {
                 try {
                     game.loadRoutesLocals(fileChooser.getSelectedFile().getAbsolutePath());
                     JOptionPane.showMessageDialog(this, "Data loaded successfully");
-                } catch (IOException exception) {
-                    new JOptionPane(exception.getMessage(), JOptionPane.ERROR_MESSAGE);
+                } catch (Exception exception) {
+                    JOptionPane.showMessageDialog(this, exception.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -60,8 +60,8 @@ public class RoutesManagementMenu extends JFrame {
                 try {
                     game.exportRoutesLocals(fileChooser.getSelectedFile().getAbsolutePath());
                     JOptionPane.showMessageDialog(this, "Data saved successfully");
-                } catch (IOException exception) {
-                    new JOptionPane(exception.getMessage(), JOptionPane.ERROR_MESSAGE);
+                } catch (Exception exception) {
+                    JOptionPane.showMessageDialog(this, exception.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });

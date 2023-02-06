@@ -2,8 +2,6 @@ package Collections.Lists;
 
 import Collections.Exceptions.EmptyCollectionException;
 
-//TODO: Iterator
-
 public class LinkedListSentinel<T> {
     private final Node<T> head;
     private Node<T> tail;

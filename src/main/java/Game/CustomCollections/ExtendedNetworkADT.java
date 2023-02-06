@@ -53,6 +53,11 @@ public interface ExtendedNetworkADT<T> extends NetworkADT<T> {
     boolean containsVertex(T vertex);
 
     /**
+     * Clears all the edges in the network.
+     */
+    void clearRoutes();
+
+    /**
      * Returns all the vertexes in the network.
      *
      * @return all the vertexes in the network
