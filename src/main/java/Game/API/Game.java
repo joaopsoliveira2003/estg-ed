@@ -428,8 +428,8 @@ public interface Game {
      *
      * @param local The id of the local.
      * @return An iterator with the locals.
-     * @throws IllegalArgumentException
-     * @throws NoSuchLocalException
+     * @throws IllegalArgumentException If the id is invalid.
+     * @throws NoSuchLocalException If the local does not exist.
      */
     Iterator<Local> getLocalsInRange(int local) throws IllegalArgumentException, NoSuchLocalException;
 }

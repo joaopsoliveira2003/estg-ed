@@ -64,7 +64,7 @@ public class DoublyNode<T> {
     /**
      * Returns the previous node in this node.
      *
-     * @return DoublyNode<T> the previous node in this node
+     * @return DoublyNode the previous node in this node
      */
     public DoublyNode<T> getPrevious() {
         return this.previous;
@@ -82,7 +82,7 @@ public class DoublyNode<T> {
     /**
      * Returns the next node in this node.
      *
-     * @return DoublyNode<T> the next node in this node
+     * @return DoublyNode the next node in this node
      */
     public DoublyNode<T> getNext() {
         return this.next;

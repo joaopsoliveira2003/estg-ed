@@ -61,7 +61,7 @@ public interface SetADT<T> {
     /**
      * Returns an iterator for the elements currently in this set.
      *
-     * @return Iterator<T> the iterator over this set
+     * @return Iterator the iterator over this set
      */
     Iterator<T> iterator();
 

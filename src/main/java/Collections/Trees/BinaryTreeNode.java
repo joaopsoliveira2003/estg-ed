@@ -52,7 +52,7 @@ public class BinaryTreeNode<T> {
     /**
      * Returns the left child of this node or null if it does not have one.
      *
-     * @return BinaryTreeNode<T> the left child of this node
+     * @return BinaryTreeNode the left child of this node
      */
     public BinaryTreeNode<T> getLeft() {
         return left;
@@ -70,7 +70,7 @@ public class BinaryTreeNode<T> {
     /**
      * Returns the right child of this node or null if it does not have one.
      *
-     * @return BinaryTreeNode<T> the right child of this node
+     * @return BinaryTreeNode the right child of this node
      */
     public BinaryTreeNode<T> getRight() {
         return right;

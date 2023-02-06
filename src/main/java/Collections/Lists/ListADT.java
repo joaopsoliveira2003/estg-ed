@@ -80,7 +80,7 @@ public interface ListADT<T> extends Iterable<T> {
     /**
      * Returns an iterator for the elements in this list.
      *
-     * @return Iterator<T> an iterator over the elements in this list
+     * @return Iterator an iterator over the elements in this list
      */
     Iterator<T> iterator();
 

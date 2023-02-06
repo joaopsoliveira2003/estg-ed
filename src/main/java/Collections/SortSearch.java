@@ -210,6 +210,8 @@ public class SortSearch {
     /**
      * Sorts an array using the quick sort algorithm.
      * @param data the array to be sorted
+     * @param min the index of the first element in the array
+     * @param max the index of the last element in the array
      * @param <T> the type of the elements in the array
      */
     public static <T extends Comparable<? super T>> void quickSort(T[] data, int min, int max) {
@@ -227,7 +229,10 @@ public class SortSearch {
     /**
      * Partitions an array using the quick sort algorithm.
      * @param data the linked list to be sorted
+     * @param min the index of the first element in the array
+     * @param max the index of the last element in the array
      * @param <T> the type of the elements in the linked list
+     * @return the index of the pivot element
      */
     private static <T extends Comparable<? super T>> int partition(T[] data, int min, int max) {
         //store the pivot element
@@ -264,6 +269,8 @@ public class SortSearch {
      * Sorts a linked list using the quick sort function above.
      * The linked list is converted to an array before the sort because of efficiency.
      * @param list the linked list to be sorted
+     * @param min the index of the first element in the array
+     * @param max the index of the last element in the array
      * @param <T> the type of the elements in the linked list
      */
     public static <T extends Comparable<? super T>> void quickSort(LinkedUnorderedList<T> list, int min, int max) {
@@ -278,6 +285,8 @@ public class SortSearch {
     /**
      * Sorts an array using the merge sort algorithm.
      * @param data the array to be sorted
+     * @param min the index of the first element in the array
+     * @param max the index of the last element in the array
      * @param <T> the type of the elements in the array
      */
     public static <T extends Comparable<? super T>> void mergeSort(T[] data, int min, int max) {
@@ -297,6 +306,9 @@ public class SortSearch {
     /**
      * Merges two sorted arrays.
      * @param data the array to be sorted
+     * @param min the index of the first element in the array
+     * @param mid the index of the last element in the first array
+     * @param max the index of the last element in the array
      * @param <T> the type of the elements in the array
      */
     private static <T extends Comparable<? super T>> void merge(T[] data, int min, int mid, int max) {
@@ -345,6 +357,8 @@ public class SortSearch {
      * Sorts a linked list using the merge sort function above.
      * The linked list is converted to an array before the sort because of efficiency.
      * @param list the linked list to be sorted
+     * @param min the index of the first element in the array
+     * @param max the index of the last element in the array
      * @param <T> the type of the elements in the linked list
      */
     public static <T extends Comparable<? super T>> void mergeSort(LinkedUnorderedList<T> list, int min, int max) {

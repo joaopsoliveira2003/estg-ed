@@ -24,7 +24,7 @@ public interface BinaryTreeADT<T> {
     /**
      * Returns a reference to the root node
      *
-     * @return BinaryTreeNode<T> a reference to the root node
+     * @return BinaryTreeNode a reference to the root node
      * @throws EmptyCollectionException if the tree is empty
      * @throws UnsupportedOperationException if the operation is not supported
      */
